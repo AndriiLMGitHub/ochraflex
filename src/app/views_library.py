@@ -369,11 +369,7 @@ def add_combined_block_to_template_view(request, combined_block_id):
 
     template.save()
 
-    messages.success(
-        request,
-        f'Новий шаблон для {
-            combined_block.block_template.name} створено успішно!'
-    )
+    messages.success(request,f'Новий шаблон для {combined_block.block_template.name} створено успішно!')
     return redirect('library')
 
 def delete_combined_block_from_template_library_view(request, id):
