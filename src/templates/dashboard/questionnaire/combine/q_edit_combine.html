@@ -1,0 +1,631 @@
+{% extends 'dashboard/dashboard_base.html' %} {% load static %}
+<!--Title-->
+{% block title %}Dashboard - Start create{% endblock title %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+  rel="stylesheet"
+  href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+  <a href="{% url 'questionnaire_detail' block_template.id %}">
+    <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+  </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Редагувати блок{% endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %} {% load static %}
+<form method="POST" action="{% url 'edit_combined_block' block_template.id combined_block.id %}">
+  {% csrf_token %}
+  <div class="d-flex align-items-center justify-content-between">
+    <div>
+      <h3>{{ block_template.name }}</h3>
+      <p>{{ block_template.description }}</p>
+    </div>
+    <div class="d-flex align-items-center">
+      <button type="submit" class="button_primary button_reset d-flex align-items-center">
+        <svg class="offset-right-5" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14.5924 5.58L8.00244 12.17L4.41244 8.59L3.00244 10L8.00244 15L16.0024 7L14.5924 5.58ZM10.0024 0C4.48244 0 0.00244141 4.48 0.00244141 10C0.00244141 15.52 4.48244 20 10.0024 20C15.5224 20 20.0024 15.52 20.0024 10C20.0024 4.48 15.5224 0 10.0024 0ZM10.0024 18C5.58244 18 2.00244 14.42 2.00244 10C2.00244 5.58 5.58244 2 10.0024 2C14.4224 2 18.0024 5.58 18.0024 10C18.0024 14.42 14.4224 18 10.0024 18Z" fill="currentColor"/>
+        </svg> 
+        Зберегти
+      </button>
+    </div>
+  </div>
+  <div class="example-template marg_top-20">
+    <div class="border-field-questionnaire">
+      <div class="group-info marg_bottom-20">
+        {% if description_field %}
+          <div class="d-flex justify-content-between align-items-center main-title-menu marg_bottom-25">
+            <div class="main-title-menu marg_top-20">
+              <h3 class="marg_bottom-10">{{ description_field.title }}</h3>
+              <div class="main-desc">{{ description_field.description }}</div>
+            </div>
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="ds-combined"
+                  value="{{ description_field.id}}"
+                  checked
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+        </div>
+        {% endif %}
+        <!-- Fields -->
+        {% for field in combined_block_fields %}
+        <div class="wrap-quest">
+          <div class="group-form">
+            <label for="{{field.name}}" class="input_label">{{field.name}}</label>
+            {% if field.is_required %}
+            <p>
+              <img src="{% static 'images/icons/required.svg' %}" alt="" />
+            </p>
+            {% endif %}
+          </div>
+        </div>
+        {% if field.field_type == 'textarea' %}
+        <div
+          class="d-flex align-items-center justify-content-between main-title-menu"
+        >
+          <div class="wrap-quest">
+            <div class="textarea-quest">
+              <textarea class="input_base_red" placeholder="Введіть текст"></textarea>
+            </div>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id }}"
+                  checked
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'select' %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <select class="input_base_red">
+              {% for option in field.options %}
+              <option value="{{option}}">{{option}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                  checked
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'radio' %}
+        <!-- Loop -->
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <div class="radio-container">
+              {% for option in field.options %}
+              <input type="radio" value="{{ options }}" name="name"/>
+              <label for="{{ forloop.counter }}">{{ option }}</label>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input 
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                  checked
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'checkbox' %}
+        <!-- Loop -->
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <div class="radio-container">
+              {% for option in field.options %}
+              <label class="checkbox">
+                <input type="checkbox" name="combined" value="{{ field.id}}"/>
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+              <p>{{ option }}</p>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                  checked
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'boolean' %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <div class="radio-container">
+              <input type="radio" name="some" value="true" />
+              <label for="true">Так</label>
+              <input type="radio" name="some" value="false" />
+              <label for="false">Ні</label>
+            </div>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                  checked
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'number' and field.extra_tag %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <div class="d-flex phoneForm">
+              <select class="input_base languageDropdown"></select>
+              <div class="selectedLanguage"></div>
+              <input type="text" class="input_base phoneNumberInput" />
+            </div>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                  checked
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'date' %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <input
+              type="{{field.field_type}}"
+              class="input_base_red"
+              maxlength="{{ field.max_symbols }}"
+              max="{{field.max_symbols}}"
+            />
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox" 
+                  name="combined"
+                  value="{{ field.id}}"
+                  checked
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'number' %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <input
+              type="{{field.field_type}}"
+              class="input_base_red"
+              placeholder="Введіть число"
+              max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+            />
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                  checked
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <input
+              type="{{field.field_type}}"
+              class="input_base_red"
+              placeholder="Введіть текст"
+              maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+            />
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                  checked
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        <p class="marg_top-5 marg_bottom-25 offset-left-5">
+          <small class="text-small-muted">{{field.help_info}}</small>
+        </p>
+        {% endfor %}
+        <!-- <button class="button_reset button_red marg_top-20">Додати</button> -->
+      </div>
+      {% if description_fields or fields %}
+      {% for description_field in description_fields %}
+        {% if not description_field.is_combined %}
+        <div class="d-flex justify-content-between align-items-center main-title-menu marg_bottom-25">
+          <div class="main-title-menu marg_top-20">
+            <h3 class="marg_bottom-10">{{ description_field.title }}</h3>
+            <div class="main-desc">{{ description_field.description }}</div>
+          </div>
+          <div class="radio-container">
+            <label class="checkbox">
+              <input
+                type="checkbox"
+                name="ds-combined"
+                value="{{ description_field.id}}"
+              />
+              <div class="circle"></div>
+              <div class="box">
+                <span class="checkmark"></span>
+              </div>
+            </label>
+          </div>
+        </div>
+        {% endif %}
+      {% endfor %}
+      <!-- Fields -->
+      {% for field in fields %}
+        {% if not field.is_combined %}
+        <div class="wrap-quest">
+          <div class="group-form">
+            <label for="{{field.name}}" class="input_label"
+              >{{field.name}}</label
+            >
+            {% if field.is_required %}
+            <p>
+              <img src="{% static 'images/icons/required.svg' %}" alt="" />
+            </p>
+            {% endif %}
+          </div>
+        </div>
+        {% if field.field_type == 'textarea' %}
+        <div
+          class="d-flex align-items-center justify-content-between main-title-menu"
+        >
+          <div class="wrap-quest">
+            <div class="textarea-quest">
+              <textarea class="input_base_red" placeholder="Введіть текст"></textarea>
+            </div>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'select' %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <select class="input_base_red">
+              {% for option in field.options %}
+              <option value="{{option}}">{{option}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'radio' %}
+        <!-- Loop -->
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <div class="radio-container">
+              {% for option in field.options %}
+              <input type="radio" value="{{ options }}" name="name"/>
+              <label for="{{ forloop.counter }}">{{ option }}</label>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input 
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'checkbox' %}
+        <!-- Loop -->
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <div class="radio-container">
+              {% for option in field.options %}
+              <label class="checkbox">
+                <input type="checkbox" name="combined" value="{{ field.id}}"/>
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+              <p>{{ option }}</p>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'boolean' %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <div class="radio-container">
+              <input type="radio" name="some" value="true" />
+              <label for="true">Так</label>
+              <input type="radio" name="some" value="false" />
+              <label for="false">Ні</label>
+            </div>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'number' and field.extra_tag %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <div class="d-flex phoneForm">
+              <select class="input_base languageDropdown"></select>
+              <div class="selectedLanguage"></div>
+              <input type="text" class="input_base phoneNumberInput" />
+            </div>
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'date' %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <input
+              type="{{field.field_type}}"
+              class="input_base_red"
+              maxlength="{{ field.max_symbols }}"
+              max="{{field.max_symbols}}"
+            />
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox" 
+                  name="combined"
+                  value="{{ field.id}}"
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% elif field.field_type == 'number' %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <input
+              type="{{field.field_type}}"
+              class="input_base_red"
+              placeholder="Введіть число"
+              max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+            />
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-between main-title-menu">
+          <div class="wrap-quest">
+            <input
+              type="{{field.field_type}}"
+              class="input_base_red"
+              placeholder="Введіть текст"
+              maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+            />
+          </div>
+          <div class="relative">
+            <div class="radio-container">
+              <label class="checkbox">
+                <input
+                  type="checkbox"
+                  name="combined"
+                  value="{{ field.id}}"
+                />
+                <div class="circle"></div>
+                <div class="box">
+                  <span class="checkmark"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        <p class="marg_top-5 marg_bottom-25 offset-left-5">
+          <small class="text-small-muted">{{field.help_info}}</small>
+        </p>
+        {% endif %}
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</form>
+{% endblock main %}
+<!--Sctipts-->
+{% block scripts %}
+<script src="{% static 'js/fields.js' %}"></script>
+<script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/utils/phoneNumber.js' %}"></script>
+<script src="{% static 'js/questionnaire/init.js' %}"></script>
+{% endblock scripts %}
+<!--Sctipts-->

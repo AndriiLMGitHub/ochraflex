@@ -1,0 +1,62 @@
+{% extends 'dashboard/dashboard_base.html' %} {% load static %}
+<!--Title-->
+{% block title %}Dashboard - Start create{% endblock title %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+    <a href="{% url 'create_field_to_template' library_template.id %}">
+        <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+    </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Додати заголовок і опис{%endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %} {% load static %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="add_new_field marg_bottom-20">
+        <button type="submit" class="button_primary button_reset btn-icon">
+            <p>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.00244 14C6.71911 14 6.48177 13.904 6.29044 13.712C6.09844 13.5207 6.00244 13.2833 6.00244 13V8H1.00244C0.719108 8 0.481442 7.904 0.289442 7.712C0.0981082 7.52067 0.00244141 7.28333 0.00244141 7C0.00244141 6.71667 0.0981082 6.479 0.289442 6.287C0.481442 6.09567 0.719108 6 1.00244 6H6.00244V1C6.00244 0.716667 6.09844 0.479 6.29044 0.287C6.48177 0.0956668 6.71911 0 7.00244 0C7.28577 0 7.52344 0.0956668 7.71544 0.287C7.90677 0.479 8.00244 0.716667 8.00244 1V6H13.0024C13.2858 6 13.5231 6.09567 13.7144 6.287C13.9064 6.479 14.0024 6.71667 14.0024 7C14.0024 7.28333 13.9064 7.52067 13.7144 7.712C13.5231 7.904 13.2858 8 13.0024 8H8.00244V13C8.00244 13.2833 7.90677 13.5207 7.71544 13.712C7.52344 13.904 7.28577 14 7.00244 14Z" fill="currentColor"/>
+                </svg> 
+            </p>
+            <p>Додати</p>
+        </button>
+    </div>
+    <div class="border-field">
+        <div class="create-template-panel">
+            <div class="form-group marg_bottom-20">
+                <label for="id_title" class="input_label">Уведіть заголовок</label>
+                <input
+                    type="text"
+                    id="id_title"
+                    name="title"
+                    class="input_base"
+                    maxlength="128"
+                    required
+                />
+                <small class="text-small-muted">Назва</small>
+            </div>
+            <div class="form-group marg_bottom-20">
+                <label for="id_description" class="input_label">Уведіть опис</label>
+                <textarea id="id_description" name="description" class="input_base"></textarea>
+                <small class="text-small-muted"> Текст </small>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock main %} {% block scripts %} {% endblock scripts %}

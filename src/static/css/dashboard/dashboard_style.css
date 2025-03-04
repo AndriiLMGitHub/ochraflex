@@ -1,0 +1,64 @@
+.page {
+  width: 100%;
+  padding-left: 250px;
+}
+
+.content {
+  padding: 30px;
+}
+
+.content h4 {
+  font-size: 22px;
+  color: #2e2e2e;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.content h5 {
+  font-size: 18px;
+  color: #2e2e2e;
+  font-weight: 600;
+  margin: 30px 0;
+}
+
+.settings {
+  width: 400px;
+}
+/* Tool Bar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 10px 20px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.search-icon:hover {
+  cursor: pointer;
+}
+/* Tool Bar */
+
+.main-title-menu div a img {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+.main-title-menu div a {
+  display: inline-block;
+  padding: 15px;
+  border-radius: 100%;
+}
+
+.main-title-menu div a:hover,
+.dropdown-menu-setting a:hover {
+  background-color: #f1f1f1;
+}
+.main-desc {
+  width: 768px;
+}

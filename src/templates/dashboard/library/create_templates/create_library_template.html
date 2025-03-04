@@ -1,0 +1,58 @@
+{% extends 'dashboard/dashboard_base.html' %} {% load static %}
+<!--Title-->
+{% block title %}Dashboard - Start create{% endblock title %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+    <a href="{% url 'library' %}">
+    <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+    </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Створення шаблону{%endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %}
+{% load static %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="border-field">
+        <div class="create-template-panel">
+            <div class="form-group marg_bottom-20">
+                <label for="id_title" class="input_label">Уведіть назву блока</label>
+                <input
+                    type="text"
+                    name="name"
+                    class="input_base"
+                    maxlength="128"
+                    required
+                />
+                <small class="text-small-muted">Назва блока</small>
+            </div>
+            <div class="add_new_field marg_bottom-20">
+                <button type="submit" class="button_primary button_reset btn-icon">
+                <p>Далі</p>
+                <p>
+                    <svg width="11" height="11" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8.58637 0.286693L15.2882 6.78323C15.3898 6.88166 15.4625 6.98887 15.5063 7.10487C15.5494 7.22088 15.572 7.34555 15.5741 7.47886C15.5762 7.61218 15.5574 7.73749 15.5179 7.85478C15.4778 7.97209 15.4084 8.08151 15.31 8.18306L8.81348 14.8849C8.63302 15.0711 8.40554 15.1706 8.13105 15.1836C7.85587 15.1959 7.61674 15.1036 7.41365 14.9067C7.21083 14.7265 7.10294 14.4992 7.09 14.2247C7.07772 13.9495 7.17001 13.7103 7.36688 13.5073L12.1901 8.53163L1.01641 8.70547C0.733114 8.70987 0.493989 8.61792 0.299036 8.42959C0.104738 8.24059 0.0053858 8.00444 0.000978337 7.72114C-0.00342912 7.43784 0.0885343 7.19905 0.276869 7.00477C0.465859 6.8098 0.702002 6.71012 0.985302 6.70571L12.159 6.53187L7.18332 1.70869C6.99716 1.52823 6.89754 1.29642 6.88447 1.01325C6.87206 0.730079 6.96442 0.495283 7.16154 0.30886C7.34174 0.106033 7.57349 0.00241377 7.85679 -0.00199368C8.14009 -0.00640114 8.38328 0.0898288 8.58637 0.286693Z" fill="currentColor"/>
+                    </svg>           
+                </p>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock main %}
+{% block scripts %} {% endblock scripts %}
+

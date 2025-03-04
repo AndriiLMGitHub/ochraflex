@@ -1,0 +1,9 @@
+@media screen and (max-width: 400px) {
+  .container {
+    width: 100%;
+    padding: 0 10px;
+  }
+  .auth_form {
+    width: 100%;
+  }
+}

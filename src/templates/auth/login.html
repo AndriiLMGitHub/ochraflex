@@ -1,0 +1,48 @@
+{% extends 'auth/auth_base.html' %}
+<!--Title-->
+{% block title %}Auth - Login{% endblock title %}
+<!--Content-->
+{% block auth-content %} {% load static %}
+<div class="auth_form center_block">
+  <div>
+    <div class="logo">
+      <a href="#">
+        <img src="{% static 'images/main_logo.svg' %}" alt="Main logo" />
+      </a>
+    </div>
+    <h3 class="title_form">Увійти в обліковий запис</h3>
+    <form method="POST">
+      {% csrf_token %}
+      <label for="id_email" class="input_label">Email</label>
+      <input
+        type="email"
+        name="email"
+        required
+        id="id_email"
+        class="input_base marg_bottom-25"
+      />
+      <label for="id_password" class="input_label">Пароль</label>
+      <input
+        type="password"
+        name="password"
+        required
+        id="id_password"
+        class="input_base"
+      />
+      <p class="forget_password">
+        <a href="{% url 'password_reset' %}">Забули пароль?</a>
+      </p>
+      <button
+        type="submit"
+        class="button_reset button_primary button_full_width"
+      >
+        Увійти
+      </button>
+    </form>
+    <p class="register_or_login_link">
+      Не маєте облікового запису?&nbsp&nbsp
+      <a href="{% url 'signup' %}">Зареєструватись</a>
+    </p>
+  </div>
+</div>
+{% endblock auth-content %}

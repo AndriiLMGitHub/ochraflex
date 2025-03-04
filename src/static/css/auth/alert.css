@@ -1,0 +1,54 @@
+:root {
+  --success-bg-color: #d5e6de;
+  --success-text-color: #0a3622;
+  --success-border-color: #9eccbd;
+  /* --- */
+  --warning-bg-color: orange;
+  --warning-text-color: orange;
+  --warning-border-color: orange;
+  /* --- */
+  --danger-bg-color: #f8d7da;
+  --danger-text-color: #58151c;
+  --danger-border-color: #f1aeb5;
+}
+
+.alert {
+  width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.alert-success {
+  background-color: var(--success-bg-color);
+  color: var(--success-text-color);
+  border: 1px solid var(--success-border-color);
+}
+
+.alert-error {
+  background-color: var(--danger-bg-color);
+  color: var(--danger-text-color);
+  border: 1px solid var(--danger-border-color);
+}
+
+.btn-close {
+  background-color: transparent;
+  border: 0;
+  float: right;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-close:hover {
+  background-color: rgb(255, 255, 255, 0.4);
+}
+
+.alert_container {
+  width: 768px;
+  margin: 0 auto;
+}
+
+.top {
+  margin-top: 15px;
+}

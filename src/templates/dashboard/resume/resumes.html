@@ -1,0 +1,144 @@
+{% extends 'dashboard/dashboard_base.html' %}
+<!--Title-->
+{% block title %}Dashboard - Resumes{% endblock title %} {% load static %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+  rel="stylesheet"
+  href="{% static 'css/dashboard/resumes/resumes.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block title_page %}Заповнені анкети-резюме{% endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %}
+<div class="tabs">
+  <button class="tab-link active" data-tab="all">Всі</button>
+  <button class="tab-link" data-tab="new">Нові</button>
+  <button class="tab-link" data-tab="favorites">Обрані</button>
+  <button class="tab-link" data-tab="deleted">Видалені</button>
+</div>
+<div class="toolbar">
+  <div class="toolbar-left">
+    <div class="checkbox-container">
+      <label class="checkbox">
+        <input type="checkbox" />
+        <div class="circle"></div>
+        <div class="box">
+          <span class="checkmark"></span>
+        </div>
+      </label>
+    </div>
+    <!-- Placeholder for a checkbox icon -->
+    <i><img src="{% static 'images/icons/trash-disabled.svg' %}" alt="Delete item" /></i>
+    <!-- Trash can icon -->
+    <i><img src="{% static 'images/icons/order.svg' %}" alt="Order item" /></i>
+    <!-- Order icon -->
+    <i><img src="{% static 'images/icons/filter.svg' %}" alt="Filter" /></i>
+    <!-- Filter icon -->
+  </div>
+  <div class="search-bar">
+    <input type="text" placeholder="Введіть значення" class="input_base" />
+      <div class="search-icon">
+        <img src="{% static 'images/icons/search.svg' %}" alt="Search item" />
+      </div>
+    </button>
+    <!-- Search icon -->
+  </div>
+  <div class="toolbar-right">
+    <div class="page-nav">
+      <!-- <i class="disabled">&#8249;</i> -->
+      <!-- Left arrow -->
+      <i>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <symbol id="fff"></symbol>
+            <g clip-path="url(#clip0_148_3888)">
+            <path d="M15.41 7.41L14 6L8 12L14 18L15.41 16.59L10.83 12L15.41 7.41Z" fill="#E8E8E8"/>
+            </g>
+            <defs>
+            <clipPath id="clip0_148_3888">
+            <rect width="24" height="24" fill="white"/>
+            </clipPath>
+            </defs>
+        </svg>
+      </i>
+      <span>1-20</span>
+      <i>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_148_3893)">
+            <path d="M9.99984 6L8.58984 7.41L13.1698 12L8.58984 16.59L9.99984 18L15.9998 12L9.99984 6Z" fill="#2E2E2E"/>
+            </g>
+            <defs>
+            <clipPath id="clip0_148_3893">
+            <rect width="24" height="24" fill="white"/>
+            </clipPath>
+            </defs>
+        </svg> 
+      </i>       
+      <!-- Right arrow -->
+    </div>
+    <span>з</span>
+    <span>100</span>
+  </div>
+</div>
+<div id="all" class="tab-content active">
+  <div>
+    <table>
+      <thead>
+          <tr>
+              <th></th>
+              <th></th>
+              <th>ID</th>
+              <th>Jméno a příjmení</th>
+              <th>Datum</th>
+              <th>Obor</th>
+              <th>Dotazník</th>
+              <th>Jazyk</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td >
+                <div class="checkbox-container">
+                  <label class="checkbox">
+                    <input type="checkbox" />
+                    <div class="circle"></div>
+                    <div class="box">
+                      <span class="checkmark"></span>
+                    </div>
+                  </label>
+                </div>
+              </td>
+              <td class="icon star">★</td>
+              <td>123456</td>
+              <td>Jakub Novák</td>
+              <td>28.10.2024, 23:45:12</td>
+              <td>Електрик</td>
+              <td>Для всіх</td>
+              <td>CZ</td>
+          </tr>
+      </tbody>
+  </table>
+  </div>
+</div>
+<div id="new" class="tab-content">
+  <p>Нові</p>
+</div>
+<div id="favorites" class="tab-content">
+  <p>Обрані</p>
+</div>
+<div id="deleted" class="tab-content">
+  <p>Видалені</p>
+</div>
+{% endblock main %}
+<!--Content-->
+<!--Sctipts-->
+{% block scripts %}
+<script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/resumes/index.js' %}"></script>
+{% endblock scripts %}
+<!--Sctipts-->

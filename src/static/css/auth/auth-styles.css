@@ -1,0 +1,42 @@
+a {
+  text-decoration: none !important;
+}
+.auth_form {
+  width: 400px;
+}
+
+.center_block {
+  margin: 0 auto;
+}
+
+.title_form {
+  margin: 20px 0;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 33px;
+}
+
+.forget_password {
+  margin: 5px 0 20px 0;
+}
+
+.forget_password a {
+  font-weight: 500;
+  color: #2e2e2e;
+  border-bottom: 1px solid #2e2e2e;
+}
+
+.forget_password a:hover {
+  color: #131313;
+  border-bottom: 1px solid #131313;
+}
+
+.register_or_login_link {
+  margin-top: 20px;
+}
+.register_or_login_link a {
+  color: #037dff;
+}
+.register_or_login_link a:hover {
+  border-bottom: 1px solid #037dff;
+}

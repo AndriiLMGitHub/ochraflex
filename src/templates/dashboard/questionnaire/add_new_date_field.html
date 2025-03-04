@@ -1,0 +1,215 @@
+{% extends 'dashboard/dashboard_base.html' %} {% load static %}
+<!--Title-->
+{% block title %}Dashboard - Start create{% endblock title %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+  rel="stylesheet"
+  href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+  <a href="{% url 'questionnaire_detail' block_template.id %}">
+    <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+  </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Дата{%endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %}
+{% load static %}
+<form method="POST" id="field-form">
+  {% csrf_token %}
+  <div class="add_new_field marg_bottom-20">
+    <button type="submit" class="button_primary button_reset btn-icon" id="submit-button">
+    <svg class="offset-right-5" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7 14C6.71667 14 6.47933 13.904 6.288 13.712C6.096 13.5207 6 13.2833 6 13V8H1C0.716667 8 0.479 7.904 0.287 7.712C0.0956668 7.52067 0 7.28333 0 7C0 6.71667 0.0956668 6.479 0.287 6.287C0.479 6.09567 0.716667 6 1 6H6V1C6 0.716667 6.096 0.479 6.288 0.287C6.47933 0.0956668 6.71667 0 7 0C7.28333 0 7.521 0.0956668 7.713 0.287C7.90433 0.479 8 0.716667 8 1V6H13C13.2833 6 13.5207 6.09567 13.712 6.287C13.904 6.479 14 6.71667 14 7C14 7.28333 13.904 7.52067 13.712 7.712C13.5207 7.904 13.2833 8 13 8H8V13C8 13.2833 7.90433 13.5207 7.713 13.712C7.521 13.904 7.28333 14 7 14Z" fill="currentColor"/>
+    </svg>
+      <p>Додати</p>
+    </button>
+  </div>
+  <div class="d-flex">
+    <div class="border-field" id="source-container">
+      <div class="input-panel">
+        <div class="group-form">
+          <!-- <h5 class="static-title">Datum</h5> -->
+          <label for="id_name" class="input_label">
+            <input
+              type="text"
+              class="input-title"
+              autofocus
+              placeholder="Уведіть заголовок"
+              id="id_name"
+              required
+              name="name"
+              maxlength="128"
+            />
+          </label>
+          <span>
+            <img src="{% static 'images/icons/required.svg' %}" alt="" />
+          </span>
+        </div>
+        <input type="date" id="dateInput" class="input_base" />
+        <p>
+          <label for="help_info"></label>
+          <input
+            type="text"
+            id="help_info"
+            name="help_info"
+            class="input-title"
+            placeholder="Текст підказка"
+          />
+        </p>
+      </div>
+    </div>
+    <div class="settings-panel">
+      <div class="checkbox-container justify-content-start marg_bottom-10">
+        <label class="checkbox">
+          <input
+            id="required-fill"
+            type="checkbox"
+            id="is_required"
+            name="is_required"
+            value="true"
+          />
+          <div class="circle"></div>
+          <div class="box">
+            <span class="checkmark"></span>
+          </div>
+        </label>
+        <span>Обов’язкове до заповнення</span>
+      </div>
+      <div class="checkbox-container justify-content-start marg_bottom-10">
+        <label class="checkbox">
+          <input type="checkbox" id="required-fill-help-text" />
+          <div class="circle"></div>
+          <div class="box">
+            <span class="checkmark"></span>
+          </div>
+        </label>
+        <span>Допоміжний текст (Текст підказка)</span>
+      </div>
+      <!-- Title -->
+      <div class="settings-panel-title">Тип введення</div>
+      <!-- Title -->
+      <div class="radio-container marg_bottom-10">
+        <div class="radio-container">
+          <input
+            type="radio"
+            id="type-number"
+            name="field_type"
+            value="date"
+            required
+            checked
+          />
+          <label for="type-number">Цифрове значення </label>
+        </div>
+      </div>
+      <div class="block-muted">
+        <!-- Title -->
+        <div class="settings-panel-title">Кількість символів:</div>
+        <!-- Title -->
+        <div class="radio-container marg_bottom-10">
+          <div class="radio-container">
+            <input type="radio" id="max-60" name="max_symbols" value="60" />
+            <label for="max-60">до 60</label>
+          </div>
+        </div>
+        <div class="radio-container marg_bottom-10">
+          <div class="radio-container">
+            <input type="radio" id="max-250" name="max_symbols" value="250" />
+            <label for="max-250">до 250 <span>(рекомендовано)</span></label>
+          </div>
+        </div>
+        <div class="radio-container marg_bottom-10">
+          <div class="radio-container">
+            <input type="radio" id="max-500" name="max_symbols" value="500" />
+            <label for="max-500">до 500</label>
+          </div>
+        </div>
+        <div class="radio-container marg_bottom-10">
+          <div class="radio-container">
+            <input
+              type="radio"
+              id="static"
+              name="max_symbols"
+              value="static"
+              checked
+            />
+            <label for="static">Стале значення</label>
+          </div>
+          <div class="group-input-value" id="static-value-block">
+            <input
+              type="number"
+              class="input_base"
+              id="static_value"
+              name="static_value"
+              style="width: 100px"
+              value="8"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="add-new-lang-block">
+    <a href="{% url 'de_language_date_field' block_template.id %}" class="button_primary_outline button_reset" id="copy-button">
+      Зберегти і додати іншомовний варіант
+    </a>
+  </div>
+</form>
+<!-- Content -->
+{% endblock main %} {% block scripts %}
+<script src="{% static 'js/questionnaire/date.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const copyButton = document.getElementById("copy-button");
+    const submitButton = document.getElementById("submit-button");
+    const form = document.getElementById("field-form");
+
+    function handleFormSubmission(event, redirectUrl) {
+      event.preventDefault(); // Запобігаємо стандартній поведінці форми
+
+      const formData = new FormData(form);
+
+      // Виконуємо запит на сервер
+      fetch("{% url 'create_field' block_template.id %}", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            alert(data.message);
+
+            // Перехід за посиланням після успішної відправки
+            window.location.href = redirectUrl;
+          } else {
+            alert("Помилка: " + data.message);
+          }
+        })
+        .catch((error) => console.error("Помилка:", error));
+    }
+
+    // Додаємо обробник для кнопки submit
+    submitButton.addEventListener("click", function (e) {
+      handleFormSubmission(
+        e,
+        "{% url 'questionnaire_detail' block_template.id %}"
+      );
+    });
+
+    // Додаємо обробник для посилання
+    copyButton.addEventListener("click", function (e) {
+      handleFormSubmission(e, copyButton.href);
+    });
+  });
+</script>
+{% endblock scripts %}

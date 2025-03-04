@@ -1,0 +1,98 @@
+{% load static %} {% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/auth/alert.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/dashboard/dashboard_style.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'css/dashboard/side_bar.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'css/dashboard/main_header.css' %}"
+    />
+    <link rel="stylesheet" href="{% static 'css/form-items.css' %}" />
+    {% block styles %}{% endblock styles %}
+  </head>
+  <body class="inter-primary">
+    <div class="sidebar">
+      <div class="logo">
+        <a href="{% url 'questionnaires' %}">
+          <img src="{% static 'images/main_logo.svg' %}" alt="Logo" />
+        </a>
+      </div>
+      <div class="user">
+        {{ request.user.get_full_name }}
+        <div class="role">Admin</div>
+      </div>
+      <ul class="menu">
+        <li>
+          <a
+            href="{% url 'list_resumes' %}"
+            class="{% is_active_path request '/dashboard/resumes/.*' %}"
+          >
+            Заповнені анкети-резюме</a
+          >
+        </li>
+        <li>
+          <a
+            href="{% url 'questionnaires' %}"
+            class="{% is_active_path request '/dashboard/questionnaires/.*' %}"
+            >Анкети</a
+          >
+        </li>
+        <li>
+          <a
+            href="{% url 'dashboard' %}"
+            class="{% if request.path == '/dashboard/settings/' %}active{% endif %}"
+            >Налаштування</a
+          >
+        </li>
+      </ul>
+      <div class="logout">
+        <a href="{% url 'logout' %}"> Logout </a>
+      </div>
+    </div>
+    <div class="page">
+      <div class="header">
+        {% block back %}{% endblock back %}
+        <h1>{% block title_page %}{% endblock title_page %}</h1>
+      </div>
+      <div class="content">
+        <!--Messages-->
+        {% if messages %}
+        <!--Loop messages-->
+        {% for message in messages %}
+        <div class="alert alert-{{message.tags}}">
+          {{message}}
+          <button type="button" class="btn-close">
+            <img
+              src="{% static 'images/icons/close.svg' %}"
+              alt="Close button"
+            />
+          </button>
+        </div>
+        {% endfor %}
+        <!--Loop messages-->
+        {% endif %}
+        <!--Messages-->
+        {% block main %} {% endblock main %}
+      </div>
+    </div>
+    {% block scripts %}
+    <script src="{% static 'js/app.js' %}"></script>
+    {% endblock scripts %}
+  </body>
+</html>

@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Auth{% endblock title %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/auth/auth-styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/auth/auth-responsive.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/auth/alert.css' %}" />
+  </head>
+  <body class="inter-primary">
+    <!--Messages-->
+    <div class="alert_container">
+      {% if messages %}
+      <!--Loop messages-->
+      {% for message in messages %}
+      <div class="alert alert-{{message.tags}} top">
+        {{message}}
+        <button type="button" class="btn-close">
+          <img src="{% static 'images/icons/close.svg' %}" alt="Close button" />
+        </button>
+      </div>
+      {% endfor %}
+      <!--Loop messages-->
+      {% endif %}
+    </div>
+    <!--Messages-->
+
+    <!-- Content -->
+    <div class="container">
+      {% block auth-content %}{% endblock auth-content %}
+    </div>
+    <!-- Content -->
+    {% block scripts %}
+    <script src="{% static 'js/app.js' %}"></script>
+    {% endblock scripts %}
+  </body>
+</html>

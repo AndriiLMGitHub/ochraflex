@@ -1,0 +1,171 @@
+{% extends 'dashboard/dashboard_base.html' %}
+<!--Title-->
+{% block title %}Dashboard - Resumes{% endblock title %} {% load static %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/library/library.css' %}"
+/>
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/resumes/resumes.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+    <a href="{{ request.META.HTTP_REFERER }}">
+        <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+    </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Всі шаблони{% endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %}
+{% for library_template in library_templates %}
+<div class="border-field-questionnaire">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <h3>{{ library_template.name }}</h3>
+            <p>{% if library_template.description %}{{ library_template.description }}{% endif %}</p>
+        </div>
+        <div>
+            <a href="{% url 'add_library_template_to_block' block_template.id library_template.id %}" class="d-flex align-items-center button_primary button_reset">
+                <svg class="offset-right-5" width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.5924 5.58L8.00244 12.17L4.41244 8.59L3.00244 10L8.00244 15L16.0024 7L14.5924 5.58ZM10.0024 0C4.48244 0 0.00244141 4.48 0.00244141 10C0.00244141 15.52 4.48244 20 10.0024 20C15.5224 20 20.0024 15.52 20.0024 10C20.0024 4.48 15.5224 0 10.0024 0ZM10.0024 18C5.58244 18 2.00244 14.42 2.00244 10C2.00244 5.58 5.58244 2 10.0024 2C14.4224 2 18.0024 5.58 18.0024 10C18.0024 14.42 14.4224 18 10.0024 18Z" fill="currentColor"/>
+                </svg>
+                <p>Вибрати</p>                    
+            </a>
+        </div>
+    </div>
+    <div>
+        {% if library_template.field %}
+        <div class="marg_bottom-15">
+            <div class="view-box marg_top-20">
+                <div class="w-100 marg_top-20">
+                    <div class="group-form">
+                    <label for="{{library_field.field.name}}" class="input_label">{{library_template.field.name}}</label>
+                    {% if library_template.field.is_required %}
+                    <p>
+                        <img src="{% static 'images/icons/required.svg' %}" alt="" />
+                    </p>
+                    {% endif %}
+                    </div>
+                </div>
+                {% if library_template.field.field_type == 'textarea' %}
+                <div class="d-flex justify-content-between main-title-menu">
+                    <div class="w-100">
+                        <div class="textarea-quest">
+                        <textarea class="input_base_red" placeholder="Введіть текст" maxlength="{{ library_field.field.max_symbols }}"></textarea>
+                    </div>
+                    </div>
+                </div>
+                {% elif library_template.field.field_type == 'number' and library_template.field.extra_tag == 'phone' %}
+                <div class="w-100">
+                    <div class="d-flex phoneForm">
+                        <select class="input_base languageDropdown"></select>
+                        <div class="selectedLanguage"></div>
+                        <input type="text" class="input_base phoneNumberInput" />
+                    </div>
+                </div>
+                {% elif library_template.field.field_type == 'number' %}
+                <div class="w-100">
+                    <input
+                        type="{{field.field_type}}"
+                        class="input_base_red"
+                        placeholder="Введіть число"
+                        max="{% if library_field.field.static_value %}{{ library_field.field.static_value }}{% else %}{{library_field.field.max_symbols}}{% endif %}"
+                    />
+                </div>
+                {% elif library_template.field.field_type == 'date' %}
+                <div class="w-100">
+                    <input
+                    type="{{library_field.field.field_type}}"
+                    class="input_base_red"
+                    maxlength="{{ library_field.field.max_symbols }}"
+                    max="{{library_field.field.max_symbols}}"
+                    />
+                </div>
+                {% elif library_template.field.field_type == 'boolean' %}
+                <div class="w-100">
+                    <div class="radio-container">
+                    <input type="radio" name="some" value="true" />
+                    <label for="true">Так</label>
+                    <input type="radio" name="some" value="false" />
+                    <label for="false">Ні</label>
+                    </div>
+                </div>
+                {% elif library_template.field.field_type == 'checkbox' %}
+                <div class="w-100">
+                    <div class="radio-container offset-left-20">
+                    {% for option in library_template.field.options %}
+                    <div class="d-flex g-30">
+                        <label class="checkbox">
+                        <input type="checkbox" />
+                        <div class="circle"></div>
+                        <div class="box">
+                            <span class="checkmark"></span>
+                        </div>
+                        </label>
+                        <p>{{ option }}</p>
+                    </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                {% elif library_template.field.field_type == 'select' %}
+                    <div class="w-100">
+                        <select class="input_base_red">
+                        {% for option in library_template.field.options %}
+                        <option value="{{option}}">{{option}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                {% elif library_template.field.field_type == 'radio' %}
+                    <div class="w-100">
+                        <div class="radio-container offset-left-20">
+                        {% for option in library_template.field.options %}
+                        <div class="d-flex g-30">
+                            <input type="radio" value="{{ options }}" name="name" />
+                            <label for="{{ forloop.counter }}">{{ option }}</label>
+                        </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <input
+                        type="{{field.field_type}}"
+                        class="input_base_red"
+                        placeholder="Введіть текст"
+                        maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                    />
+                {% endif %}
+                {% if library_template.field.help_info %}
+                    <p class="offset-left-5">
+                        <small class="text-small-muted">{{library_template.field.help_info}}</small>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        {% elif library_template.description_field %}
+            {{ library_template.description_field}}
+        {% else %}
+            {{ library.combined_block.fields.all }}
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% endblock main %}
+<!--Content-->
+{% block scripts %}
+<script src="{% static 'js/utils/phoneNumber.js' %}"></script>
+{% endblock scripts %}

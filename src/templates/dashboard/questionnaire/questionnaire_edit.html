@@ -1,0 +1,45 @@
+{% extends 'dashboard/dashboard_base.html' %} {% load static %}
+<!--Title-->
+{% block title %}Dashboard - Edit{% endblock title %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+  rel="stylesheet"
+  href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+  <a href="{% url 'questionnaires' %}">
+    <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+  </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Редагувати анкету{%endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %} {% load static %}
+<!-- <h3>{{ block_template.name }}</h3>
+<p>{{ block_template.description }}</p> -->
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group marg_bottom-20">
+        <label for="id_name" class="input_label">Назва анкети</label>
+        <input type="text" id="id_name" name="name" class="input_base" maxlength="255" required value="{{block_template.name}}"/>
+        <small>Назва буде відображатися для всіх</small>
+    </div>
+    <div class="form-group marg_bottom-20">
+        <label for="id_description" class="input_label">Опис анкети</label>
+        <textarea id="id_description" name="description" class="input_base">{{block_template.description}}</textarea>
+        <small>Цей текст буде відображатися лише для адмінів</small>
+    </div>
+    <div class="form-buttons">
+        <button type="submit" class="button_primary button_reset">Зберегти</button>
+</form>
+{% endblock main %}
+{% block scripts %}{% endblock scripts %}

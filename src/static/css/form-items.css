@@ -1,0 +1,168 @@
+/* Checkbox states */
+.checkbox-container {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkbox {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+/* Invisible native checkbox */
+.checkbox input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* Outer Circle for hover effect */
+.checkbox .circle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 123, 255, 0.2);
+  display: none;
+  z-index: 1;
+}
+.circle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 123, 255, 0.2);
+  display: none;
+  z-index: 1;
+}
+
+.checkbox input:hover ~ .circle {
+  display: block;
+}
+
+/* Custom Checkbox Appearance */
+.checkbox .box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #2e2e2e;
+  border-radius: 5px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+/* Checkmark for selected state */
+.checkbox .checkmark {
+  display: none;
+  width: 6px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Checked state */
+.checkbox input:checked ~ .circle {
+  display: block;
+  background-color: rgba(0, 123, 255, 0.4);
+}
+
+.checkbox input:checked ~ .box {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.checkbox input:checked ~ .box .checkmark {
+  display: block;
+}
+
+/* Disabled state */
+.checkbox input:disabled ~ .box {
+  background-color: #f5f5f5;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+.checkbox input:disabled ~ .circle {
+  display: none;
+}
+/* Checkbox states */
+
+.radio-container, .multi-container {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.radio-container span, .multi-container span {
+  color: #a9a9a9;
+  font-size: 12px;
+}
+
+input[type="radio"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #333;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+input[type="radio"]:checked {
+  border-color: #1e90ff; /* Основний колір обводу */
+  /* box-shadow: 0 0 0 4px rgba(30, 144, 255, 0.5),
+    0 0 0 8px rgba(30, 144, 255, 0.5);  */
+}
+
+input[type="radio"]:checked::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background-color: rgb(30, 144, 255); /* Синій колір всередині */
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.input-title {
+  border: none;
+  outline: none;
+}
+
+.input-title::placeholder {
+  color: #d3d3d3; /* Placeholder text color */
+  transition: color 0.3s ease; /* Smooth transition for color */
+}
+.input-title:focus::placeholder {
+  color: #ddd;
+}
+
+#help_info {
+  display: none;
+  font-weight: 600;
+  color: #2e2e2e;
+  margin-top: 10px;
+}
+
+.multi-container {
+  flex-direction: column;
+  align-items: start;
+}

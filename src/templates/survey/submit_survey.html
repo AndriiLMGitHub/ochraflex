@@ -1,0 +1,67 @@
+{% extends 'dashboard/dashboard_base.html' %}
+<!--Title-->
+{% block title %}Dashboard - Resumes{% endblock title %} {% load static %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/library/library.css' %}"
+/>
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/resumes/resumes.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+    <a href="{% url 'questionnaires' %}">
+        <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+    </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Бібліотека шаблонів{% endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %}
+<h2>Анкета: {{ block_template.name }}</h2>
+<form method="POST">
+    {% csrf_token %}
+
+    <h3>Комбіновані блоки</h3>
+    {% for combined_block in combined_blocks %}
+        <label>{{ combined_block.description_field.title }}</label>
+        <p>{{ combined_block.fields.all }}</p>
+        <textarea name="combined_block_{{ combined_block.id }}"></textarea>
+        <br>
+    {% endfor %}
+
+    {% if not user.is_authenticated %}
+        <label>E-mail:</label>
+        <input type="email" name="email" required>
+        <br>
+    {% endif %}
+
+    <h3>Поля анкети</h3>
+    {% for field in fields %}
+        <label>{{ field.name }}</label>
+        <input type="text" name="field_{{ field.id }}">
+        <br>
+    {% endfor %}
+    
+    <button type="submit">Відправити</button>
+</form>
+{% endblock main %}
+<!--Content-->
+<!--Scripts-->
+{% block scripts %}
+{% endblock scripts %}
+<!--Scripts-->

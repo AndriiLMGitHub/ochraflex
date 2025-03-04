@@ -1,0 +1,244 @@
+{% extends 'dashboard/dashboard_base.html' %}
+<!--Title-->
+{% block title %}Dashboard - Resumes{% endblock title %} {% load static %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/library/library.css' %}"
+/>
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/resumes/resumes.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+    <a href="{% url 'library' %}">
+        <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+    </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Створити новий шаблон{% endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %}
+<div class="d-flex align-items-center justify-content-between">
+    <div>
+        <h3>{{ library_template.name }}</h3>
+        <p>{% if library_template.description %}{{ library_template.description }}{% endif %}</p>
+    </div>
+    <div class="d-flex align-items-center">
+        <div class="offset-right-10 d-flex">
+        <a href="" class="button_reset btn-icon-hover">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_308_8659)">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0025 4C14.73 4 17.3381 5.43062 19.7688 7.78115C20.598 8.58305 21.3482 9.43916 22.0086 10.2956C22.4071 10.8124 22.69 11.219 22.8449 11.4612L23.1895 12L22.8449 12.5388C22.69 12.781 22.4071 13.1876 22.0086 13.7044C21.3482 14.5608 20.598 15.417 19.7688 16.2189C17.3381 18.5694 14.73 20 12.0025 20C9.27492 20 6.66679 18.5694 4.23617 16.2189C3.40695 15.417 2.65677 14.5608 1.99637 13.7044C1.59787 13.1876 1.31494 12.781 1.16003 12.5388L0.81543 12L1.16003 11.4612C1.31494 11.219 1.59787 10.8124 1.99637 10.2956C2.65677 9.43916 3.40695 8.58305 4.23617 7.78115C6.66679 5.43062 9.27492 4 12.0025 4ZM20.4247 11.5169C19.8201 10.7327 19.1326 9.9482 18.3784 9.21885C16.285 7.19438 14.1075 6 12.0025 6C9.89739 6 7.71996 7.19438 5.6265 9.21885C4.8723 9.9482 4.18485 10.7327 3.58021 11.5169C3.44962 11.6862 3.32895 11.8478 3.21863 12C3.32895 12.1522 3.44962 12.3138 3.58021 12.4831C4.18485 13.2673 4.8723 14.0518 5.6265 14.7811C7.71996 16.8056 9.89739 18 12.0025 18C14.1075 18 16.285 16.8056 18.3784 14.7811C19.1326 14.0518 19.8201 13.2673 20.4247 12.4831C20.5553 12.3138 20.676 12.1522 20.7863 12C20.676 11.8478 20.5553 11.6862 20.4247 11.5169ZM12.0025 16C9.79333 16 8.00246 14.2091 8.00246 12C8.00246 9.79086 9.79333 8 12.0025 8C14.2116 8 16.0025 9.79086 16.0025 12C16.0025 14.2091 14.2116 16 12.0025 16ZM12.0025 14C13.107 14 14.0025 13.1046 14.0025 12C14.0025 10.8954 13.107 10 12.0025 10C10.8979 10 10.0025 10.8954 10.0025 12C10.0025 13.1046 10.8979 14 12.0025 14Z" fill="currentColor"/>
+                </g>
+                <defs>
+                <clipPath id="clip0_308_8659">
+                <rect width="24" height="24" fill="white" transform="translate(0.00244141)"/>
+                </clipPath>
+                </defs>
+            </svg>          
+        </a>
+        </div>
+        <a href="{% url 'allow_duplicate_library_template' library_template.id %}" class="button_primary button_reset d-flex align-items-center">               
+            Продовжити
+        <svg class="offset-left-5" width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.58637 0.286693L15.2882 6.78323C15.3898 6.88166 15.4625 6.98887 15.5063 7.10487C15.5494 7.22088 15.572 7.34555 15.5741 7.47886C15.5762 7.61218 15.5574 7.73749 15.5179 7.85478C15.4778 7.97209 15.4084 8.08151 15.31 8.18306L8.81348 14.8849C8.63302 15.0711 8.40554 15.1706 8.13105 15.1836C7.85587 15.1959 7.61674 15.1036 7.41365 14.9067C7.21083 14.7265 7.10294 14.4992 7.09 14.2247C7.07772 13.9495 7.17001 13.7103 7.36688 13.5073L12.1901 8.53163L1.01641 8.70547C0.733114 8.70987 0.493989 8.61792 0.299036 8.42959C0.104739 8.24059 0.0053858 8.00444 0.000978337 7.72114C-0.00342912 7.43784 0.0885347 7.19905 0.276869 7.00477C0.465859 6.8098 0.702003 6.71012 0.985302 6.70571L12.159 6.53187L7.18332 1.70869C6.99716 1.52823 6.89754 1.29642 6.88447 1.01325C6.87206 0.73008 6.96442 0.495282 7.16154 0.30886C7.34174 0.106032 7.57349 0.00241377 7.85679 -0.00199368C8.14009 -0.00640114 8.38328 0.0898286 8.58637 0.286693Z" fill="currentColor"/>
+        </svg>            
+        </a>           
+    </div>
+</div>
+<div class="add-button add-field marg_top-20">
+    <button class="button_reset button_primary">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.00244 14C6.71911 14 6.48177 13.904 6.29044 13.712C6.09844 13.5207 6.00244 13.2833 6.00244 13V8H1.00244C0.719108 8 0.481442 7.904 0.289442 7.712C0.0981082 7.52067 0.00244141 7.28333 0.00244141 7C0.00244141 6.71667 0.0981082 6.479 0.289442 6.287C0.481442 6.09567 0.719108 6 1.00244 6H6.00244V1C6.00244 0.716667 6.09844 0.479 6.29044 0.287C6.48177 0.0956668 6.71911 0 7.00244 0C7.28577 0 7.52344 0.0956668 7.71544 0.287C7.90677 0.479 8.00244 0.716667 8.00244 1V6H13.0024C13.2858 6 13.5231 6.09567 13.7144 6.287C13.9064 6.479 14.0024 6.71667 14.0024 7C14.0024 7.28333 13.9064 7.52067 13.7144 7.712C13.5231 7.904 13.2858 8 13.0024 8H8.00244V13C8.00244 13.2833 7.90677 13.5207 7.71544 13.712C7.52344 13.904 7.28577 14 7.00244 14Z" fill="currentColor"/>
+        </svg> 
+    </button>
+    <div class="dropdown-fields">
+        <a href="{% url 'create_description_field_template' library_template.id %}" class="dropdown-item">Назва (заголовок) і опис</a>
+        <a href="{% url 'create_textfield_template' library_template.id %}" class="dropdown-item">Поле для вводу</a>
+        <a href="{% url 'create_textarea_field_template' library_template.id %}" class="dropdown-item">Поле для опису</a>
+        <a href="{% url 'create_select_field_template' library_template.id %}" class="dropdown-item">Випадаючий список</a>
+        <a href="{% url 'create_one_value_field_template' library_template.id %}" class="dropdown-item">Вибрати одне значення</a>
+        <a href="{% url 'create_multiple_values_field_template' library_template.id %}" class="dropdown-item">Вибрати декілька значень</a>
+        <a href="{% url 'create_yes_or_no_field_template' library_template.id %}" class="dropdown-item">Так або ні</a>
+        <a href="{% url 'create_phone_field_template' library_template.id %}" class="dropdown-item">Телефон</a>
+        <a href="{% url 'create_date_field_template' library_template.id %}" class="dropdown-item">Дата</a>
+    </div>
+</div>
+<div class="example-template marg_top-20">
+    <div class="border-field-questionnaire">
+        {% if library_template.combined_block.description_field %}
+            <div class="d-flex align-items-center justify-content-between main-title-menu marg_bottom-30">
+                <div class="wrap-quest">
+                    <h3 class="marg_bottom-10">{{ library_template.combined_block.description_field.title }}</h3>
+                    <p class="">{{ library_template.combined_block.description_field.description }}</p>
+                </div>
+                <div class="relative">
+                    <div href="#" class="dropdown-setting">
+                        <a href="#" class="trigger">
+                            <img src="{% static 'images/icons/hr--menu.svg' %}" alt="" />
+                        </a>
+                        <div class="dropdown-menu-setting">
+                            <a href="{% url 'update_description_field_template' library_template.id %}" class="dropdown-item d-flex align-items-center">
+                                <p>
+                                    <svg class="offset-right-10" width="12" height="12" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 14.2512V18.0012H3.75L14.81 6.94125L11.06 3.19125L0 14.2512ZM17.71 4.04125C18.1 3.65125 18.1 3.02125 17.71 2.63125L15.37 0.291249C14.98 -0.0987512 14.35 -0.0987512 13.96 0.291249L12.13 2.12125L15.88 5.87125L17.71 4.04125Z" fill="currentColor"/>
+                                    </svg>                                        
+                                </p>
+                                <p>
+                                    Редагувати
+                                </p>
+                            </a>
+                            <a href="{% url 'delete_description_field_from_db' library_template.id %}" class="dropdown-item red d-flex align-items-center">
+                                <p>
+                                    <svg class="offset-right-10" width="12" height="16" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1.00244 16C1.00244 17.1 1.90244 18 3.00244 18H11.0024C12.1024 18 13.0024 17.1 13.0024 16V4H1.00244V16ZM14.0024 1H10.5024L9.50244 0H4.50244L3.50244 1H0.00244141V3H14.0024V1Z" fill="currentColor"/>
+                                    </svg>                           
+                                </p> 
+                                <p>Видалити</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% for field in library_template.combined_block.fields.all %}
+        <div class="d-flex align-items-center justify-content-between main-title-menu marg_bottom-30">
+            <div class="wrap-quest">
+                <div class="group-form">
+                    <label for="{{field.name}}" class="input_label">{{field.name}}</label>
+                    {% if field.is_required %}
+                        <p>
+                            <img src="{% static 'images/icons/required.svg' %}" alt="" />
+                        </p>
+                    {% endif %}
+                </div>
+                {% if field.field_type == 'textarea' %}
+                    <div class="d-flex justify-content-between main-title-menu">
+                        <div class="w-100">
+                            <textarea
+                            style="min-height: 100px;"
+                            class="input_base_red"
+                            placeholder="Введіть текст"
+                            maxlength="{{ field.max_symbols }}"></textarea>
+                        </div>
+                    </div>
+                {% elif field.field_type == 'number' and field.extra_tag == 'phone' %}
+                    <div class="d-flex phoneForm">
+                    <select class="input_base languageDropdown"></select>
+                    <div class="selectedLanguage"></div>
+                    <input type="text" class="input_base phoneNumberInput" />
+                    </div>
+                {% elif field.field_type == 'number' and not field.extra_tag %}
+                    <input
+                    type="{{field.field_type}}"
+                    class="input_base_red"
+                    placeholder="Введіть число"
+                    max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                    />
+                {% elif field.field_type == 'date' %}
+                    <input
+                        type="{{field.field_type}}"
+                        class="input_base_red"
+                        maxlength="{{ field.max_symbols }}"
+                        max="{{field.max_symbols}}"
+                    />
+                {% elif field.field_type == 'boolean' %}
+                    <div class="radio-container offset-left-20">
+                        <input type="radio" name="some" value="true" />
+                        <label for="true">Так</label>
+                        <input type="radio" name="some" value="false" />
+                        <label for="false">Ні</label>
+                    </div>
+                {% elif field.field_type == 'checkbox' %}
+                    <div class="radio-container marg_top-10 offset-left-20">
+                    {% for option in field.options %}
+                        <div class="d-flex g-30">
+                        <label class="checkbox">
+                            <input type="checkbox" />
+                            <div class="circle"></div>
+                            <div class="box">
+                            <span class="checkmark"></span>
+                            </div>
+                        </label>
+                        <p>{{ option }}</p>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% elif field.field_type == 'select' %}
+                    <select class="input_base_red">
+                    {% for option in field.options %}
+                        <option value="{{option}}">{{option}}</option>
+                    {% endfor %}
+                    </select>
+                {% elif field.field_type == 'radio' %}
+                    <div class="radio-container marg_top-10 offset-left-20">
+                    {% for option in field.options %}
+                    <div class="d-flex g-30">
+                        <input type="radio" value="{{ options }}" name="name" />
+                        <label for="{{ forloop.counter }}">{{ option }}</label>
+                    </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <input
+                    type="{{field.field_type}}"
+                    class="input_base_red"
+                    placeholder="Введіть текст"
+                    maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                    />
+                {% endif %}
+                {% if field.help_info %}
+                    <p class="offset-left-5">
+                        <small class="text-small-muted">{{field.help_info}}</small>
+                    </p>
+                {% endif %}
+            </div>
+            <div class="relative">
+                <div href="#" class="dropdown-setting">
+                    <a href="#" class="trigger">
+                        <img src="{% static 'images/icons/hr--menu.svg' %}" alt="" />
+                    </a>
+                    <div class="dropdown-menu-setting">
+                        <a href="{% url 'delete_field_from_db' library_template.id field.id %}" class="dropdown-item red d-flex align-items-center">
+                            <p>
+                                <svg class="offset-right-10" width="12" height="16" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1.00244 16C1.00244 17.1 1.90244 18 3.00244 18H11.0024C12.1024 18 13.0024 17.1 13.0024 16V4H1.00244V16ZM14.0024 1H10.5024L9.50244 0H4.50244L3.50244 1H0.00244141V3H14.0024V1Z" fill="currentColor"/>
+                                </svg>                                        
+                            </p> 
+                            <p>Видалити</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if library_template.combined_block.allow_dublicate %}
+            <div class="d-flex justify-content-end">
+                <button class="button_red_outline" id="add-one-more-block">
+                    <p>Додати ще</p>
+                </button>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock main %}
+{% block scripts %}
+    <script src="{% static 'js/fields.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/utils/phoneNumber.js' %}"></script>
+    <script src="{% static 'js/questionnaire/init.js' %}"></script>
+{% endblock scripts %}

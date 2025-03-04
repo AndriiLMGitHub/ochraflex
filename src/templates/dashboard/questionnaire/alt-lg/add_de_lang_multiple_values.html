@@ -1,0 +1,151 @@
+{% extends 'dashboard/dashboard_base.html' %} {% load static %}
+<!--Title-->
+{% block title %}Dashboard - Start create{% endblock title %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+  rel="stylesheet"
+  href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+  <a href="{% url 'questionnaire_detail' block_template.id %}">
+    <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+  </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Вибрати декілька значень{%endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %} {% load static %}
+<form method="POST" id="field-form">
+  {% csrf_token %}
+  <div class="add_new_field marg_bottom-20">
+    <button type="submit" class="button_primary button_reset btn-icon">
+      <p>
+        <img src="{% static 'images/icons/plus-button-light.svg' %}" alt="" />
+      </p>
+      <p>Додати</p>
+    </button>
+  </div>
+  <div class="d-flex">
+    <div class="border-field">
+      <div class="input-panel">
+        <div class="group-form">
+          <label for="id_name" class="input_label">
+            <input
+              type="text"
+              class="input-title"
+              autofocus
+              placeholder="Уведіть заголовок"
+              id="id_name"
+              required
+              name="name"
+              maxlength="128"
+            />
+          </label>
+          <span>
+            <img src="{% static 'images/icons/required.svg' %}" alt="" />
+          </span>
+        </div>
+        <p>
+          <input
+            type="hidden"
+            name="field_type"
+            id="id_field_type"
+            value="checkbox"
+          />
+        </p>
+        <div class="create-items marg_top-20">
+          <ol></ol>
+          <div class="create-button-item marg_top-20">
+            <button
+              type="button"
+              class="btn-icon button_primary button_reset button_small"
+            >
+              <p>
+                <img
+                  src="{% static 'images/icons/plus-button-light.svg' %}"
+                  alt=""
+                />
+              </p>
+              <p>Додати</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="settings-panel">
+      <div class="checkbox-container justify-content-start marg_bottom-10">
+        <label class="checkbox">
+          <input
+            id="required-fill"
+            type="checkbox"
+            id="is_required"
+            name="is_required"
+            value="true"
+          />
+          <div class="circle"></div>
+          <div class="box">
+            <span class="checkmark"></span>
+          </div>
+        </label>
+        <span>Обов’язкове до заповнення</span>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock main %}
+<!-- Content -->
+{% block scripts %}
+<script src="{% static 'js/questionnaire/multiple.js' %}"></script>
+<script>
+  document
+    .getElementById("field-form")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+
+      // Збираємо опції для select, якщо такі є
+      const optionsElements = document.querySelectorAll(".input_reset");
+
+      // Парсимо значення опцій, видаляємо порожні значення та фільтруємо дублі
+      const options = Array.from(optionsElements)
+        .map((option) => option.value.trim())
+        .filter((option) => option !== ""); // Фільтруємо порожні значення
+
+      // Додаємо опції до formData як окремий параметр (JSON-строка)
+      if (options.length > 0) {
+        formData.append("options", JSON.stringify(options));
+      }
+
+      fetch("{% url 'create_field' block_template.id %}", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "X-CSRFToken": document.querySelector(
+            "input[name='csrfmiddlewaretoken']"
+          ).value,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            alert(data.message);
+            window.location.href =
+              "{% url 'questionnaire_detail' block_template.id %}";
+          } else {
+            alert("Помилка: " + data.message);
+          }
+        })
+        .catch((error) => console.error("Помилка:", error));
+    });
+</script>
+{% endblock scripts %}

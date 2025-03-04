@@ -1,0 +1,6 @@
+{% extends 'auth/auth_base.html' %}
+<!---->
+{% block auth-content %}
+<h1>Profile of {{ request.user.email }}</h1>
+<a href="{% url 'logout' %}">Logout</a>
+{% endblock auth-content %}

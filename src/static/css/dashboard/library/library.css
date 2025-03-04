@@ -1,0 +1,80 @@
+.border-block-blue {
+    width: 880px;
+    border: 1px solid #037DFF;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.border-block-red {
+    width: 880px;
+    border: 1px solid #ff3d5a;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.tool-panel{
+    padding: 5px;
+}
+
+.toggle-lang a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 0 3px;
+    border-radius: 4px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.toggle-lang a:hover {
+    color: #037DFF;
+}
+.toggle-lang a.active {
+    border:1px solid #037DFF;
+    color: #037DFF;
+}
+
+.setting-trigger-filter {
+    position: relative;
+    height: 34px !important;
+}
+.setting-trigger-filter a {
+    display: inline-block;
+    text-decoration: none;
+    padding:5px;
+    border-radius: 5px;
+}
+.setting-trigger-filter a.trigger-filter:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+.setting-trigger {
+    position: relative;
+    height: 34px !important;
+}
+.setting-trigger a {
+    display: inline-block;
+    text-decoration: none;
+    padding:5px;
+    border-radius: 5px;
+}
+
+.setting-trigger a:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+.dropdown-menu-setting-filter {
+    display: none;;
+}
+
+.dropdown-menu-setting-filter.open {
+    display: block;
+    min-width: 320px;
+    border: 1px solid #ddd;
+    margin: 0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(88, 88, 88, 0.1);
+    overflow: hidden;
+    z-index: 10;
+}

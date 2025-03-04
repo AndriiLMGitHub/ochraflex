@@ -1,0 +1,56 @@
+{% extends 'dashboard/dashboard_base.html' %}
+<!--Title-->
+{% block title %}Dashboard - Resumes{% endblock title %} {% load static %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/library/library.css' %}"
+/>
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/resumes/resumes.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+    <a href="{% url 'questionnaires' %}">
+        <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+    </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Бібліотека шаблонів{% endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %}
+<h2>Результати анкети: {{ block_template.name }}</h2>
+
+{% for response in responses %}
+    <h3>Відповідь #{{ response.id }} ({{ response.submitted_at }})</h3>
+    <ul>
+        {% for field_response in response.field_responses.all %}
+            {% if field_response.field %}
+                <li><b>{{ field_response.field.name }}:</b> {{ field_response.value }}</li>
+            {% elif field_response.combined_block %}
+                <li><b>Комбінований блок ({{ field_response.combined_block.description_field.title }}):</b> {{ field_response.value }}</li>
+            {% else %}
+                <li><b>Описовий блок:</b> {{ field_response.value }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endfor %}
+{% endblock main %}
+<!--Content-->
+<!--Scripts-->
+{% block scripts %}
+{% endblock scripts %}
+<!--Scripts-->

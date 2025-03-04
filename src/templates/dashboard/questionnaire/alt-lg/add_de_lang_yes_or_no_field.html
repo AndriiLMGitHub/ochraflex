@@ -1,0 +1,141 @@
+{% extends 'dashboard/dashboard_base.html' %} {% load static %}
+<!--Title-->
+{% block title %}Dashboard - Start create{% endblock title %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+  rel="stylesheet"
+  href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+  <a href="{% url 'questionnaire_detail' block_template.id %}">
+    <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+  </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Дата{%endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+
+{% block main %} {% load static %}
+<form method="POST" id="field-form">
+  {% csrf_token %}
+  <div class="add_new_field marg_bottom-20">
+    <button type="submit" class="button_primary button_reset btn-icon">
+      <p>
+        <img src="{% static 'images/icons/plus-button-light.svg' %}" alt="" />
+      </p>
+      <p>Додати</p>
+    </button>
+  </div>
+  <div class="d-flex">
+    <div class="border-field">
+      <div class="input-panel">
+        <div class="group-form bord-bott-1">
+          <label for="id_name" class="input_label">
+            <input
+              type="text"
+              class="input-title"
+              autofocus
+              placeholder="Уведіть заголовок"
+              id="id_name"
+              required
+              name="name"
+              maxlength="128"
+            />
+          </label>
+          <hr />
+          <span>
+            <img src="{% static 'images/icons/required.svg' %}" alt="" />
+          </span>
+        </div>
+        <p>
+          <input
+            type="hidden"
+            name="field_type"
+            id="id_field_type"
+            value="boolean"
+          />
+        </p>
+        <div class="radio-container justify-content-start marg_bottom-10 marg_top-20 custom-radio">
+          <label class="radio">
+            <input
+              type="radio"
+              id="yes"
+              name="is_multiple"
+              value="false"
+              checked
+            />
+            <div class="circle"></div>
+              Так
+          </label>
+          <label class="radio">
+            <input
+              type="radio"
+              id="no"
+              name="is_multiple"
+              value="true"
+            />
+            <div class="circle"></div>
+          Ні
+          </label>
+        </div>
+      </div>
+    </div>
+      <div class="settings-panel">
+        <div class="checkbox-container justify-content-start marg_bottom-10">
+            <label class="checkbox">
+              <input
+                id="required-fill"
+                type="checkbox"
+                id="is_required"
+                name="is_required"
+                value="true"
+              />
+              <div class="circle"></div>
+              <div class="box">
+                <span class="checkmark"></span>
+              </div>
+            </label>
+            <span>Обов’язкове до заповнення</span>
+          </div>
+        </div>
+      </div>
+  </div>
+</form>
+{% endblock main %}
+{% block scripts %}
+<script src="{% static 'js/questionnaire/boolean.js' %}"></script>
+<script>
+    document
+    .getElementById("field-form")
+    .addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+
+      fetch("{% url 'create_field' block_template.id %}", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            alert(data.message);
+            window.location.href =
+              "{% url 'questionnaire_detail' block_template.id %}";
+          } else {
+            alert("Помилка: " + data.message);
+          }
+        })
+        .catch((error) => console.error("Помилка:", error));
+    });
+  </script>
+{% endblock scripts %}

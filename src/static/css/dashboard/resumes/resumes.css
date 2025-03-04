@@ -1,0 +1,149 @@
+.tabs {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2e2e2e;
+  margin: 0 20px;
+  padding: 10px 0px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.tabs button.active {
+  color: #037dff;
+  font-weight: bold;
+}
+
+.tabs button.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #037dff;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Tool Bar Styles */
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.toolbar-left i {
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.toolbar-left i:hover {
+  color: #037dff;
+}
+.search-bar {
+  width: 615px;
+  position: relative;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2e2e2e;
+}
+
+.toolbar-right .page-nav {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.toolbar-right .page-nav i {
+  font-size: 16px;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.toolbar-right .page-nav i:hover {
+  color: #333;
+}
+
+.toolbar-right .page-nav .disabled {
+  color: #e0e0e0;
+  cursor: not-allowed;
+}
+/* Tool Bar Styles */
+
+/* All resumes */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+thead {
+  background-color: #f5f5f5;
+}
+
+thead th {
+  padding: 12px;
+  text-align: left;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr {
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s;
+}
+
+tbody tr:hover {
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+tbody td {
+  padding: 12px;
+  text-align: left;
+}
+
+tbody td:first-child {
+  text-align: center;
+}
+
+.icon {
+  display: inline-block;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.icon.star {
+  color: #000;
+}
+
+.icon.star:hover {
+  color: #ffcc00;
+}

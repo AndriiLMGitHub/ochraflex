@@ -1,0 +1,61 @@
+{% extends 'dashboard/dashboard_base.html' %} {% load static %}
+<!--Title-->
+{% block title %}Dashboard - Start create{% endblock title %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+  rel="stylesheet"
+  href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+  <a href="{% url 'questionnaires' %}">
+    <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+  </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Оновити заголовок і опис{%endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %} {% load static %}
+<form method="POST">
+  {% csrf_token %}
+  <div class="add_new_field marg_bottom-20">
+    <button type="submit" class="button_primary button_reset btn-icon">
+      <p>
+        <img src="{% static 'images/icons/plus-button-light.svg' %}" alt="" />
+      </p>
+      <p>Оновити</p>
+    </button>
+  </div>
+  <div class="border-field">
+    <div class="create-template-panel">
+      <div class="form-group marg_bottom-20">
+        <label for="id_title" class="input_label">Уведіть заголовок</label>
+        <input
+          type="text"
+          id="id_title"
+          name="title"
+          class="input_base"
+          maxlength="128"
+          value="{{description_field.title}}"
+        />
+        <small class="text-small-muted"> Назва </small>
+      </div>
+      <div class="form-group marg_bottom-20">
+        <label for="id_description" class="input_label">Уведіть опис</label>
+        <textarea id="id_description" name="description" class="input_base">{{description_field.description}}</textarea>
+        <small class="text-small-muted"> Текст </small>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock main %}
+<!-- Conetnt -->
+{% block scripts %} {% endblock scripts %}
