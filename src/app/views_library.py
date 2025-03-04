@@ -326,10 +326,7 @@ def add_field_to_template_view(request, field_id):
         template.save()
         messages.success(request, f'Поле "{field.name}" додано у шаблон!')
     elif not created:
-        messages.success(
-            request, f'Поле "{
-                field.name}" оновлено успішно!.'
-        )
+        messages.success(request, f'Поле "{field.name}" оновлено успішно!.')
 
     return redirect('library')  # Перенаправлення на список шаблонів
 
