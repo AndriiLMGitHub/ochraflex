@@ -27,7 +27,7 @@
 </div>
 {% endblock back %}
 <!---->
-{% block title_page %}Бібліотека шаблонів{% endblock title_page %}
+{% block title_page %}Результати анкети{% endblock title_page %}
 <!--Header-->
 
 <!--Content-->
@@ -35,15 +35,21 @@
 <h2>Результати анкети: {{ block_template.name }}</h2>
 
 {% for response in responses %}
-    <h3>Відповідь #{{ response.id }} ({{ response.submitted_at }})</h3>
+    <h3>Відповідь №{{ response.id }} ({{ response.submitted_at }})</h3>
     <ul>
         {% for field_response in response.field_responses.all %}
             {% if field_response.field %}
-                <li><b>{{ field_response.field.name }}:</b> {{ field_response.value }}</li>
+                <li>
+                    {% if field_response.field.field_type == 'boolean' %}
+                        <b>{{ field_response.field.name }}:</b> {% if field_response.value == 'on' %}Так{% else %}Ні{% endif %}
+                    {% else %}
+                    <b>{{ field_response.field.name }}:</b> {{ field_response.value }}
+                    {% endif %}
+                </li>
             {% elif field_response.combined_block %}
-                <li><b>Комбінований блок ({{ field_response.combined_block.description_field.title }}):</b> {{ field_response.value }}</li>
-            {% else %}
-                <li><b>Описовий блок:</b> {{ field_response.value }}</li>
+                <ul>
+                    <li>Із комбінованиї блоків <b>{{ field_response.field }}</b> - {{ field_response.value }}</li>
+                </ul>
             {% endif %}
         {% endfor %}
     </ul>
@@ -52,5 +58,6 @@
 <!--Content-->
 <!--Scripts-->
 {% block scripts %}
+<script src="{% static 'js/app.js' %}"></script>
 {% endblock scripts %}
 <!--Scripts-->

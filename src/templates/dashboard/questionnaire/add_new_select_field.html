@@ -120,15 +120,8 @@
   </div>
 </form>
 <div class="add-new-lang-block">
-  <a
-    href="{% url 'de_language_select_field' block_template.id %}"
-    class="button_primary_outline button_reset"
-    id="copy-button"
-  >
+  <a href="{% url 'de_language_select_field' block_template.id %}" class="button_primary_outline button_reset" id="copy-button">
     Зберегти і додати іншомовний варіант
-    <!-- <p>
-    <img src="{% static 'images/icons/plus-blue.svg' %}" alt="Add button" />
-  </p> -->
   </a>
 </div>
 {% endblock main %} {% block scripts %}

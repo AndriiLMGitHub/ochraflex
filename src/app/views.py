@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from account.forms import ChangeUserForm
 from django.contrib import messages
 from .models import BlockTemplate, DescriptionField, Field, CombinedBlock, LibraryTemplate
+from survey.models import SurveyResponse
 from .forms import BlockTemplateForm, DescriptionFieldForm
 from .utils import parse_json
 import json
@@ -57,9 +58,11 @@ def list_resumes_view(request):
 def questionnaires_view(request):
     # Logic for questionnaires goes here
     questionnaires = BlockTemplate.objects.filter(user=request.user)
+    answers = SurveyResponse.objects.all().count()
 
     context = {
-        'questionnaires': questionnaires
+        'questionnaires': questionnaires,
+        'answers': answers,
     }
     return render(request, 'dashboard/questionnaire/questionnaires.html', context)
 
@@ -89,44 +92,14 @@ def questionnaire_detail(request, id):
     fields = Field.objects.filter(block_template=block_template)
     combined_blocks = CombinedBlock.objects.filter(
         block_template=block_template).prefetch_related('fields')
-
-    parsed_blocks = []
-    parse_library_fields=[]
-    parse_json(fields)
-
-    # Parse options for fields in combined blocks and library templates
-    for block in combined_blocks:
-        for field in block.fields.all():
-            if field.options:
-                try:
-                    parsed_options = json.loads(field.options[0]) if isinstance(
-                        field.options, list) else field.options
-                    field.options = json.loads(parsed_options) if isinstance(
-                        parsed_options, str) else parsed_options
-                except (json.JSONDecodeError, TypeError, IndexError):
-                    field.options = []
-        parsed_blocks.append(block)
-    
-    for template in block_template.all_library_templates.all():
-        if template.combined_block:
-            for field in template.combined_block.fields.all():
-                if field.options:
-                    try:
-                        parsed_options = json.loads(field.options[0]) if isinstance(
-                            field.options, list) else field.options
-                        field.options = json.loads(parsed_options) if isinstance(
-                            parsed_options, str) else parsed_options
-                    except (json.JSONDecodeError, TypeError, IndexError):
-                        field.options = []
-                parse_library_fields.append(field)
     
 
     context = {
         'block_template': block_template,
-        'parse_library_fields': parse_library_fields,   
+        'parse_library_fields': None,   
         'description_fields': description_fields,
         'fields': fields,
-        'combined_blocks': parsed_blocks,
+        'combined_blocks': combined_blocks,
     }
 
     return render(request, 'dashboard/questionnaire/questionnaire_detail.html', context)
@@ -468,8 +441,6 @@ def questionnaire_combine_view(request, id):
 
     fields = Field.objects.filter(block_template=block_template)
 
-    parse_json(fields)
-
     if request.method == 'POST':
         checked_ids = request.POST.getlist('combined')
 
@@ -520,8 +491,6 @@ def dublicate_questionnaire_combined_view(request, id):
     description_fields = DescriptionField.objects.filter(
         block_template=block_template)
 
-    parse_json(fields)
-
     context = {
         'block_template': block_template,
         'fields': fields,
@@ -539,8 +508,6 @@ def questionnaire_combined_detail_view(request, id):
     combined_blocks = CombinedBlock.objects.filter(
         block_template=block_template)
 
-    parse_json(fields)
-
     context = {
         'block_template': block_template,
         'description_fields': description_fields,
@@ -555,9 +522,10 @@ def delete_combined_block_view(request,quest_id, combined_block_id):
     description_field = combined_block.description_field
     fields = combined_block.fields.all().filter(block_template=block_template, is_combined=True)
 
-    fields.update(is_combined=False)
-    description_field.is_combined = False
-    description_field.save()
+    if fields or description_field:
+        fields.update(is_combined=False)
+        description_field.is_combined = False
+        description_field.save()
     
     combined_block.delete()
 
@@ -574,25 +542,11 @@ def preview_questionnaire_view(request, id):
     combined_blocks = CombinedBlock.objects.filter(
         block_template=block_template).prefetch_related('fields')
 
-    parsed_blocks = []
-    parse_json(fields)
-    for block in combined_blocks:
-        for field in block.fields.all():
-            if field.options:
-                try:
-                    parsed_options = json.loads(field.options[0]) if isinstance(
-                        field.options, list) else field.options
-                    field.options = json.loads(parsed_options) if isinstance(
-                        parsed_options, str) else parsed_options
-                except (json.JSONDecodeError, TypeError, IndexError):
-                    field.options = []
-        parsed_blocks.append(block)
-
     context = {
         'block_template': block_template,
         'fields': fields,
         'description_fields': description_fields,
-        'combined_blocks': parsed_blocks,
+        'combined_blocks': combined_blocks,
     }
 
     return render(request, 'dashboard/questionnaire/preview_questionnaire.html', context)

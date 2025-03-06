@@ -27,38 +27,10 @@ def library_view(request):
         library_fields_without_fields.delete()
 
 
-
-    parsed_blocks_fields = []
-    parsed_blocks = []
-    for block in library_fields:
-        if block.field.options:
-            try:
-                parsed_options = json.loads(block.field.options[0]) if isinstance(
-                    block.field.options, list) else block.field.options
-                block.field.options = json.loads(parsed_options) if isinstance(
-                    parsed_options, str) else parsed_options
-            except (json.JSONDecodeError, TypeError, IndexError):
-                block.field.options = []
-        parsed_blocks_fields.append(block)
-
-    for block in library_blocks:
-        for field in block.combined_block.fields.all():
-            if field.options:
-                try:
-                    parsed_options = json.loads(field.options[0]) if isinstance(
-                        field.options, list) else field.options
-                    field.options = json.loads(parsed_options) if isinstance(
-                        parsed_options, str) else parsed_options
-                    print(field.options)
-                except (json.JSONDecodeError, TypeError, IndexError):
-                    field.options = []
-        parsed_blocks.append(block)
-
-
     context = {
-        'library_fields': parsed_blocks_fields,
+        'library_fields': library_fields,
         'library_descriptions': library_descriptions,
-        'library_blocks': parsed_blocks,
+        'library_blocks': library_blocks,
         'library_fields_all': library_fields_without_fields,
     }
 
@@ -108,6 +80,7 @@ def library_create_block_view(request):
         name = request.POST.get('name')
         library_template=LibraryTemplate.objects.create(
             name=name,
+            # user=request.user # to current user
         )
         library_template.save()
         messages.success(request, 'Шаблон успішно створено! Виберіть тип шаблону!')
@@ -124,9 +97,6 @@ def library_create_block_view(request):
 def create_field_to_template_view(request, id):
     library_template=get_object_or_404(LibraryTemplate, id=id)
     field = library_template.field
-
-    if field:
-        parse_json_field(field)
 
     context = {
         'library_template': library_template,
@@ -240,7 +210,8 @@ def create_combined_block_template_view(request, id):
 
     if library_template.combined_block is None:
         library_template.combined_block=CombinedBlock.objects.create(
-            allow_dublicate=False
+            allow_dublicate=False,
+            # user=request.user
         )
         library_template.save()
     context = {
@@ -319,7 +290,7 @@ def add_field_to_template_view(request, field_id):
         name=f'Шаблон поля: {field.name}',
         defaults={
             'description': f'Поле {field.name} з типом {field.field_type}',
-            'field': field
+            'field': field,
         }
     )
     if created:
@@ -358,6 +329,7 @@ def add_combined_block_to_template_view(request, combined_block_id):
     combined_block = get_object_or_404(CombinedBlock, id=combined_block_id)
 
     template = LibraryTemplate.objects.create(
+        #user=request.user,
         name=f'Шаблон для {combined_block.block_template.name}',
         description=f'Шаблон для {combined_block.block_template.name}',
         combined_block=combined_block,  # Використовуємо ForeignKey
@@ -419,18 +391,6 @@ def edit_template_library_view(request, id):
 def delete_template_view(request, template_id):
     """Видаляє шаблон"""
     template = get_object_or_404(LibraryTemplate, id=template_id)
-    # Видаляємо зв'язані з шаблоном поля та описи
-    if template.field:
-        template.field.delete()
-    elif template.description_field:
-        template.description_field.delete()
-    elif template.combined_block.description_field:
-        template.combined_block.description_field.delete()
-    elif template.combined_block.fields:
-        template.combined_block.fields.all().delete()
-        template.combined_block.delete()
-
-
 
     template.delete()
 

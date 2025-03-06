@@ -1,4 +1,5 @@
 {% extends 'dashboard/dashboard_base.html' %}
+{% load custom_parse %}
 <!--Title-->
 {% block title %}Dashboard - Resumes{% endblock title %} {% load static %}
 <!--Main content-->
@@ -272,8 +273,8 @@
         </div>
         {% elif library_field.field.field_type == 'checkbox' %}
         <div class="w-100">
-            <div class="radio-container offset-left-20">
-            {% for option in library_field.field.options %}
+            <div class="multi-container offset-left-20">
+            {% for option in library_field.field.options|json_loads %}
             <div class="d-flex g-30">
                 <label class="checkbox">
                 <input type="checkbox" />
@@ -290,15 +291,15 @@
         {% elif library_field.field.field_type == 'select' %}
             <div class="w-100">
                 <select class="input_base_red">
-                {% for option in library_field.field.options %}
+                {% for option in library_field.field.options|json_loads %}
                 <option value="{{option}}">{{option}}</option>
                 {% endfor %}
                 </select>
             </div>
         {% elif library_field.field.field_type == 'radio' %}
             <div class="w-100">
-                <div class="radio-container offset-left-20">
-                {% for option in library_field.field.options %}
+                <div class="multi-container offset-left-20">
+                {% for option in library_field.field.options|json_loads %}
                 <div class="d-flex g-30">
                     <input type="radio" value="{{ options }}" name="name" />
                     <label for="{{ forloop.counter }}">{{ option }}</label>
@@ -436,7 +437,7 @@
                     {% elif field.field_type == 'checkbox' %}
                         <div class="w-100">
                             <div class="multi-container offset-left-20">
-                            {% for option in field.options %}
+                            {% for option in field.options|json_loads %}
                             <div class="d-flex g-30">
                                 <label class="checkbox">
                                 <input type="checkbox" />
@@ -453,7 +454,7 @@
                     {% elif field.field_type == 'radio' %}
                         <div class="w-100">
                             <div class="multi-container offset-left-20">
-                            {% for option in field.options %}
+                            {% for option in field.options|json_loads %}
                             <div class="d-flex g-30">
                                 <input type="radio" value="{{ options }}" name="name" />
                                 <label for="{{ forloop.counter }}">{{ option }}</label>
@@ -464,7 +465,7 @@
                     {% elif field.field_type == 'select' %}
                         <div class="w-100">
                             <select class="input_base_red">
-                            {% for option in field.options %}
+                            {% for option in field.options|json_loads %}
                             <option value="{{option}}">{{option}}</option>
                             {% endfor %}
                             </select>

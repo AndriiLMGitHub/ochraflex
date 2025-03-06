@@ -71,8 +71,8 @@ def get_combined_block_view(request, quest_id, combined_block_id):
 
 def edit_combined_block_view(request, quest_id, combined_block_id):
     block_template = get_object_or_404(BlockTemplate, id=quest_id)
-    fields = Field.objects.all()
-    description_fields = DescriptionField.objects.all()
+    fields = Field.objects.filter(block_template=block_template)
+    description_fields = DescriptionField.objects.filter(block_template=block_template)
     combined_block = get_object_or_404(CombinedBlock, id=combined_block_id)
     description_field = combined_block.description_field
     combined_block_fields = combined_block.fields.all()
@@ -132,7 +132,6 @@ def edit_combined_block_view(request, quest_id, combined_block_id):
         messages.success(request, "Комбінований блок успішно оновлено!")
         return redirect('get_combined_block', quest_id=quest_id, combined_block_id=combined_block.id)
     
-    parse_json(combined_block_fields)
 
     context = {
         'block_template': block_template,

@@ -1,4 +1,6 @@
-{% extends 'dashboard/dashboard_base.html' %} {% load static %}
+{% extends 'dashboard/dashboard_base.html' %}
+{% load static %}
+{% load custom_parse %}
 <!--Title-->
 {% block title %}Dashboard - Start create{% endblock title %}
 <!--Main content-->
@@ -153,8 +155,8 @@
                     <label for="false">Ні</label>
                   </div>
                 {% elif field.field_type == 'checkbox' %}
-                  <div class="radio-container marg_top-10 offset-left-20">
-                    {% for option in field.options %}
+                  <div class="multi-container marg_top-10 offset-left-20">
+                    {% for option in field.options|json_loads %}
                       <div class="d-flex g-30">
                         <label class="checkbox">
                           <input type="checkbox" />
@@ -169,13 +171,13 @@
                   </div>
                 {% elif field.field_type == 'select' %}
                   <select class="input_base_red">
-                    {% for option in field.options %}
+                    {% for option in field.options|json_loads %}
                       <option value="{{option}}">{{option}}</option>
                     {% endfor %}
                   </select>
                 {% elif field.field_type == 'radio' %}
-                  <div class="radio-container marg_top-10 offset-left-20">
-                    {% for option in field.options %}
+                  <div class="multi-container marg_top-10 offset-left-20">
+                    {% for option in field.options|json_loads %}
                     <div class="d-flex g-30">
                       <input type="radio" value="{{ options }}" name="name" />
                       <label for="{{ forloop.counter }}">{{ option }}</label>
@@ -286,8 +288,8 @@
                       <label for="false">Ні</label>
                     </div>
                   {% elif field.field_type == 'checkbox' %}
-                    <div class="radio-container marg_top-10 offset-left-20">
-                      {% for option in field.options %}
+                    <div class="multi-container marg_top-10 offset-left-20">
+                      {% for option in field.options|json_loads %}
                         <div class="d-flex g-30">
                           <label class="checkbox">
                             <input type="checkbox" />
@@ -302,13 +304,13 @@
                     </div>
                   {% elif field.field_type == 'select' %}
                     <select class="input_base_red">
-                      {% for option in field.options %}
+                      {% for option in field.options|json_loads %}
                         <option value="{{option}}">{{option}}</option>
                       {% endfor %}
                     </select>
                   {% elif field.field_type == 'radio' %}
-                    <div class="radio-container marg_top-10 offset-left-20">
-                      {% for option in field.options %}
+                    <div class="multi-container marg_top-10 offset-left-20">
+                      {% for option in field.options|json_loads %}
                       <div class="d-flex g-30">
                         <input type="radio" value="{{ options }}" name="name" />
                         <label for="{{ forloop.counter }}">{{ option }}</label>
@@ -356,29 +358,11 @@
     <div class="group-info marg_bottom-20">
       {% for description_field in description_fields %}
         {% if not description_field.is_combined %}
-        <div class="d-flex justify-content-center marg_bottom-20 marg_top-20">
-          <div href="#" class="dropdown-setting relative">
-            <a href="#" class="add-extra-field trigger">
-              <img src="{% static 'images/icons/plus.svg' %}" alt="" />
-            </a>
-            <div class="dropdown-menu-setting">
-              <a href="{% url 'add_new_header_block' block_template.id %}" class="dropdown-item">Назва (заголовок) і опис</a>
-              <a href="{% url 'add_new_field' block_template.id %}"class="dropdown-item">Поле для вводу</a>
-              <a href="{% url 'add_new_textarea_field' block_template.id %}"class="dropdown-item">Поле для опису</a>
-              <a href="{% url 'add_new_select_field' block_template.id %}" class="dropdown-item">Випадаючий список</a>
-              <a href="{% url 'add_new_one_value' block_template.id %}"class="dropdown-item">Вибрати одне значення</a>
-              <a href="{% url 'add_new_multiple_value' block_template.id %}"class="dropdown-item">Вибрати декілька значень</a>
-              <a href="{% url 'add_new_boolean_field' block_template.id %}" class="dropdown-item">Так або ні</a>
-              <a href="{% url 'add_new_phone_field' block_template.id %}" class="dropdown-item">Телефон</a>
-              <a href="{% url 'add_new_date_field' block_template.id %}" class="dropdown-item">Дата</a>
-            </div>
-          </div>
-        </div>
         <div class="d-flex align-items-center justify-content-between main-title-menu">
-          <h3 class="">{{ description_field.title }}</h3>
-        </div>
-        <div class="d-flex align-items-center justify-content-between main-title-menu marg_top-20">
-          <div class="main-desc">{{ description_field.description }}</div>
+          <div class="wrap-quest">
+            <h3>{{ description_field.title }}</h3>
+            <p>{{ description_field.description }}</p>
+          </div>
           <div class="relative">
             <div href="#" class="dropdown-setting">
               <a href="#" class="trigger">
@@ -392,26 +376,13 @@
             </div>
           </div>
         </div>
+        <div class="marg_bottom-20"></div>
         {% endif %}
       {% endfor %}
       <!-- Fields -->
       {% for field in fields %}
         {% if not field.is_combined %}
-          <!-- PLUS BUTTON -->
-          <!-- <div class="d-flex justify-content-center marg_top-20">
-            <div href="#" class="dropdown-setting relative">
-              <a href="#" class="add-extra-field trigger">
-                <img src="{% static 'images/icons/plus.svg' %}" alt="" />
-              </a>
-              <div class="dropdown-menu-setting">
-                <a href="#" class="dropdown-item">Редагувати</a>
-                <a href="#" class="dropdown-item">До шаблонів</a>
-                <a href="#" class="dropdown-item red">Видалити</a>
-              </div>
-            </div>
-          </div> -->
-        <!-- PLUS BUTTON -->
-        <div class="wrap-quest">
+        <div class="wrap-quest marg_top-25">
           <div class="group-form">
             <label for="{{field.name}}" class="input_label">{{field.name}}</label>
             {% if field.is_required %}
@@ -445,7 +416,7 @@
           <div class="d-flex justify-content-between main-title-menu">
             <div class="wrap-quest">
               <select class="input_base_red">
-                {% for option in field.options %}
+                {% for option in field.options|json_loads %}
                 <option value="{{option}}">{{option}}</option>
                 {% endfor %}
               </select>
@@ -465,12 +436,14 @@
           </div>
         {% elif field.field_type == 'radio' %}
           <!-- Loop -->
-          <div class="d-flex justify-content-between main-title-menu">
+          <div class="d-flex justify-content-between align-items-center main-title-menu">
             <div class="wrap-quest">
-              <div class="radio-container marg_top-10">
-                {% for option in field.options %}
+              <div class="multi-container marg_top-10">
+                {% for option in field.options|json_loads %}
+                <div class="marg_top-10 offset-left-20">
                   <input type="radio" value="{{ options }}" name="name" />
                   <label for="{{ forloop.counter }}">{{ option }}</label>
+                </div> 
                 {% endfor %}
               </div>
             </div>
@@ -489,18 +462,20 @@
           </div>
         {% elif field.field_type == 'checkbox' %}
           <!-- Loop -->
-          <div class="d-flex justify-content-between main-title-menu">
+          <div class="d-flex justify-content-between align-items-center main-title-menu">
             <div class="wrap-quest">
-              <div class="radio-container marg_top-10">
-                {% for option in field.options %}
-                <label class="checkbox">
-                  <input type="checkbox" />
-                  <div class="circle"></div>
-                  <div class="box">
-                    <span class="checkmark"></span>
-                  </div>
-                </label>
-                <p>{{ option }}</p>
+              <div class="multi-container marg_top-10">
+                {% for option in field.options|json_loads %}
+                <div class="radio-container marg_top-10 offset-left-20">
+                  <label class="checkbox">
+                    <input type="checkbox" />
+                    <div class="circle"></div>
+                    <div class="box">
+                      <span class="checkmark"></span>
+                    </div>
+                  </label>
+                  <p>{{ option }}</p>
+                </div>
                 {% endfor %}
               </div>
             </div>
@@ -763,6 +738,24 @@
         {% endwith %}
       {% endif %}
     {% endfor %}
+    <div class="d-flex justify-content-center marg_bottom-20 marg_top-25">
+      <div href="#" class="dropdown-setting relative">
+        <a href="#" class="add-extra-field trigger">
+          <img src="{% static 'images/icons/plus.svg' %}" alt="" />
+        </a>
+        <div class="dropdown-menu-setting">
+          <a href="{% url 'add_new_header_block' block_template.id %}" class="dropdown-item">Назва (заголовок) і опис</a>
+          <a href="{% url 'add_new_field' block_template.id %}"class="dropdown-item">Поле для вводу</a>
+          <a href="{% url 'add_new_textarea_field' block_template.id %}"class="dropdown-item">Поле для опису</a>
+          <a href="{% url 'add_new_select_field' block_template.id %}" class="dropdown-item">Випадаючий список</a>
+          <a href="{% url 'add_new_one_value' block_template.id %}"class="dropdown-item">Вибрати одне значення</a>
+          <a href="{% url 'add_new_multiple_value' block_template.id %}"class="dropdown-item">Вибрати декілька значень</a>
+          <a href="{% url 'add_new_boolean_field' block_template.id %}" class="dropdown-item">Так або ні</a>
+          <a href="{% url 'add_new_phone_field' block_template.id %}" class="dropdown-item">Телефон</a>
+          <a href="{% url 'add_new_date_field' block_template.id %}" class="dropdown-item">Дата</a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock main %}

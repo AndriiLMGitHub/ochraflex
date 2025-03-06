@@ -1,4 +1,6 @@
-{% extends 'dashboard/dashboard_base.html' %} {% load static %}
+{% extends 'dashboard/dashboard_base.html' %}
+{% load static %}
+{% load custom_parse %}
 <!--Title-->
 {% block title %}Dashboard - Start create{% endblock title %}
 <!--Main content-->
@@ -107,7 +109,7 @@
         <div class="d-flex justify-content-between main-title-menu">
           <div class="wrap-quest">
             <select class="input_base_red">
-              {% for option in field.options %}
+              {% for option in field.options|json_loads %}
               <option value="{{option}}">{{option}}</option>
               {% endfor %}
             </select>
@@ -134,7 +136,7 @@
         <div class="d-flex justify-content-between main-title-menu">
           <div class="wrap-quest">
             <div class="radio-container">
-              {% for option in field.options %}
+              {% for option in field.options|json_loads %}
               <input type="radio" value="{{ options }}" name="name"/>
               <label for="{{ forloop.counter }}">{{ option }}</label>
               {% endfor %}
@@ -162,7 +164,7 @@
         <div class="d-flex justify-content-between main-title-menu">
           <div class="wrap-quest">
             <div class="radio-container">
-              {% for option in field.options %}
+              {% for option in field.options|json_loads %}
               <label class="checkbox">
                 <input type="checkbox" name="combined" value="{{ field.id}}"/>
                 <div class="circle"></div>

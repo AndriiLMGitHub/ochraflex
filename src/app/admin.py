@@ -12,7 +12,7 @@ class FieldAdmin(admin.ModelAdmin):
 class BlockTemplateAdmin(admin.ModelAdmin):
     list_display = ('name', 'created_at', 'uuid')
     filter_horizontal = (
-        'all_library_templates', 'all_description_fields', 'all_fields', 'all_combined_blocks',
+        'library_templates',
     )
 
 

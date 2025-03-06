@@ -17,10 +17,7 @@ class BlockTemplate(models.Model):
     lanuage = models.CharField(
         blank=True, null=True, choices=LANGUAGES, max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)  # Дата створення
-    all_library_templates = models.ManyToManyField('LibraryTemplate', blank=True)
-    all_combined_blocks = models.ManyToManyField('CombinedBlock', blank=True)
-    all_fields = models.ManyToManyField('Field', blank=True)
-    all_description_fields = models.ManyToManyField('DescriptionField', blank=True)
+    library_templates = models.ManyToManyField('LibraryTemplate', blank=True)
 
     def __str__(self):
         return self.name
