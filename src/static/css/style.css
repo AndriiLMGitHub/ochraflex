@@ -357,3 +357,42 @@ body {
 }
 
 /* Back button */
+
+
+/* Close Icon */
+
+.close-icon {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.close-icon::before,
+.close-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 11px;
+  height: 2px;
+  background-color: rgb(89, 89, 89);
+  transition: transform 0.3s;
+  transform-origin: center;
+}
+
+.close-icon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.close-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.close-icon:hover::before {
+  transform: translate(-50%, -50%) rotate(45deg) scale(1.2);
+}
+
+.close-icon:hover::after {
+  transform: translate(-50%, -50%) rotate(-45deg) scale(1.2);
+}

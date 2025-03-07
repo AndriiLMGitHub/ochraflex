@@ -66,7 +66,7 @@
         <select class="input_base" id="select-template">
           <option value="">Оберіть</option>
           {% for option in options %}
-          <option value="{{option}}">{{ option }}</option>
+            <option value="{{option}}">{{ option }}</option>
           {% endfor %}
           <!-- Add more options here -->
         </select>
@@ -84,7 +84,12 @@
           <ol>
             {% for option in options %}
             <li>
-              <input type="text" value="{{option}}" class="input_reset" />
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <input type="text" value="{{option}}" class="input_reset" />
+                </div>
+                <div class="close-icon"></div>
+              </div>
             </li>
             {% endfor %}
           </ol>

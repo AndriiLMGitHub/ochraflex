@@ -68,7 +68,12 @@
         <ol>
           {% for option in options %}
           <li>
-            <input type="text" value="{{option}}" class="input_reset" />
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <input type="text" value="{{option}}" class="input_reset" />
+              </div>
+              <div class="close-icon"></div>
+            </div>
           </li>
           {% endfor %}
         </ol>

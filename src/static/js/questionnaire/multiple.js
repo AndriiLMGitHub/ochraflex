@@ -11,14 +11,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function createLi() {
     let li = document.createElement("li");
+    let wrap = document.createElement("div");
+    let div1 = document.createElement("div");
+    let div2 = document.createElement("div");
     let input = document.createElement("input");
+
+    wrap.classList.add("d-flex","justify-content-between", "align-items-center")
+    div2.classList.add("close-icon")
 
     ol.forEach((list) => {
       list.appendChild(li);
-      li.appendChild(input);
+      li.appendChild(wrap);
+      wrap.appendChild(div1);
+      wrap.appendChild(div2);
+      div1.appendChild(input);
       input.classList.add("input_reset");
       input.setAttribute("placeholder", "Введіть пункт");
-      input.setAttribute("required", "true");
+    });
+
+    // Отримуємо всі елементи з класом close-btn
+    const closeButtons = document.querySelectorAll('.close-icon');
+
+    closeButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Видаляємо батьківський елемент (li)
+        this.parentElement.parentElement.remove()
+      });
     });
   }
 
@@ -34,6 +52,16 @@ document.addEventListener("DOMContentLoaded", () => {
       span.style.display = "none";
     }
   }
+
+  // Отримуємо всі елементи з класом close-btn
+  const closeButtons = document.querySelectorAll('.close-icon');
+
+  closeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Видаляємо батьківський елемент (li)
+      this.parentElement.parentElement.remove()
+    });
+  });
 
   btnCreateLi.addEventListener("click", createLi);
   requiredFill.addEventListener("change", checkboxOrRadioIsChecked);
