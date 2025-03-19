@@ -101,26 +101,28 @@
           </tr>
       </thead>
       <tbody>
-          <tr>
-              <td >
-                <div class="checkbox-container">
-                  <label class="checkbox">
-                    <input type="checkbox" />
-                    <div class="circle"></div>
-                    <div class="box">
-                      <span class="checkmark"></span>
+          {% for answer in answers %}
+              <tr onclick="window.location.href='{% url 'survey_detail' answer.block_template.uuid answer.id %}'" style="cursor: pointer;">
+                  <td >
+                    <div class="checkbox-container">
+                      <label class="checkbox">
+                        <input type="checkbox" />
+                        <div class="circle"></div>
+                        <div class="box">
+                          <span class="checkmark"></span>
+                        </div>
+                      </label>
                     </div>
-                  </label>
-                </div>
-              </td>
-              <td class="icon star">★</td>
-              <td>123456</td>
-              <td>Jakub Novák</td>
-              <td>28.10.2024, 23:45:12</td>
-              <td>Електрик</td>
-              <td>Для всіх</td>
-              <td>CZ</td>
-          </tr>
+                  </td>
+                  <td class="icon star">★</td>
+                  <td>{{ answer.id }}</td>
+                  <td>Jakub Novák</td>
+                  <td>{{ answer.submitted_at }}</td>
+                  <td>Електрик</td>
+                  <td>Для всіх</td>
+                  <td>CZ</td>
+            </tr>
+          {% endfor %}
       </tbody>
   </table>
   </div>

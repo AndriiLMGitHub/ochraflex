@@ -1,0 +1,37 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% load static %}
+{% load custom_parse %}
+<!--Title-->
+{% block title %}Dashboard - Resume{% endblock title %}
+<!--Main content-->
+<!-- Styles -->
+{% block styles %}
+<link
+    rel="stylesheet"
+    href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+/>
+{% endblock styles %}
+<!-- Styles -->
+<!--Header-->
+{% block back %}
+<div class="back-button">
+    <a href="{% url 'questionnaires' %}">
+        <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+    </a>
+</div>
+{% endblock back %}
+<!---->
+{% block title_page %}Створити анкету{% endblock title_page %}
+<!--Header-->
+
+<!--Content-->
+{% block main %}
+{% load static %}
+<h1>Resume detail</h1>
+{% endblock %}
+<!--Content-->
+<!--Scripts-->
+{% block scripts %}
+
+{% endblock scripts %}
+<!--Scripts-->

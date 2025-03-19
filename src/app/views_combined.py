@@ -6,6 +6,9 @@ from .utils import parse_json
 
 def create_combined_block_view(request, id):
     block_template = get_object_or_404(BlockTemplate, id=id)
+    library_templates = block_template.library_templates.all()
+
+    print(library_templates)
 
     """Створює блок на основі вибраних чекбоксів полів (combined) та описового блоку (ds-combined)"""
     if request.method == "POST":
@@ -52,6 +55,7 @@ def create_combined_block_view(request, id):
         'block_template': block_template,
         'fields': parse_json(fields),
         'description_fields': description_fields,
+        'library_templates': library_templates,
         'empty': empty,
     }
 

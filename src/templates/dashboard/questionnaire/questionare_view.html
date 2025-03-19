@@ -2,50 +2,52 @@
 {% load static %}
 {% load custom_parse %}
 <!--Title-->
-{% block title %}Dashboard - Start create{% endblock title %}
+{% block title %}Dashboard{% endblock title %}
 <!--Main content-->
 <!-- Styles -->
 {% block styles %}
 <link
-  rel="stylesheet"
-  href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
+    rel="stylesheet"
+    href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
 />
 {% endblock styles %}
 <!-- Styles -->
 <!--Header-->
 {% block back %}
 <div class="back-button">
-  <a href="{% url 'questionnaire_detail' block_template.id %}">
-    <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
-  </a>
+    <a href="{% url 'preview_questionnaire' block_template.id %}">
+        <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
+    </a>
 </div>
 {% endblock back %}
 <!---->
-{% block title_page %}Попередній перегляд анкети{% endblock title_page %}
+{% block title_page %}Перегляд анкети{% endblock title_page %}
 <!--Header-->
 
 <!--Content-->
-{% block main %} {% load static %}
+{% block main %}
+{% load static %}
 <div class="d-flex align-items-center justify-content-between">
-  <div>
-    <h3>{{ block_template.name }}</h3>
-    <p>{{ block_template.description }}</p>
-  </div>
-  <div class="d-flex align-items-center">
-    <div class="offset-right-10">
-      <a href="{% url 'questionnaire_detail' block_template.id %}" class="button_reset button_primary_outline d-flex align-items-center">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 14.2512V18.0012H3.75L14.81 6.94125L11.06 3.19125L0 14.2512ZM17.71 4.04125C18.1 3.65125 18.1 3.02125 17.71 2.63125L15.37 0.291249C14.98 -0.0987512 14.35 -0.0987512 13.96 0.291249L12.13 2.12125L15.88 5.87125L17.71 4.04125Z" fill="currentColor"/>
-        </svg>                    
-      </a>
+    <div>
+        <h3>{{ block_template.name }}</h3>
+        <p>{{ block_template.description }}</p>
     </div>
-    <a href="{% url 'questionnaire_result' block_template.id %}" class="button_primary button_reset d-flex align-items-center">
-      <svg class="offset-right-5" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14.5924 5.58L8.00244 12.17L4.41244 8.59L3.00244 10L8.00244 15L16.0024 7L14.5924 5.58ZM10.0024 0C4.48244 0 0.00244141 4.48 0.00244141 10C0.00244141 15.52 4.48244 20 10.0024 20C15.5224 20 20.0024 15.52 20.0024 10C20.0024 4.48 15.5224 0 10.0024 0ZM10.0024 18C5.58244 18 2.00244 14.42 2.00244 10C2.00244 5.58 5.58244 2 10.0024 2C14.4224 2 18.0024 5.58 18.0024 10C18.0024 14.42 14.4224 18 10.0024 18Z" fill="currentColor"/>
-      </svg>  
-      Зберегти
-    </a>
-  </div>
+    <div class="d-flex align-items-center">
+        <!-- <div class="offset-right-10">
+            <a href="{% url 'questionnaire_user_result' block_template.uuid %}" class="button_reset button_primary_outline d-flex align-items-center">
+                <svg class="offset-right-5" width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.0024 0.5C6.00244 0.5 1.73244 3.61 0.00244141 8C1.73244 12.39 6.00244 15.5 11.0024 15.5C16.0024 15.5 20.2724 12.39 22.0024 8C20.2724 3.61 16.0024 0.5 11.0024 0.5ZM11.0024 13C8.24244 13 6.00244 10.76 6.00244 8C6.00244 5.24 8.24244 3 11.0024 3C13.7624 3 16.0024 5.24 16.0024 8C16.0024 10.76 13.7624 13 11.0024 13ZM11.0024 5C9.34244 5 8.00244 6.34 8.00244 8C8.00244 9.66 9.34244 11 11.0024 11C12.6624 11 14.0024 9.66 14.0024 8C14.0024 6.34 12.6624 5 11.0024 5Z" fill="currentColor"/>
+                </svg>
+                Дивитись анкету                               
+            </a>
+        </div> -->
+        <button id="copy-link-button" data-link="{{ pre_url }}{% url 'submit_survey' block_template.uuid %}" class="button_primary button_reset d-flex align-items-center">
+        <svg class="offset-right-5" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14.5924 5.58L8.00244 12.17L4.41244 8.59L3.00244 10L8.00244 15L16.0024 7L14.5924 5.58ZM10.0024 0C4.48244 0 0.00244141 4.48 0.00244141 10C0.00244141 15.52 4.48244 20 10.0024 20C15.5224 20 20.0024 15.52 20.0024 10C20.0024 4.48 15.5224 0 10.0024 0ZM10.0024 18C5.58244 18 2.00244 14.42 2.00244 10C2.00244 5.58 5.58244 2 10.0024 2C14.4224 2 18.0024 5.58 18.0024 10C18.0024 14.42 14.4224 18 10.0024 18Z" fill="currentColor"/>
+        </svg>  
+        Копіювати посилання
+        </button>
+    </div>
 </div>
 <div class="example-template marg_top-20">
   <div class="border-field-questionnaire">
@@ -493,10 +495,24 @@
     {% endfor %}
   </div>
 </div>
-{% endblock main  %}
+{% endblock main %}
+<!-- Content-->
+
+
+<!--Scripts-->
 {% block scripts %}
 <script src="{% static 'js/utils/phoneNumber.js' %}"></script>
 <script src="{% static 'js/app.js' %}"></script>
 <script src="{% static 'js/questionnaire/init.js' %}"></script>
-<script src="{% static 'js/questionnaire/hide-combined-block.js' %}"></script>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    document.getElementById('copy-link-button').addEventListener('click', function() {
+      const link = this.getAttribute('data-link');
+      navigator.clipboard.writeText(link).then(function() {
+          window.alert('Посилання скопійовано в буфер обміну!');
+      });
+  });
+  });
+</script>
 {% endblock scripts %}
+<!-- Scripts-->

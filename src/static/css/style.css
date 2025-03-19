@@ -6,6 +6,10 @@ body {
   outline: none !important;
 }
 
+.responsive-header {
+  display: none;
+}
+
 .inter-primary {
   font-family: "Inter", serif;
   font-optical-sizing: auto;

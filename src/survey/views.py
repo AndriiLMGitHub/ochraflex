@@ -1,13 +1,14 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.sites.shortcuts import get_current_site
 from survey.models import SurveyResponse, FieldResponse
 from app.models import BlockTemplate, DescriptionField, Field, CombinedBlock
 
 
-def submit_survey_response(request, block_id):
+def submit_survey_response(request, uuid):
     """Обробка надсилання відповіді на анкету анонімними та авторизованими користувачами."""
-    block_template = get_object_or_404(BlockTemplate, id=block_id)
+    block_template = get_object_or_404(BlockTemplate, uuid=uuid)
     fields = Field.objects.filter(block_template=block_template)
     description_fields = DescriptionField.objects.filter(block_template=block_template)
     combined_blocks = CombinedBlock.objects.filter(block_template=block_template).prefetch_related('fields')
@@ -25,7 +26,7 @@ def submit_survey_response(request, block_id):
             # Якщо e-mail не заповнений, повертаємо помилку
             if not email:
                 messages.error(request, "Будь ласка, введіть e-mail, щоб ми могли зв'язатися з вами.")
-                return redirect("submit_survey", block_id=block_id)
+                return redirect("submit_survey", uuid=uuid)
 
         # Створюємо відповідь на анкету
         survey_response = SurveyResponse.objects.create(
@@ -114,7 +115,7 @@ def submit_survey_response(request, block_id):
                             )
 
         messages.success(request, "Анкету успішно відправлено!")
-        return redirect("survey_detail", block_id=block_template.id)
+        return redirect("survey_detail", uuid=block_template.uuid, response_id=survey_response.id)
     
 
     return render(request, "survey/submit_survey.html", {
@@ -126,12 +127,17 @@ def submit_survey_response(request, block_id):
 
 
 @login_required
-def survey_detail_view(request, block_id):
+def survey_detail_view(request, uuid, response_id):
     """Деталі відповідей на анкету."""
-    block_template = get_object_or_404(BlockTemplate, id=block_id)
-    responses = SurveyResponse.objects.filter(block_template=block_template).prefetch_related('field_responses')
+    block_template = get_object_or_404(BlockTemplate, uuid=uuid)
+    survey_response = SurveyResponse.objects.get(block_template=block_template, id=response_id)
+
+    current_site = get_current_site(request)
+    protocol = 'https' if request.is_secure() else 'http'
+    pre_url = f'{protocol}://{current_site.domain}'
 
     return render(request, "survey/survey_detail.html", {
         "block_template": block_template,
-        "responses": responses
+        "response": survey_response,
+        'pre_url': pre_url,
     })

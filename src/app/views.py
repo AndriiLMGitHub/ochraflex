@@ -7,6 +7,7 @@ from .models import BlockTemplate, DescriptionField, Field, CombinedBlock, Libra
 from survey.models import SurveyResponse
 from .forms import BlockTemplateForm, DescriptionFieldForm
 from .utils import parse_json
+from django.contrib.sites.shortcuts import get_current_site
 import json
 
 # Change password imports
@@ -52,7 +53,11 @@ def dashboard_view(request):
 
 def list_resumes_view(request):
     # Logic for listing resumes goes here
-    return render(request, 'dashboard/resume/resumes.html')
+    answers = SurveyResponse.objects.all()
+    context = {
+        'answers': answers,
+    }
+    return render(request, 'dashboard/resume/resumes.html', context)
 
 
 def questionnaires_view(request):
@@ -550,3 +555,45 @@ def preview_questionnaire_view(request, id):
     }
 
     return render(request, 'dashboard/questionnaire/preview_questionnaire.html', context)
+
+
+def questionnaire_result_view(request, id):
+    block_template = get_object_or_404(BlockTemplate, id=id)
+    fields = Field.objects.filter(block_template=block_template)
+    description_fields = DescriptionField.objects.filter(
+        block_template=block_template)
+    combined_blocks = CombinedBlock.objects.filter(
+        block_template=block_template).prefetch_related('fields')
+    
+    messages.success(request, 'Збережено успішно!!')
+    
+    current_site = get_current_site(request)
+    protocol = 'https' if request.is_secure() else 'http'
+    pre_url = f'{protocol}://{current_site.domain}'
+
+    context = {
+        'block_template': block_template,
+        'fields': fields,
+        'description_fields': description_fields,
+        'combined_blocks': combined_blocks,
+        'pre_url': pre_url,
+    }
+
+    return render(request, 'dashboard/questionnaire/questionare_view.html', context)
+
+def questionnaire_user_result_view(request, uuid):
+    block_template = get_object_or_404(BlockTemplate, uuid=uuid)
+    fields = Field.objects.filter(block_template=block_template)
+    description_fields = DescriptionField.objects.filter(
+        block_template=block_template)
+    combined_blocks = CombinedBlock.objects.filter(
+        block_template=block_template).prefetch_related('fields')
+
+    context = {
+        'block_template': block_template,
+        'fields': fields,
+        'description_fields': description_fields,
+        'combined_blocks': combined_blocks,
+    }
+
+    return render(request, 'dashboard/questionnaire/user_view.html', context)

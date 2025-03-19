@@ -174,6 +174,16 @@ urlpatterns = [
           name="preview_questionnaire"
      ),
      path(
+          'questionnaires/<str:id>/view/result/',
+          views.questionnaire_result_view,
+          name="questionnaire_result"
+     ),
+     path(
+          'questionnaires/<str:uuid>/',
+          views.questionnaire_user_result_view,
+          name="questionnaire_user_result"
+     ),
+     path(
           'questionnaires/<str:id>/combine/',
           views.questionnaire_combine_view,
           name="questionnaire_combine"

@@ -251,115 +251,6 @@
             {% endif %}
         {% endfor%}
 
-        <h3 class="marg_top-25">Поля анкети з шаблонів</h3>
-        {% for template in block_template_fields %}
-            <div class="marg_top-20">
-                {% if template.description_field %}
-                    <h3>{{ template.description_field.title }}</h3>
-                    <p>{{ template.description_field.description }}</p>
-                {% endif %}
-                {% if template.field %}
-                    {% with template.field as field %}
-                        <div class="marg_top-25">
-                            <div class="group-form">
-                                <label for="{{field.name}}" class="input_label">{{field.name}}</label>
-                                {% if field.is_required %}
-                                    <p>
-                                        <img src="{% static 'images/icons/required.svg' %}" alt="" />
-                                    </p>
-                                {% endif %}
-                            </div>
-                            {% if field.field_type == 'textarea' %}
-                                <div class="d-flex justify-content-between main-title-menu">
-                                    <div class="w-100">
-                                        <textarea
-                                            id="{{field.name}}"
-                                            style="min-height: 100px;"
-                                            class="input_base_red"
-                                            placeholder="Введіть текст"
-                                            maxlength="{{ field.max_symbols }}"
-                                            name="field_{{ field.id }}" 
-                                            ></textarea>
-                                    </div>
-                                </div>
-                            {% elif field.field_type == 'number' and field.extra_tag == 'phone' %}
-                                <div class="d-flex phoneForm">
-                                    <select class="input_base languageDropdown"></select>
-                                    <div class="selectedLanguage"></div>
-                                        <input type="text" class="input_base_red phoneNumberInput" name="field_{{ field.id }}"/>
-                                    </div>
-                                <!-- <input
-                                    type="{{field.field_type}}"
-                                    class="input_base_red"
-                                    placeholder="Введіть число"
-                                    max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                    name="field_{{ field.id }}"
-                                /> -->
-                            {% elif field.field_type == 'date' %}
-                                <input
-                                    type="{{field.field_type}}"
-                                    class="input_base_red"
-                                    maxlength="{{ field.max_symbols }}"
-                                    max="{{field.max_symbols}}"
-                                    name="field_{{ field.id }}"
-                                />
-                            {% elif field.field_type == 'boolean' %}
-                                <div class="radio-container offset-left-20">
-                                    <input type="radio" name="field_{{ field.id }}" />
-                                    <label for="true">Так</label>
-                                    <input type="radio" name="field_{{ field.id }}" />
-                                    <label for="false">Ні</label>
-                                </div>
-                            {% elif field.field_type == 'checkbox' %}
-                                <div class="multi-container marg_top-10 offset-left-20">
-                                    {% for option in template.field.options %}
-                                        <div class="d-flex g-30">
-                                            <label class="checkbox" for="{{ forloop.counter }}">
-                                                <input type="checkbox" name="field_{{ field.id }}" value="{{ option }}"/>
-                                                <div class="circle"></div>
-                                                <div class="box">
-                                                    <span class="checkmark"></span>
-                                                </div>
-                                            </label>
-                                            <p>{{ option }}</p>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% elif field.field_type == 'select' %}
-                                <select class="input_base_red" name="field_{{ field.id }}">
-                                    {% for option in field.options %}
-                                        <option value="{{option}}">{{option}}</option>
-                                    {% endfor %}
-                                </select>
-                            {% elif field.field_type == 'radio' %}
-                                <div class="multi-container marg_top-10 offset-left-20">
-                                    {% for option in field.options %}
-                                        <div class="d-flex g-30">
-                                            <input type="radio" name="field_{{ field.id }}" value="{{ option }}" />
-                                            <label for="{{ forloop.counter }}">{{ option }}</label>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                <input
-                                    type="{{field.field_type}}"
-                                    class="input_base_red"
-                                    placeholder="Введіть текст"
-                                    maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                    name="field_{{ field.id }}"
-                                />
-                            {% endif %}
-                            {% if field.help_info %}
-                                <p class="offset-left-5">
-                                <small class="text-small-muted">{{ field.help_info}}</small>
-                                </p>
-                            {% endif %}
-                        </div>
-                    {% endwith %}
-                {% endif %}
-            </div>
-        {% endfor %}
-
         <h3>Поля з шаблонів (комбіновані)</h3>
         {% for template in block_template.library_templates.all %}
             {% if template.combined_block %}
@@ -467,6 +358,117 @@
                     {% endfor %}
                 </div>
             {% endif %}
+        {% endfor %}
+
+        <h3>Поля з бібліотеки шаблонів</h3>
+        {% for template in block_template.library_templates.all %}
+        {% if template.field %}
+            <div class="marg_top-20">
+                {% if template.description_field %}
+                    <h3>{{ template.description_field.title }}</h3>
+                    <p>{{ template.description_field.description }}</p>
+                {% endif %}
+                {% if template.field %}
+                    {% with template.field as field %}
+                        <div class="marg_top-25">
+                            <div class="group-form">
+                                <label for="{{field.name}}" class="input_label">{{field.name}}</label>
+                                {% if field.is_required %}
+                                    <p>
+                                        <img src="{% static 'images/icons/required.svg' %}" alt="" />
+                                    </p>
+                                {% endif %}
+                            </div>
+                            {% if field.field_type == 'textarea' %}
+                                <div class="d-flex justify-content-between main-title-menu">
+                                    <div class="w-100">
+                                        <textarea
+                                            id="{{field.name}}"
+                                            style="min-height: 100px;"
+                                            class="input_base_red"
+                                            placeholder="Введіть текст"
+                                            maxlength="{{ field.max_symbols }}"
+                                            name="field_{{ field.id }}" 
+                                            ></textarea>
+                                    </div>
+                                </div>
+                            {% elif field.field_type == 'number' and field.extra_tag == 'phone' %}
+                                <div class="d-flex phoneForm">
+                                    <select class="input_base languageDropdown"></select>
+                                    <div class="selectedLanguage"></div>
+                                        <input type="text" class="input_base_red phoneNumberInput" name="field_{{ field.id }}"/>
+                                    </div>
+                                <!-- <input
+                                    type="{{field.field_type}}"
+                                    class="input_base_red"
+                                    placeholder="Введіть число"
+                                    max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                                    name="field_{{ field.id }}"
+                                /> -->
+                            {% elif field.field_type == 'date' %}
+                                <input
+                                    type="{{field.field_type}}"
+                                    class="input_base_red"
+                                    maxlength="{{ field.max_symbols }}"
+                                    max="{{field.max_symbols}}"
+                                    name="field_{{ field.id }}"
+                                />
+                            {% elif field.field_type == 'boolean' %}
+                                <div class="radio-container offset-left-20">
+                                    <input type="radio" name="field_{{ field.id }}" />
+                                    <label for="true">Так</label>
+                                    <input type="radio" name="field_{{ field.id }}" />
+                                    <label for="false">Ні</label>
+                                </div>
+                            {% elif field.field_type == 'checkbox' %}
+                                <div class="multi-container marg_top-10 offset-left-20">
+                                    {% for option in template.field.options %}
+                                        <div class="d-flex g-30">
+                                            <label class="checkbox" for="{{ forloop.counter }}">
+                                                <input type="checkbox" name="field_{{ field.id }}" value="{{ option }}"/>
+                                                <div class="circle"></div>
+                                                <div class="box">
+                                                    <span class="checkmark"></span>
+                                                </div>
+                                            </label>
+                                            <p>{{ option }}</p>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% elif field.field_type == 'select' %}
+                                <select class="input_base_red" name="field_{{ field.id }}">
+                                    {% for option in field.options %}
+                                        <option value="{{option}}">{{option}}</option>
+                                    {% endfor %}
+                                </select>
+                            {% elif field.field_type == 'radio' %}
+                                <div class="multi-container marg_top-10 offset-left-20">
+                                    {% for option in field.options %}
+                                        <div class="d-flex g-30">
+                                            <input type="radio" name="field_{{ field.id }}" value="{{ option }}" />
+                                            <label for="{{ forloop.counter }}">{{ option }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <input
+                                    type="{{field.field_type}}"
+                                    class="input_base_red"
+                                    placeholder="Введіть текст"
+                                    maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                                    name="field_{{ field.id }}"
+                                />
+                            {% endif %}
+                            {% if field.help_info %}
+                                <p class="offset-left-5">
+                                <small class="text-small-muted">{{ field.help_info}}</small>
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endwith %}
+                {% endif %}
+            </div>
+        {% endif %}
         {% endfor %}
         
         

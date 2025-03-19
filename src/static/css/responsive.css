@@ -1,0 +1,67 @@
+@media screen and (max-width: 992px) {
+    .burger-menu {
+        position: relative;
+    }
+
+    .burger-icon {
+        display: block;
+        padding: 8px;
+        border-radius: 6px;
+    }
+
+    .burger-icon:hover {
+        background-color: #dadada;
+    }
+    
+    .menu-items {
+        display: none;
+        min-width: 220px;
+        position: absolute;
+        top: 30px;
+        left: 0;
+        background-color: white;
+        border: 1px solid #ddd;
+        z-index: 1000;
+        border-radius: 8px;
+    }
+    
+    .menu-items a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #2E2E2E;
+        border-bottom: 1px solid #ddd;
+        transition: background-color 0.3s;
+    }
+    .menu-items a:last-child {
+        border-bottom: 0;
+    }
+    
+    .menu-items a:hover {
+        background-color: #f0f0f0;
+    }
+    
+    .menu-items.active {
+        display: block;
+    }
+    /* Comment */
+    .responsive-header {
+        display: block !important;
+    }
+    .sidebar {
+        display: none !important;
+    }
+    .page {
+        margin: auto !important;
+        padding: 0 15px;
+    }
+
+    /* .create-template-panel */
+    .create-template-panel {
+        width: auto !important;
+    }
+
+    .settings {
+        margin: auto !important;
+    }
+}

@@ -1,4 +1,5 @@
 {% extends 'dashboard/dashboard_base.html' %}
+{% load custom_tags %}
 <!--Title-->
 {% block title %}Dashboard - Resumes{% endblock title %} {% load static %}
 <!--Main content-->
@@ -27,33 +28,43 @@
 </div>
 {% endblock back %}
 <!---->
-{% block title_page %}Результати анкети{% endblock title_page %}
+{% block title_page %}Перегляд анкети {{ block_template.id }}{% endblock title_page %}
 <!--Header-->
 
 <!--Content-->
 {% block main %}
-<h2>Результати анкети: {{ block_template.name }}</h2>
+<p class="marg_bottom-10"><b>Назва анкети:</b> {{ block_template.name }}</p>
+<p class="marg_bottom-10"><b>Посилання створив:</b>  {{ request.user.email }}</p>
+<p class="marg_bottom-10"><b>Анкета заповнена:</b>  {{ response.submitted_at}}</p>
+<p class="marg_bottom-10"><b>Мова:</b> CZ</p>
+<p class="marg_bottom-10"><b>Посилання на анкету:</b>  {{ pre_url }}{% url 'submit_survey' block_template.uuid %}</p>
+<p class="marg_bottom-10"><b>Код активації: </b>123456</p>
+<p class="marg_bottom-10"><button type="button" class="button_primary button_reset button_sm">Показати інформацію про заповнення</button></p>
 
-{% for response in responses %}
-    <h3>Відповідь №{{ response.id }} ({{ response.submitted_at }})</h3>
-    <ul>
-        {% for field_response in response.field_responses.all %}
-            {% if field_response.field %}
-                <li>
-                    {% if field_response.field.field_type == 'boolean' %}
-                        <b>{{ field_response.field.name }}:</b> {% if field_response.value == 'on' %}Так{% else %}Ні{% endif %}
-                    {% else %}
-                    <b>{{ field_response.field.name }}:</b> {{ field_response.value }}
-                    {% endif %}
-                </li>
-            {% elif field_response.combined_block %}
-                <ul>
-                    <li>Із комбінованиї блоків <b>{{ field_response.field }}</b> - {{ field_response.value }}</li>
-                </ul>
+    <div style="background-color: rgba(0, 0,0 , 0.05)">
+        {% group_by_combined_block response.field_responses.all as grouped_responses %}
+
+        {% for combined_block, fields in grouped_responses %}
+            {% if combined_block.description_field %}
+                <h3>{{ combined_block.description_field.title }}</h3>
+                <p>{{ combined_block.description_field.description }}</p>
             {% endif %}
+
+            <div class="marg_bottom-10">
+                {% for field_response in fields %}
+                    <p>
+                        {% if field_response.field.field_type == 'boolean' %}
+                            <b>{{ field_response.field.name }}:</b> 
+                            {% if field_response.value == 'on' %}Так{% else %}Ні{% endif %}
+                        {% else %}
+                            <b>{{ field_response.field.name }}:</b> {{ field_response.value }}
+                        {% endif %}
+                    </p>
+                {% endfor %}
+                </div>
         {% endfor %}
-    </ul>
-{% endfor %}
+
+    </div>
 {% endblock main %}
 <!--Content-->
 <!--Scripts-->
