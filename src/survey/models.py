@@ -24,6 +24,11 @@ class SurveyResponse(models.Model):
         return f"{self.user} - {self.block_template}"
 
 class FieldResponse(models.Model):
+    INPUT_METHODS = (
+        ('paste', 'Paste'),
+        ('keyboard', 'Keyboard'),
+        ('unknown', 'Unknown'),
+    )
     survey_response = models.ForeignKey(
         SurveyResponse,
         on_delete=models.CASCADE,
@@ -44,4 +49,6 @@ class FieldResponse(models.Model):
         related_name='combined_block_responses'
     )
     value = models.TextField()
+    input_time = models.IntegerField(default=0, null=True, blank=True)
+    input_method = models.CharField(max_length=128, choices=INPUT_METHODS, blank=True, null=True)
 

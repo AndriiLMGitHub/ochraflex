@@ -4,6 +4,9 @@ from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from survey.models import SurveyResponse, FieldResponse
 from app.models import BlockTemplate, DescriptionField, Field, CombinedBlock
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from weasyprint import HTML
 
 
 def submit_survey_response(request, uuid):
@@ -27,6 +30,19 @@ def submit_survey_response(request, uuid):
             if not email:
                 messages.error(request, "Будь ласка, введіть e-mail, щоб ми могли зв'язатися з вами.")
                 return redirect("submit_survey", uuid=uuid)
+            
+        # Отримуємо всі поля введення (крім прихованих)
+        form_data = {key: value for key, value in request.POST.items() if key.startswith("field_")}
+
+        # Отримуємо час введення та метод введення для кожного поля
+        input_times = {key.replace("field_", ""): request.POST.get(f"input_time_{key.replace('field_', '')}", "0") for key in form_data.keys()}
+        input_methods = {key.replace("field_", ""): request.POST.get(f"input_method_{key.replace('field_', '')}", "unknown") for key in form_data.keys()}
+
+
+        # Логування або збереження в базу
+        for field_name, value in form_data.items():
+            field_id = field_name.replace("field_", "")
+            print(f"Поле: {field_name}, Значення: {value}, Час: {input_times.get(field_id, '0')} мс, Метод: {input_methods.get(field_id, 'unknown')}")
 
         # Створюємо відповідь на анкету
         survey_response = SurveyResponse.objects.create(
@@ -60,6 +76,8 @@ def submit_survey_response(request, uuid):
         for combined_block in combined_blocks:
             for field in combined_block.fields.all():
                 field_name = f"field_{field.id}"
+                input_time_name = f"input_time_{field.id}"
+                input_method_name = f"input_method_{field.id}"
 
                 if field.field_type == Field.CHECKBOX:
                     field_value = ", ".join(request.POST.getlist(field_name))
@@ -68,12 +86,18 @@ def submit_survey_response(request, uuid):
                 else:
                     field_value = request.POST.get(field_name, "").strip()
 
+                # Отримуємо час заповнення та метод введення
+                input_time = request.POST.get(input_time_name, "0")
+                input_method = request.POST.get(input_method_name, "unknown")
+
                 if field_value:
                     FieldResponse.objects.create(
                         survey_response=survey_response,
                         field=field,
                         value=field_value,
-                        combined_block=combined_block  # Прив'язка до комбінованого блоку
+                        combined_block=combined_block,  # Прив'язка до комбінованого блоку
+                        input_time=int(input_time),  # Записуємо час у мілісекундах
+                        input_method=input_method  # Записуємо метод введення
                     )
 
         for template in block_template.library_templates.all():
@@ -141,3 +165,16 @@ def survey_detail_view(request, uuid, response_id):
         "response": survey_response,
         'pre_url': pre_url,
     })
+
+def generate_partial_pdf(request, uuid):
+    block_template = get_object_or_404(BlockTemplate, uuid=uuid)
+    # Рендеримо весь HTML-шаблон з контекстом
+    html_string = render_to_string('survey/pdf_template.html', {'block_template': block_template})
+
+    # Генеруємо PDF-файл
+    pdf = HTML(string=html_string).write_pdf()
+
+    # Повертаємо PDF-файл як HTTP-відповідь
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="partial_report_{block_template.uuid}.pdf"'
+    return response

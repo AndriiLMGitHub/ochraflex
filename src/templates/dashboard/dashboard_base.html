@@ -58,12 +58,14 @@
           <a
             href="{% url 'dashboard' %}"
             class="{% if request.path == '/dashboard/settings/' %}active{% endif %}"
-            >Налаштування</a
+          >
+            Налаштування
+          </a
           >
         </li>
       </ul>
       <div class="logout">
-        <a href="{% url 'logout' %}"> Logout </a>
+        <a href="{% url 'logout' %}">Logout</a>
       </div>
     </div>
     <div class="responsive-header">

@@ -33,26 +33,57 @@
 
 <!--Content-->
 {% block main %}
-<p class="marg_bottom-10"><b>Назва анкети:</b> {{ block_template.name }}</p>
-<p class="marg_bottom-10"><b>Посилання створив:</b>  {{ request.user.email }}</p>
-<p class="marg_bottom-10"><b>Анкета заповнена:</b>  {{ response.submitted_at}}</p>
-<p class="marg_bottom-10"><b>Мова:</b> CZ</p>
-<p class="marg_bottom-10"><b>Посилання на анкету:</b>  {{ pre_url }}{% url 'submit_survey' block_template.uuid %}</p>
-<p class="marg_bottom-10"><b>Код активації: </b>123456</p>
-<p class="marg_bottom-10"><button type="button" class="button_primary button_reset button_sm">Показати інформацію про заповнення</button></p>
+<div class="d-flex justify-content-between">
+    <div class="info">
+        <p class="marg_bottom-10"><b>Назва анкети:</b> {{ block_template.name }}</p>
+        <p class="marg_bottom-10"><b>Посилання створив:</b>  {{ request.user.email }}</p>
+        <p class="marg_bottom-10"><b>Анкета заповнена:</b>  {{ response.submitted_at}}</p>
+        <p class="marg_bottom-10"><b>Мова:</b> CZ</p>
+        <p class="marg_bottom-10"><b>Посилання на анкету:</b>  {{ pre_url }}{% url 'submit_survey' block_template.uuid %}</p>
+        <p class="marg_bottom-10"><b>Код активації: </b>123456</p>
+        <p class="marg_bottom-10"><button type="button" class="button_primary button_reset button_sm">Показати інформацію про заповнення</button></p>
+    </div>
+    <div class="actions-pdf">
+        <a href="{% url 'generate_partial_pdf' block_template.uuid %}">
+            <button type="button" class="button_primary button_reset button_sm">PDF для замовника</button>
+        </a>
+        <a href="#"><button type="button" class="button_primary button_reset button_sm">PDF для себе</button></a>
+    </div>
+</div>
 
-    <div style="background-color: rgba(0, 0,0 , 0.05)">
+    <div class="pdf-content" style="background-color: rgba(0, 0,0 , 0.05); padding: 35px; border-radius: 10px;">
         {% group_by_combined_block response.field_responses.all as grouped_responses %}
+        <div class="d-flex justify-content-end align-items-center">
+            <div></div>
+            <div class="d-flex">
+                <p class="offset-right-10">
+                    <a href="#">
+                        <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM3 6H11V16H3V6ZM10.5 1L9.5 0H4.5L3.5 1H0V3H14V1H10.5Z" fill="#2E2E2E"/>
+                        </svg>
+                    </a>
+                </p>
+                <p>
+                    <a href="#">
+                        <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 7.24L12.81 6.62L10 0L7.19 6.63L0 7.24L5.46 11.97L3.82 19L10 15.27L16.18 19L14.55 11.97L20 7.24ZM10 13.4L6.24 15.67L7.24 11.39L3.92 8.51L8.3 8.13L10 4.1L11.71 8.14L16.09 8.52L12.77 11.4L13.77 15.68L10 13.4Z" fill="#2E2E2E"/>
+                        </svg>                        
+                    </a>
+                </p>
+            </div>
+        </div>
 
         {% for combined_block, fields in grouped_responses %}
             {% if combined_block.description_field %}
-                <h3>{{ combined_block.description_field.title }}</h3>
-                <p>{{ combined_block.description_field.description }}</p>
+                <div class="marg_bottom-20">
+                    <h3>{{ combined_block.description_field.title }}</h3>
+                    <p>{{ combined_block.description_field.description }}</p>
+                </div>
             {% endif %}
 
             <div class="marg_bottom-10">
                 {% for field_response in fields %}
-                    <p>
+                    <p class="marg_bottom-10">
                         {% if field_response.field.field_type == 'boolean' %}
                             <b>{{ field_response.field.name }}:</b> 
                             {% if field_response.value == 'on' %}Так{% else %}Ні{% endif %}
@@ -63,7 +94,6 @@
                 {% endfor %}
                 </div>
         {% endfor %}
-
     </div>
 {% endblock main %}
 <!--Content-->
