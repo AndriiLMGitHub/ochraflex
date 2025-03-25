@@ -1,11 +1,38 @@
+{% load static %}
+{% load custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h1>{{ block_template.uuid }}</h1>
+    <h1>Анкета - {{ block_template.uuid }}</h1>
+    <div class="pdf-content" style="background-color: rgba(0, 0,0 , 0.05); padding: 35px; border-radius: 10px;">
+        {% group_by_combined_block response.field_responses.all as grouped_responses %}
+        {% for combined_block, fields in grouped_responses %}
+            {% if combined_block.description_field %}
+                <div class="marg_bottom-20">
+                    <h3>{{ combined_block.description_field.title }}</h3>
+                    <p>{{ combined_block.description_field.description }}</p>
+                </div>
+            {% endif %}
+
+            <div class="marg_bottom-10">
+                {% for field_response in fields %}
+                    <p class="marg_bottom-10">
+                        {% if field_response.field.field_type == 'boolean' %}
+                            <b>{{ field_response.field.name }}:</b> 
+                            {% if field_response.value == 'on' %}Так{% else %}Ні{% endif %}
+                        {% else %}
+                            <b>{{ field_response.field.name }}:</b> {{ field_response.value }}
+                        {% endif %}
+                    </p>
+                {% endfor %}
+                </div>
+        {% endfor %}
+    </div>
 </body>
 </html>

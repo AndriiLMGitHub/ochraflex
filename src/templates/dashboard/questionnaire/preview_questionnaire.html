@@ -106,7 +106,7 @@
                   </div>
                 {% elif field.field_type == 'checkbox' %}
                   <div class="radio-container marg_top-10 offset-left-20">
-                    {% for option in field.options %}
+                    {% for option in field.options|json_loads %}
                       <div class="d-flex g-30">
                         <label class="checkbox">
                           <input type="checkbox" />
@@ -121,13 +121,13 @@
                   </div>
                 {% elif field.field_type == 'select' %}
                   <select class="input_base_red">
-                    {% for option in field.options %}
+                    {% for option in field.options|json_loads %}
                       <option value="{{option}}">{{option}}</option>
                     {% endfor %}
                   </select>
                 {% elif field.field_type == 'radio' %}
                   <div class="radio-container marg_top-10 offset-left-20">
-                    {% for option in field.options %}
+                    {% for option in field.options|json_loads %}
                     <div class="d-flex g-30">
                       <input type="radio" value="{{ options }}" name="name" />
                       <label for="{{ forloop.counter }}">{{ option }}</label>

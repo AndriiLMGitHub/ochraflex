@@ -120,7 +120,7 @@
                   <td>{{ answer.submitted_at }}</td>
                   <td>Електрик</td>
                   <td>Для всіх</td>
-                  <td>CZ</td>
+                  <td>{% if answer.block_template.language == 'cs' %}CZ{% else %}DE{% endif %}</td>
             </tr>
           {% endfor %}
       </tbody>

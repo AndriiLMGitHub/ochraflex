@@ -86,9 +86,6 @@ urlpatterns = [
           views.edit_date_field_view,
           name='edit_date_field'
      ),
-
-
-
      path(
           'questionnaires/<str:id>/add/new/select/field/',
           views.add_new_select_field_view,
@@ -124,8 +121,6 @@ urlpatterns = [
           views.delete_field_view,
           name='delete_field'
      ),
-
-
      path(
           'questionnaires/<str:id>/add/alt/language/date/field',
           views.de_language_date_field_view,
@@ -360,6 +355,9 @@ urlpatterns = [
           views_library.allow_duplicate_library_template_view,
           name='allow_duplicate_library_template'
      ),
+
+     # User View Routes
+     path('user/questionare/create/answer/<str:uuid>/', views.questionnaire_user_result_view, name='questionnaire_user_result'),
 
 
 

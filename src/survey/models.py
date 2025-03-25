@@ -4,6 +4,10 @@ from django.conf import settings
 
 # Create your models here.
 class SurveyResponse(models.Model):
+    LANGUAGES = (
+        ('cs', 'Czech Republic'),
+        ('de', 'Germany'),
+    ) 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -18,6 +22,9 @@ class SurveyResponse(models.Model):
         related_name='survey_responses'
     )
     submitted_at = models.DateTimeField(auto_now_add=True)
+    language = models.CharField(
+        blank=True, null=True, choices=LANGUAGES, max_length=128, default='cs'
+    )
 
 
     def __str__(self):

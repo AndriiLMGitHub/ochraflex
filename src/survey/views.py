@@ -103,6 +103,8 @@ def submit_survey_response(request, uuid):
         for template in block_template.library_templates.all():
             if template.field:
                 field_name = f"field_{template.field.id}"
+                input_time_name = f"input_time_{field.id}"
+                input_method_name = f"input_method_{field.id}"
 
                 if template.field.field_type == Field.CHECKBOX:
                     field_value = ", ".join(request.POST.getlist(field_name))
@@ -111,17 +113,25 @@ def submit_survey_response(request, uuid):
                 else:
                     field_value = request.POST.get(field_name, "").strip()
 
+                # Отримуємо час заповнення та метод введення
+                input_time = request.POST.get(input_time_name, "0")
+                input_method = request.POST.get(input_method_name, "unknown")
+
                 if field_value:
                     FieldResponse.objects.create(
                         survey_response=survey_response,
                         field=template.field,  
                         value=field_value,
-                        combined_block=template.combined_block  # Додаємо прив’язку, якщо потрібно
+                        combined_block=template.combined_block,  # Додаємо прив’язку, якщо потрібно
+                        input_time=int(input_time),  # Записуємо час у мілісекундах
+                        input_method=input_method  # Записуємо метод введення
                     )
             elif template.combined_block:
                 for field in template.combined_block.fields.all():
                     if field:
                         field_name = f"field_{field.id}"
+                        input_time_name = f"input_time_{field.id}"
+                        input_method_name = f"input_method_{field.id}"
 
                         if field.field_type == Field.CHECKBOX:
                             field_value = ", ".join(request.POST.getlist(field_name))
@@ -130,12 +140,18 @@ def submit_survey_response(request, uuid):
                         else:
                             field_value = request.POST.get(field_name, "").strip()
 
+                        # Отримуємо час заповнення та метод введення
+                        input_time = request.POST.get(input_time_name, "0")
+                        input_method = request.POST.get(input_method_name, "unknown")
+
                         if field_value:
                             FieldResponse.objects.create(
                                 survey_response=survey_response,
                                 field=field,
                                 value=field_value,
-                                combined_block=template.combined_block  # Додаємо прив’язку, якщо потрібно
+                                combined_block=template.combined_block,  # Додаємо прив’язку, якщо потрібно
+                                input_time=int(input_time),  # Записуємо час у мілісекундах
+                                input_method=input_method  # Записуємо метод введення
                             )
 
         messages.success(request, "Анкету успішно відправлено!")
@@ -166,10 +182,21 @@ def survey_detail_view(request, uuid, response_id):
         'pre_url': pre_url,
     })
 
-def generate_partial_pdf(request, uuid):
+def generate_partial_pdf(request, uuid, response_id):
     block_template = get_object_or_404(BlockTemplate, uuid=uuid)
+    survey_response = SurveyResponse.objects.get(block_template=block_template, id=response_id)
+
+    current_site = get_current_site(request)
+    protocol = 'https' if request.is_secure() else 'http'
+    pre_url = f'{protocol}://{current_site.domain}'
+
+    context = {
+        "block_template": block_template,
+        "response": survey_response,
+        'pre_url': pre_url,
+    }
     # Рендеримо весь HTML-шаблон з контекстом
-    html_string = render_to_string('survey/pdf_template.html', {'block_template': block_template})
+    html_string = render_to_string('survey/pdf_template.html', context)
 
     # Генеруємо PDF-файл
     pdf = HTML(string=html_string).write_pdf()
@@ -178,3 +205,36 @@ def generate_partial_pdf(request, uuid):
     response = HttpResponse(pdf, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="partial_report_{block_template.uuid}.pdf"'
     return response
+
+
+def choose_language_questionare_view(request, id):
+    """Вибір мови анкети."""
+    block_template = get_object_or_404(BlockTemplate, id=id)
+
+    if block_template.language:
+        return redirect("questionnaire_user_result", block_template.uuid)
+
+    if request.method == "POST":
+        language = request.POST.get("language")
+        block_template.language = language
+        block_template.save()
+        return redirect("questionnaire_user_result", block_template.uuid)
+    
+    context = {
+        "block_template": block_template,
+    }
+
+    return render(request, "survey/choose_language.html", context)
+
+
+
+def delete_survey_view(request, survey_id):
+    survey_response = get_object_or_404(SurveyResponse, id=survey_id)
+    
+    survey_response.delete()
+    messages.success(request, 'Опитування успішно видалено!')
+    return redirect('list_resumes')
+
+def add_to_favorite_view(request, survey_id):
+    survey_detail = get_object_or_404(SurveyResponse, id=survey_id)
+    pass

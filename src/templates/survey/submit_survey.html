@@ -321,15 +321,23 @@
                                             class="input_base_red"
                                             placeholder="Введіть текст"
                                             maxlength="{{ field.max_symbols }}"
-                                            name="field_{{ field.id }}" 
-                                            ></textarea>
+                                            name="field_{{ field.id }}"
+                                            data-track
+                                            data-id="{{ field.id }}" 
+                                        ></textarea>
                                     </div>
                                 </div>
                             {% elif field.field_type == 'number' and field.extra_tag == 'phone' %}
                                 <div class="d-flex phoneForm">
                                     <select class="input_base languageDropdown"></select>
                                     <div class="selectedLanguage"></div>
-                                        <input type="text" class="input_base_red phoneNumberInput" name="field_{{ field.id }}"/>
+                                        <input
+                                            type="text"
+                                            class="input_base_red phoneNumberInput"
+                                            name="field_{{ field.id }}"
+                                            data-track
+                                            data-id="{{ field.id }}"
+                                        />
                                     </div>
                                 <!-- <input
                                     type="{{field.field_type}}"
@@ -345,12 +353,24 @@
                                     maxlength="{{ field.max_symbols }}"
                                     max="{{field.max_symbols}}"
                                     name="field_{{ field.id }}"
+                                    data-track
+                                    data-id="{{ field.id }}"
                                 />
                             {% elif field.field_type == 'boolean' %}
                                 <div class="radio-container offset-left-20">
-                                    <input type="radio" name="field_{{ field.id }}" />
+                                    <input
+                                        type="radio"
+                                        name="field_{{ field.id }}"
+                                        data-track
+                                        data-id="{{ field.id }}"
+                                    />
                                     <label for="true">Так</label>
-                                    <input type="radio" name="field_{{ field.id }}" />
+                                    <input
+                                        type="radio"
+                                        name="field_{{ field.id }}"
+                                        data-track
+                                        data-id="{{ field.id }}"
+                                    />
                                     <label for="false">Ні</label>
                                 </div>
                             {% elif field.field_type == 'checkbox' %}
@@ -358,7 +378,13 @@
                                     {% for option in field.options|json_loads %}
                                         <div class="d-flex g-30">
                                             <label class="checkbox" for="{{ forloop.counter }}">
-                                                <input type="checkbox" name="field_{{ field.id }}" value="{{ option }}"/>
+                                                <input
+                                                    type="checkbox"
+                                                    name="field_{{ field.id }}"
+                                                    value="{{ option }}"
+                                                    data-track
+                                                    data-id="{{ field.id }}"
+                                                />
                                                 <div class="circle"></div>
                                                 <div class="box">
                                                     <span class="checkmark"></span>
@@ -369,7 +395,12 @@
                                     {% endfor %}
                                 </div>
                             {% elif field.field_type == 'select' %}
-                                <select class="input_base_red" name="field_{{ field.id }}">
+                                <select
+                                    class="input_base_red"
+                                    name="field_{{ field.id }}"
+                                    data-track
+                                    data-id="{{ field.id }}"
+                                >
                                     {% for option in field.options|json_loads %}
                                         <option value="{{option}}">{{option}}</option>
                                     {% endfor %}
@@ -378,7 +409,13 @@
                                 <div class="multi-container marg_top-10 offset-left-20">
                                     {% for option in field.options|json_loads %}
                                         <div class="d-flex g-30">
-                                            <input type="radio" name="field_{{ field.id }}" value="{{ option }}" />
+                                            <input
+                                                type="radio"
+                                                name="field_{{ field.id }}"
+                                                value="{{ option }}"
+                                                data-track
+                                                data-id="{{ field.id }}"
+                                            />
                                             <label for="{{ forloop.counter }}">{{ option }}</label>
                                         </div>
                                     {% endfor %}
@@ -390,8 +427,13 @@
                                     placeholder="Введіть текст"
                                     maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
                                     name="field_{{ field.id }}"
+                                    data-track
+                                    data-id="{{ field.id }}"
                                 />
                             {% endif %}
+                            <!-- Для кожного поля додаємо приховані поля, щоб JavaScript міг знайти їх -->
+                            <input type="hidden" name="input_time_{{ field.id }}" id="input_time_{{ field.id }}">
+                            <input type="hidden" name="input_method_{{ field.id }}" id="input_method_{{ field.id }}">
                             {% if field.help_info %}
                                 <p class="offset-left-5">
                                 <small class="text-small-muted">{{ field.help_info}}</small>
@@ -431,7 +473,9 @@
                                             class="input_base_red"
                                             placeholder="Введіть текст"
                                             maxlength="{{ field.max_symbols }}"
-                                            name="field_{{ field.id }}" 
+                                            name="field_{{ field.id }}"
+                                            data-track
+                                            data-id="{{ field.id }}" 
                                             ></textarea>
                                     </div>
                                 </div>
@@ -439,7 +483,13 @@
                                 <div class="d-flex phoneForm">
                                     <select class="input_base languageDropdown"></select>
                                     <div class="selectedLanguage"></div>
-                                        <input type="text" class="input_base_red phoneNumberInput" name="field_{{ field.id }}"/>
+                                        <input
+                                            type="text"
+                                            class="input_base_red phoneNumberInput"
+                                            name="field_{{ field.id }}"
+                                            data-track
+                                            data-id="{{ field.id }}"
+                                        />
                                     </div>
                                 <!-- <input
                                     type="{{field.field_type}}"
@@ -455,12 +505,24 @@
                                     maxlength="{{ field.max_symbols }}"
                                     max="{{field.max_symbols}}"
                                     name="field_{{ field.id }}"
+                                    data-track
+                                    data-id="{{ field.id }}"
                                 />
                             {% elif field.field_type == 'boolean' %}
                                 <div class="radio-container offset-left-20">
-                                    <input type="radio" name="field_{{ field.id }}" />
+                                    <input 
+                                        type="radio"
+                                        name="field_{{ field.id }}"
+                                        data-track
+                                        data-id="{{ field.id }}"
+                                    />
                                     <label for="true">Так</label>
-                                    <input type="radio" name="field_{{ field.id }}" />
+                                    <input
+                                        type="radio"
+                                        name="field_{{ field.id }}"
+                                        data-track
+                                        data-id="{{ field.id }}"
+                                    />
                                     <label for="false">Ні</label>
                                 </div>
                             {% elif field.field_type == 'checkbox' %}
@@ -468,7 +530,13 @@
                                     {% for option in template.field.options %}
                                         <div class="d-flex g-30">
                                             <label class="checkbox" for="{{ forloop.counter }}">
-                                                <input type="checkbox" name="field_{{ field.id }}" value="{{ option }}"/>
+                                                <input
+                                                    type="checkbox"
+                                                    name="field_{{ field.id }}"
+                                                    value="{{ option }}"
+                                                    data-track
+                                                    data-id="{{ field.id }}"
+                                                />
                                                 <div class="circle"></div>
                                                 <div class="box">
                                                     <span class="checkmark"></span>
@@ -479,7 +547,7 @@
                                     {% endfor %}
                                 </div>
                             {% elif field.field_type == 'select' %}
-                                <select class="input_base_red" name="field_{{ field.id }}">
+                                <select class="input_base_red" name="field_{{ field.id }}" data-track data-id="{{ field.id }}">
                                     {% for option in field.options %}
                                         <option value="{{option}}">{{option}}</option>
                                     {% endfor %}
@@ -488,7 +556,13 @@
                                 <div class="multi-container marg_top-10 offset-left-20">
                                     {% for option in field.options %}
                                         <div class="d-flex g-30">
-                                            <input type="radio" name="field_{{ field.id }}" value="{{ option }}" />
+                                            <input
+                                                type="radio"
+                                                name="field_{{ field.id }}" 
+                                                value="{{ option }}"
+                                                data-track
+                                                data-id="{{ field.id }}"
+                                            />
                                             <label for="{{ forloop.counter }}">{{ option }}</label>
                                         </div>
                                     {% endfor %}
@@ -500,8 +574,13 @@
                                     placeholder="Введіть текст"
                                     maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
                                     name="field_{{ field.id }}"
+                                    data-track
+                                    data-id="{{ field.id }}"
                                 />
                             {% endif %}
+                            <!-- Для кожного поля додаємо приховані поля, щоб JavaScript міг знайти їх -->
+                            <input type="hidden" name="input_time_{{ field.id }}" id="input_time_{{ field.id }}">
+                            <input type="hidden" name="input_method_{{ field.id }}" id="input_method_{{ field.id }}">
                             {% if field.help_info %}
                                 <p class="offset-left-5">
                                 <small class="text-small-muted">{{ field.help_info}}</small>

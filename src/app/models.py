@@ -14,7 +14,7 @@ class BlockTemplate(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=255)  # Назва блоку
     description = models.TextField(blank=True, null=True)  # Опис блоку
-    lanuage = models.CharField(
+    language = models.CharField(
         blank=True, null=True, choices=LANGUAGES, max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)  # Дата створення
     library_templates = models.ManyToManyField('LibraryTemplate', blank=True)
