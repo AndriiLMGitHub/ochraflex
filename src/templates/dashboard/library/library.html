@@ -39,10 +39,12 @@
 </div>
 <div class="d-flex align-items-center marg_bottom-20">
     <div class="search-bar offset-right-20">
-        <input type="text" placeholder="Введіть значення" class="input_base" />
-        <div class="search-icon">
-            <img src="{% static 'images/icons/search.svg' %}" alt="Search item" />
-        </div>
+        <form action="" method="GET">
+            <input type="text" name="q" value="{{ query }}" placeholder="Введіть значення" class="input_base" />
+            <div class="search-icon">
+                <img src="{% static 'images/icons/search.svg' %}" alt="Search item" />
+            </div>
+        </form>
         <!-- Search icon -->
     </div>
     <div class="toolbar-left setting-trigger-filter">

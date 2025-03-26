@@ -158,9 +158,124 @@
             </div>
         </div>
         {% elif library_template.description_field %}
-            {{ library_template.description_field}}
+        <div class="marg_bottom-15">
+            <h3>{{ library_template.description_field.title}}</h3>
+            <p>{{ library_template.description_field.description }}</p>
+        </div>
         {% else %}
-            {{ library.combined_block.fields.all }}
+            {% for field in library_template.combined_block.fields.all %}
+                    <div class="w-100 marg_top-20">
+                        <div class="group-form">
+                        <label for="{{field.name}}" class="input_label">{{field.name}}</label>
+                        {% if field.is_required %}
+                        <p>
+                            <img src="{% static 'images/icons/required.svg' %}" alt="" />
+                        </p>
+                        {% endif %}
+                        </div>
+                    </div>
+                    {% if field.field_type == 'textarea' %}
+                        <div class="d-flex justify-content-between main-title-menu">
+                            <div class="w-100">
+                            <div class="textarea-quest">
+                                <textarea class="input_base_red" placeholder="Введіть текст" maxlength="{{ field.max_symbols }}"></textarea>
+                            </div>
+                            </div>
+                        </div>
+                    {% elif field.field_type == 'number' and field.extra_tag %}
+                        <div class="w-100">
+                            <div class="d-flex phoneForm">
+                            <select class="input_base languageDropdown"></select>
+                            <div class="selectedLanguage"></div>
+                            <input type="text" class="input_base phoneNumberInput" />
+                            </div>
+                        </div>
+                    {% elif field.field_type == 'number' %}
+                        <div class="w-100">
+                            <input
+                            type="{{field.field_type}}"
+                            class="input_base_red"
+                            placeholder="Введіть число"
+                            max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                            />
+                        </div>
+                    {% elif field.field_type == 'date' %}
+                        <div class="w-100">
+                            <input
+                            type="{{field.field_type}}"
+                            class="input_base_red"
+                            maxlength="{{ field.max_symbols }}"
+                            max="{{field.max_symbols}}"
+                            />
+                        </div>
+                    {% elif field.field_type == 'boolean' %}
+                        <div class="w-100">
+                            <div class="radio-container">
+                            <input type="radio" name="some" value="true" />
+                            <label for="true">Так</label>
+                            <input type="radio" name="some" value="false" />
+                            <label for="false">Ні</label>
+                            </div>
+                        </div>
+                    {% elif field.field_type == 'checkbox' %}
+                        <div class="w-100">
+                            <div class="multi-container offset-left-20">
+                            {% for option in field.options|json_loads %}
+                            <div class="d-flex g-30">
+                                <label class="checkbox">
+                                <input type="checkbox" />
+                                <div class="circle"></div>
+                                <div class="box">
+                                    <span class="checkmark"></span>
+                                </div>
+                                </label>
+                                <p>{{ option }}</p>
+                            </div>
+                            {% endfor %}
+                            </div>
+                        </div>
+                    {% elif field.field_type == 'radio' %}
+                        <div class="w-100">
+                            <div class="multi-container offset-left-20">
+                            {% for option in field.options|json_loads %}
+                            <div class="d-flex g-30">
+                                <input type="radio" value="{{ options }}" name="name" />
+                                <label for="{{ forloop.counter }}">{{ option }}</label>
+                            </div>
+                            {% endfor %}
+                            </div>
+                        </div>
+                    {% elif field.field_type == 'select' %}
+                        <div class="w-100">
+                            <select class="input_base_red">
+                            {% for option in field.options|json_loads %}
+                            <option value="{{option}}">{{option}}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    {% else %}
+                        <div class="w-100">
+                            <input
+                            type="{{field.field_type}}"
+                            class="input_base_red"
+                            placeholder="Введіть текст"
+                            maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                            />
+                        </div>
+                    {% endif %}
+                    {% if field.help_info %}
+                        <p class="offset-left-5">
+                            <small class="text-small-muted">{{field.help_info}}</small>
+                        </p>
+                    {% endif %}
+                {% endfor %}
+                {% if library_template.combined_block.allow_dublicate %}
+                    <div class="d-flex justify-content-end marg_top-20">
+                        <button class="button_red_outline" id="add-one-more-block" style="display: flex;">
+                            <p>Додати ще</p>
+                        </button>
+                    </div>
+                {% endif %}
         {% endif %}
     </div>
 </div>

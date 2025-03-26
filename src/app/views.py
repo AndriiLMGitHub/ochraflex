@@ -10,6 +10,7 @@ from .utils import parse_json
 from django.contrib.sites.shortcuts import get_current_site
 import json
 from django.http import HttpResponse
+from django.db.models import Count, Q
 
 # Change password imports
 from django.contrib.auth.decorators import login_required
@@ -53,22 +54,38 @@ def dashboard_view(request):
 
 
 def list_resumes_view(request):
+    """Пошук відповідей на анкети."""
+    query = request.GET.get("q", "").strip()  # Отримуємо параметр пошуку
     # Logic for listing resumes goes here
     answers = SurveyResponse.objects.filter(user=request.user)
+
+    if query:
+        answers = answers.filter(
+            Q(block_template__name__icontains=query)
+        )
+        messages.success(request, f'Пошук завершено, знайдено {answers.count()} відповідей!')
+    
     context = {
         'answers': answers,
+        "query": query,
     }
     return render(request, 'dashboard/resume/resumes.html', context)
 
 
 def questionnaires_view(request):
-    # Logic for questionnaires goes here
-    questionnaires = BlockTemplate.objects.filter(user=request.user)
-    answers = SurveyResponse.objects.all().count()
+    """Відображає список шаблонів блоків з можливістю пошуку."""
+    query = request.GET.get("q", "").strip()  # Отримуємо параметр пошуку
+    questionnaires = BlockTemplate.objects.filter(user=request.user).annotate(response_count=Count('survey_responses'))  # Додаємо кількість відповідей
+
+    if query:
+        questionnaires = questionnaires.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+        messages.success(request, f'Пошук завершено, знайдено {questionnaires.count()} анкет!')
 
     context = {
         'questionnaires': questionnaires,
-        'answers': answers,
+        'query': query,
     }
     return render(request, 'dashboard/questionnaire/questionnaires.html', context)
 

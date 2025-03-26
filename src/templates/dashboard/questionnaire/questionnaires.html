@@ -9,6 +9,15 @@
   rel="stylesheet"
   href="{% static 'css/dashboard/questionnaires/questionnaires.css' %}"
 />
+<style>
+  .button-search {
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-top: 4px;
+    margin-right: 3px;
+  }
+</style>
 {% endblock styles %}
 <!-- Styles -->
 <!--Header-->
@@ -16,17 +25,29 @@
 <!--Header-->
 
 <!--Content-->
-{% block main %} {% load static %}
+{% block main %}
+{% load static %}
 <div class="toolbar">
   <div class="link-templates">
-    <a href="{% url 'library' %}" class="button_reset button_primary">Бібліотека шаблонів</a>
+    <a href="{% url 'library' %}" class="button_reset button_primary d-flex align-items-center">
+      <!-- <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M3 21h18M4 18h16M6 10v8m4-8v8m4-8v8m4-8v8M4 9.5v-.955a1 1 0 0 1 .458-.84l7-4.52a1 1 0 0 1 1.084 0l7 4.52a1 1 0 0 1 .458.84V9.5a.5.5 0 0 1-.5.5h-15a.5.5 0 0 1-.5-.5Z"/>
+      </svg>       -->
+      <!-- <p style="word-wrap: normal;overflow-wrap: normal; white-space: nowrap;"></p> -->
+      Бібліотека шаблонів
+    </a>
   </div>
   <div class="search-bar">
-    <input type="text" placeholder="Введіть значення" class="input_base" />
+    <form method="GET" action="{% url 'questionnaires' %}">
+      <input type="text" name="q" value="{{ query }}" placeholder="Введіть назву" class="input_base" />
       <div class="search-icon">
-        <img src="{% static 'images/icons/search.svg' %}" alt="Search item" />
+        <button type="submit" class="button-search">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.5 11H11.71L11.43 10.73C12.41 9.59 13 8.11 13 6.5C13 2.91 10.09 0 6.5 0C2.91 0 0 2.91 0 6.5C0 10.09 2.91 13 6.5 13C8.11 13 9.59 12.41 10.73 11.43L11 11.71V12.5L16 17.49L17.49 16L12.5 11ZM6.5 11C4.01 11 2 8.99 2 6.5C2 4.01 4.01 2 6.5 2C8.99 2 11 4.01 11 6.5C11 8.99 8.99 11 6.5 11Z" fill="#8B8B8B"/>
+          </svg>            
+        </button>
       </div>
-    </button>
+    </form>
     <!-- Search icon -->
   </div>
 </div>
@@ -43,39 +64,60 @@
       {% for questionnaire in questionnaires %}
         <div class="questionnaires-block">
           <div class="left">
-            <img src="{% static 'images/icons/list.svg' %}" alt="Icon">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="#9cbcde" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7h1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h11.5M7 14h6m-6 3h6m0-10h.5m-.5 3h.5M7 7h3v3H7V7Z"/>
+            </svg>            
             <div><div class="title">{{questionnaire.name}}</div></div>
             <div><div class="description">{{questionnaire.description}}</div></div>
           </div>
           <div class="right">
-            <div class="responses">Відповіді <span>({{answers}})</span></div>
+            <div class="responses">Відповіді <span>({{questionnaire.response_count}})</span></div>
             <div class="menu" id="menu-{{ forloop.counter }}">
               <img src="{% static 'images/icons/menu.svg' %}" alt="Menu">
               <div class="dropdown">
                   <a href="{% url 'questionnaire_detail' questionnaire.id %}" class="dropdown-item d-flex align-items-center">
-                    <svg class="offset-right-5" width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- <svg class="offset-right-5" width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M0 14.2512V18.0012H3.75L14.81 6.94125L11.06 3.19125L0 14.2512ZM17.71 4.04125C18.1 3.65125 18.1 3.02125 17.71 2.63125L15.37 0.291249C14.98 -0.0987512 14.35 -0.0987512 13.96 0.291249L12.13 2.12125L15.88 5.87125L17.71 4.04125Z" fill="currentColor"/>
-                    </svg>                      
+                    </svg>-->
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                    </svg> 
                     <p>Редагувати</p>
                   </a>
                   <a href="{% url 'preview_questionnaire' questionnaire.id %}" class="dropdown-item d-flex align-items-center">
                     <svg class="offset-right-5" width="16" height="12" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M11.0024 0.5C6.00244 0.5 1.73244 3.61 0.00244141 8C1.73244 12.39 6.00244 15.5 11.0024 15.5C16.0024 15.5 20.2724 12.39 22.0024 8C20.2724 3.61 16.0024 0.5 11.0024 0.5ZM11.0024 13C8.24244 13 6.00244 10.76 6.00244 8C6.00244 5.24 8.24244 3 11.0024 3C13.7624 3 16.0024 5.24 16.0024 8C16.0024 10.76 13.7624 13 11.0024 13ZM11.0024 5C9.34244 5 8.00244 6.34 8.00244 8C8.00244 9.66 9.34244 11 11.0024 11C12.6624 11 14.0024 9.66 14.0024 8C14.0024 6.34 12.6624 5 11.0024 5Z" fill="currentColor"/>
-                    </svg>                      
+                    </svg>                
                     <p>Перегляд</p>
                   </a>
                   <a href="{% url 'list_resumes' %}" class="dropdown-item d-flex align-items-center">
-                    <svg class="offset-right-5" width="14" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- <svg class="offset-right-5" width="14" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M14.5924 5.58L8.00244 12.17L4.41244 8.59L3.00244 10L8.00244 15L16.0024 7L14.5924 5.58ZM10.0024 0C4.48244 0 0.00244141 4.48 0.00244141 10C0.00244141 15.52 4.48244 20 10.0024 20C15.5224 20 20.0024 15.52 20.0024 10C20.0024 4.48 15.5224 0 10.0024 0ZM10.0024 18C5.58244 18 2.00244 14.42 2.00244 10C2.00244 5.58 5.58244 2 10.0024 2C14.4224 2 18.0024 5.58 18.0024 10C18.0024 14.42 14.4224 18 10.0024 18Z" fill="currentColor"/>
-                    </svg>                      
-                    <p>Відповіді <span>({{answers}})</span></p>
+                    </svg>-->
+                    <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg> 
+                    <p>Відповіді <span>({{questionnaire.response_count}})</span></p>
                   </a>
-                  <a href="{% url 'share_questionare' questionnaire.id %}" class="dropdown-item">Поширити</a>
-                  <a href="{% url 'questionnaire_edit' questionnaire.id %}" class="dropdown-item">Перейменувати</a>
+                  <a href="{% url 'share_questionare' questionnaire.id %}" class="dropdown-item d-flex align-items-center">
+                    <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M7.926 10.898 15 7.727m-7.074 5.39L15 16.29M8 12a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm12 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm0-11a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+                    </svg>                    
+                    Поширити
+                  </a>
+                  <a href="{% url 'questionnaire_edit' questionnaire.id %}" class="dropdown-item d-flex align-items-center">
+                    <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6.2V5h11v1.2M8 5v14m-3 0h6m2-6.8V11h8v1.2M17 11v8m-1.5 0h3"/>
+                    </svg>                    
+                    Перейменувати
+                  </a>
                   <a href="{% url 'delete_questionnaire' questionnaire.id %}" class="dropdown-item red d-flex align-items-center">
-                    <svg class="offset-right-5" width="12" height="14" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- <svg class="offset-right-5" width="12" height="14" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M1.00244 16C1.00244 17.1 1.90244 18 3.00244 18H11.0024C12.1024 18 13.0024 17.1 13.0024 16V4H1.00244V16ZM14.0024 1H10.5024L9.50244 0H4.50244L3.50244 1H0.00244141V3H14.0024V1Z" fill="currentColor"/>
-                    </svg>                      
+                    </svg>-->
+                    <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                    </svg>                    
                     <p>Видалити</p>
                   </a>
               </div>

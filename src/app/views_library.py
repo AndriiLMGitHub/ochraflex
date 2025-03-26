@@ -8,6 +8,7 @@ import json
 
 
 def library_view(request):
+    query = request.GET.get("q", "").strip()  # Отримуємо параметр пошуку
     library_fields_without_fields = LibraryTemplate.objects.filter(
         field__isnull=True,
         description_field__isnull=True,
@@ -23,8 +24,17 @@ def library_view(request):
     library_blocks = LibraryTemplate.objects.annotate(
         num_fields=Count('combined_block')).filter(num_fields__gt=0).prefetch_related('combined_block__fields')
     
+    all_library_templates = LibraryTemplate.objects.all()
+    
     if library_fields_without_fields:
         library_fields_without_fields.delete()
+
+    templates=[]
+    if query:
+        templates = all_library_templates.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+        messages.success(request, f'Пошук завершено, знайдено {templates.count()} відповідей!')
 
 
     context = {
@@ -32,6 +42,8 @@ def library_view(request):
         'library_descriptions': library_descriptions,
         'library_blocks': library_blocks,
         'library_fields_all': library_fields_without_fields,
+        'query': query,
+        'templates': templates,  # Отримуємо всі шаблони бібліотеки, які відносять до поточного блоку
     }
 
     return render(request, 'dashboard/library/library.html', context)
