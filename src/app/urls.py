@@ -358,6 +358,8 @@ urlpatterns = [
 
      # User View Routes
      path('user/questionare/create/answer/<str:uuid>/', views.questionnaire_user_result_view, name='questionnaire_user_result'),
+     # Share Social
+     path('share/questionnaire/result/<str:block_id>/', views.share_questionare_view, name='share_questionare'),
 
 
 

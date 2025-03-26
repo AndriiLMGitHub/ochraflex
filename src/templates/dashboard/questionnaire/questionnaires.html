@@ -70,7 +70,7 @@
                     </svg>                      
                     <p>Відповіді <span>({{answers}})</span></p>
                   </a>
-                  <a href="#" class="dropdown-item">Поширити</a>
+                  <a href="{% url 'share_questionare' questionnaire.id %}" class="dropdown-item">Поширити</a>
                   <a href="{% url 'questionnaire_edit' questionnaire.id %}" class="dropdown-item">Перейменувати</a>
                   <a href="{% url 'delete_questionnaire' questionnaire.id %}" class="dropdown-item red d-flex align-items-center">
                     <svg class="offset-right-5" width="12" height="14" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">

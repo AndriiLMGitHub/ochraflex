@@ -741,3 +741,17 @@ def questionnaire_user_result_view(request, uuid):
     }
 
     return render(request, 'survey/user_view.html', context)
+
+
+
+def share_questionare_view(request, block_id):
+    block_template = get_object_or_404(BlockTemplate, id=block_id)
+    current_site = get_current_site(request)
+    protocol = 'https' if request.is_secure() else 'http'
+    pre_url = f'{protocol}://{current_site.domain}'
+
+    context = {
+        'block_template': block_template,
+        'pre_url': pre_url,
+    }
+    return render(request, 'dashboard/questionnaire/share.html', context)
