@@ -54,7 +54,7 @@ def dashboard_view(request):
 
 def list_resumes_view(request):
     # Logic for listing resumes goes here
-    answers = SurveyResponse.objects.all()
+    answers = SurveyResponse.objects.filter(user=request.user)
     context = {
         'answers': answers,
     }
