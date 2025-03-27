@@ -7,6 +7,9 @@ from app.models import BlockTemplate, DescriptionField, Field, CombinedBlock
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from weasyprint import HTML
+from django.templatetags.static import static
+import os
+from django.conf import settings
 
 
 def submit_survey_response(request, uuid):
@@ -238,3 +241,18 @@ def delete_survey_view(request, survey_id):
 def add_to_favorite_view(request, survey_id):
     survey_detail = get_object_or_404(SurveyResponse, id=survey_id)
     pass
+
+def test_pdf_view(request, uuid, response_id):
+    block_template = get_object_or_404(BlockTemplate, uuid=uuid)
+    survey_response = SurveyResponse.objects.get(block_template=block_template, id=response_id)
+    # logo_url = request.build_absolute_uri(static("images/main_logo.svg"))
+    logo_path = settings.BASE_DIR / 'images/main_logo.svg'
+    logo_url = f"file://{logo_path}"  # Формат для WeasyPrint
+
+    context = {
+        'block_template': block_template,
+        'response': survey_response,
+        'logo_url': logo_url,
+    }
+
+    return render(request, "survey/pdf_template.html", context)
