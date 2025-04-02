@@ -7,11 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF - Document</title>
     <style>
-        body {
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+        html {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: justify;
+            font-size: 11pt;
+        }
+        body, p, h1, h2, h3, h4, h5, h6 {
             margin: 0;
             padding: 0;
-            font-family: Inter, sans-serif;
-            font-size: 12pt;
         }
         img {
             height: auto;
@@ -19,18 +28,6 @@
         }
         h1 {
             color: #3a3a3a;
-        }
-        h3 {
-            font-size: 16pt;
-            margin-bottom: 5px;
-        }
-        p {
-            margin-bottom: 0;
-        }
-        
-        @page {
-            size: A4;
-            margin: 0; /* Мінімальний відступ */
         }
         .text-center {
             text-align: center;
@@ -42,11 +39,11 @@
         .container {
             margin: 0;
             padding: 0;
+            position: relative;
         }
         .d-flex {
             display: flex;
             flex-wrap: nowrap;
-            height: 100vh;;
         }
         .justify-content-between {
             justify-content: space-between;
@@ -56,14 +53,20 @@
         }
         .pdf-side-bar {
             width: 20%;
-            padding-top: 85px;
+            position: absolute;
+            padding: 25px 20px 0;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 20%;
+            background: #D7EAFF;
             height: 100vh;
-            background: url("/static/images/main_logo.svg") no-repeat center 25px #D7EAFF;
         }
         
         .pdf-main-content {
             width: 70%;
-            padding: 30px 0 0 50px;
+            margin: 0 0 0 24%;
+            padding: 20px;
         }
         
         hr {
@@ -77,8 +80,9 @@
     <div class="d-flex container">
         <div class="pdf-side-bar">
             <div class="text-center">
+                <img src="{% static 'images/main_logo.png' %}" alt="">
                 <h4>{{ block_template.name }}</h4>
-                <p class="fz-sm">Cтворена - {{ response.submitted_at|date:"Y-m-d / H:i" }}</p> 
+                <p class="fz-sm">Cтворена - {{ response.submitted_at|date:"Y-m-d / H:i" }}</p>
             </div>
         </div>
         <div class="pdf-main-content">  

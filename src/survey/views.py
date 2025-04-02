@@ -8,7 +8,6 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from weasyprint import HTML
 from django.templatetags.static import static
-import os
 from django.conf import settings
 from django.utils.html import escape
 
@@ -203,7 +202,7 @@ def generate_partial_pdf(request, uuid, response_id):
     html_string = render_to_string('survey/pdf_template.html', context)
 
     # Генеруємо PDF-файл
-    pdf = HTML(string=html_string).write_pdf()
+    pdf = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
 
     # Повертаємо PDF-файл як HTTP-відповідь
     response = HttpResponse(pdf, content_type='application/pdf')
