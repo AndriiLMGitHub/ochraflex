@@ -10,6 +10,7 @@ from weasyprint import HTML
 from django.templatetags.static import static
 import os
 from django.conf import settings
+from django.utils.html import escape
 
 
 def submit_survey_response(request, uuid):
@@ -206,7 +207,7 @@ def generate_partial_pdf(request, uuid, response_id):
 
     # Повертаємо PDF-файл як HTTP-відповідь
     response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="partial_report_{block_template.uuid}.pdf"'
+    response['Content-Disposition'] = f'inline; filename="partial_report_{block_template.uuid}.pdf"'
     return response
 
 
@@ -246,8 +247,8 @@ def test_pdf_view(request, uuid, response_id):
     block_template = get_object_or_404(BlockTemplate, uuid=uuid)
     survey_response = SurveyResponse.objects.get(block_template=block_template, id=response_id)
     logo_url = request.build_absolute_uri(static("images/main_logo.svg"))
-    # logo_path = settings.BASE_DIR / 'images/main_logo.svg'
-    # logo_url = f"file://{logo_path}"  # Формат для WeasyPrint
+    logo_url = escape(logo_url)
+    print(logo_url)
 
     context = {
         'block_template': block_template,

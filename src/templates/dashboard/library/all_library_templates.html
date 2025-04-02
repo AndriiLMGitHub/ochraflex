@@ -99,16 +99,20 @@
                 </div>
                 {% elif library_template.field.field_type == 'boolean' %}
                 <div class="w-100">
-                    <div class="radio-container">
-                    <input type="radio" name="some" value="true" />
-                    <label for="true">Так</label>
-                    <input type="radio" name="some" value="false" />
-                    <label for="false">Ні</label>
+                    <div class="multi-container offset-left-20 marg_top-10">
+                        <div class="radio-container">
+                            <input type="radio" name="some" value="true" />
+                            <label for="true">Так</label>
+                        </div>
+                        <div class="radio-container">
+                            <input type="radio" name="some" value="false" />
+                            <label for="false">Ні</label>
+                        </div>
                     </div>
                 </div>
                 {% elif library_template.field.field_type == 'checkbox' %}
                 <div class="w-100">
-                    <div class="radio-container offset-left-20">
+                    <div class="multi-container offset-left-20 marg_top-10">
                     {% for option in library_template.field.options|json_loads %}
                     <div class="d-flex g-30">
                         <label class="checkbox">
@@ -126,20 +130,20 @@
                 {% elif library_template.field.field_type == 'select' %}
                     <div class="w-100">
                         <select class="input_base_red">
-                        {% for option in library_template.field.options|json_loads %}
-                        <option value="{{option}}">{{option}}</option>
-                        {% endfor %}
+                            {% for option in library_template.field.options|json_loads %}
+                                <option value="{{option}}">{{option}}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 {% elif library_template.field.field_type == 'radio' %}
                     <div class="w-100">
-                        <div class="radio-container offset-left-20">
-                        {% for option in library_template.field.options|json_loads %}
-                        <div class="d-flex g-30">
-                            <input type="radio" value="{{ options }}" name="name" />
-                            <label for="{{ forloop.counter }}">{{ option }}</label>
-                        </div>
-                        {% endfor %}
+                        <div class="multi-container offset-left-20 marg_top-10">
+                            {% for option in library_template.field.options|json_loads %}
+                                <div class="d-flex g-30">
+                                    <input type="radio" value="{{ options }}" name="name" />
+                                    <label for="{{ forloop.counter }}">{{ option }}</label>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                 {% else %}
@@ -210,11 +214,15 @@
                         </div>
                     {% elif field.field_type == 'boolean' %}
                         <div class="w-100">
-                            <div class="radio-container">
-                            <input type="radio" name="some" value="true" />
-                            <label for="true">Так</label>
-                            <input type="radio" name="some" value="false" />
-                            <label for="false">Ні</label>
+                            <div class="multi-container offset-left-20 marg_top-10">
+                                <div class="radio-container">
+                                    <input type="radio" name="some" value="true" />
+                                    <label for="true">Так</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" name="some" value="false" />
+                                    <label for="false">Ні</label>
+                                </div>
                             </div>
                         </div>
                     {% elif field.field_type == 'checkbox' %}

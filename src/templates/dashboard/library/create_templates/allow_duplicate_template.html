@@ -111,11 +111,15 @@
     {% elif field.field_type == 'boolean' %}
     <div class="d-flex justify-content-between main-title-menu">
       <div class="wrap-guest-combine">
-        <div class="radio-container">
-          <input type="radio" name="some" value="true" />
-          <label for="true">Так</label>
-          <input type="radio" name="some" value="false" />
-          <label for="false">Ні</label>
+        <div class="multi-container offset-left-20 marg_top-10">
+          <div class="radio-container">
+            <input type="radio" name="some" value="true" />
+            <label for="true">Так</label>
+          </div>
+          <div class="radio-container">
+            <input type="radio" name="some" value="false" />
+            <label for="false">Ні</label>
+          </div>
         </div>
       </div>
     </div>

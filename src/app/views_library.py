@@ -92,7 +92,6 @@ def library_create_block_view(request):
         name = request.POST.get('name')
         library_template=LibraryTemplate.objects.create(
             name=name,
-            # user=request.user # to current user
         )
         library_template.save()
         messages.success(request, 'Шаблон успішно створено! Виберіть тип шаблону!')

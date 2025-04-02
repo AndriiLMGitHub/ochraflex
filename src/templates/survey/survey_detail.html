@@ -124,8 +124,24 @@
                         {% endif %}
                     </p>
                 {% endfor %}
-                </div>
+            </div>
         {% endfor %}
+
+        <!-- {% for resp in response.field_responses.all %}
+        <p class="marg_bottom-10">
+            {% if resp.field.field_type == 'boolean' %}
+                <b>{{ resp.field.name }}:</b> 
+                {% if resp.value == 'on' %}
+                    Так
+                    <span style="color: #037DFF;">-- Час заповнення - {{ resp.input_time }} мс; Тип заповнення - {% if resp.input_method == 'keyboard' %}Клавіатура{% elif resp.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
+                {% else %}
+                    Ні <span style="color: #037DFF;">-- Час заповнення - {{ resp.input_time }} мс; Тип заповнення - {% if resp.input_method == 'keyboard' %}Клавіатура{% elif resp.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
+                {% endif %}
+            {% else %}
+                <b>{{ resp.field.name }}:</b> {{ resp.value }} -- <span style="color: #037DFF;">-- Час заповнення - {{ resp.input_time }} мс; Тип заповнення - {% if resp.input_method == 'keyboard' %}Клавіатура{% elif resp.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
+            {% endif %}
+        </p>
+        {% endfor %} -->
     </div>
 {% endblock main %}
 <!--Content-->

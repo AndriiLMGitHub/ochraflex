@@ -74,6 +74,12 @@
                     padding: 25px 0;
                     background-color: rgb(251, 248, 248);
                 }
+
+                @media screen and (max-width: 768px) {
+                    .main-content-body {
+                        padding: 0 15px;
+                    }
+                }
             </style>
         {% endblock styles %}
     </head>
@@ -317,23 +323,28 @@
                                                     name="field_{{ field.id }}"
                                                     data-track
                                                     data-id="{{ field.id }}"
+                                                    id="dateShowPicker"
                                                 />
                                             {% elif field.field_type == 'boolean' %}
-                                                <div class="radio-container offset-left-20 marg_bottom-10">
-                                                    <input
-                                                        type="radio"
-                                                        name="field_{{ field.id }}"
-                                                        data-track
-                                                        data-id="{{ field.id }}"
-                                                    />
-                                                    <label for="true">Так</label>
-                                                    <input
+                                                <div class="multi-container offset-left-20 marg_bottom-10 marg_top-10">
+                                                    <div class="radio-container">
+                                                        <input
                                                         type="radio"
                                                         name="field_{{ field.id }}"
                                                         data-track
                                                         data-id="{{ field.id }}"
                                                         />
-                                                    <label for="false">Ні</label>
+                                                        <label for="true">Так</label>
+                                                    </div>
+                                                    <div class="radio-container">
+                                                        <input
+                                                            type="radio"
+                                                            name="field_{{ field.id }}"
+                                                            data-track
+                                                            data-id="{{ field.id }}"
+                                                        />
+                                                        <label for="false">Ні</label>
+                                                    </div>
                                                 </div>
                                             {% elif field.field_type == 'checkbox' %}
                                                 <div class="multi-container marg_top-10 offset-left-20">
@@ -433,7 +444,9 @@
                                                         class="input_base_red"
                                                         placeholder="Введіть текст"
                                                         maxlength="{{ field.max_symbols }}"
-                                                        name="field_{{ field.id }}" 
+                                                        name="field_{{ field.id }}"
+                                                        data-track
+                                                        data-id="{{ field.id }}" 
                                                         ></textarea>
                                                 </div>
                                             </div>
@@ -441,7 +454,13 @@
                                             <div class="d-flex phoneForm">
                                                 <select class="input_base_red languageDropdown"></select>
                                                 <div class="selectedLanguage"></div>
-                                                    <input type="text" class="input_base_red phoneNumberInput" name="field_{{ field.id }}"/>
+                                                    <input
+                                                        type="text"
+                                                        class="input_base_red phoneNumberInput"
+                                                        name="field_{{ field.id }}"
+                                                        data-track
+                                                        data-id="{{ field.id }}"
+                                                    />
                                                 </div>
                                             <!-- <input
                                                 type="{{field.field_type}}"
@@ -457,12 +476,25 @@
                                                 maxlength="{{ field.max_symbols }}"
                                                 max="{{field.max_symbols}}"
                                                 name="field_{{ field.id }}"
+                                                data-track
+                                                data-id="{{ field.id }}"
+                                                id="dateShowPicker"
                                             />
                                         {% elif field.field_type == 'boolean' %}
                                             <div class="radio-container offset-left-20">
-                                                <input type="radio" name="field_{{ field.id }}" />
+                                                <input
+                                                    type="radio"
+                                                    name="field_{{ field.id }}"
+                                                    data-track
+                                                    data-id="{{ field.id }}"
+                                                />
                                                 <label for="true">Так</label>
-                                                <input type="radio" name="field_{{ field.id }}" />
+                                                <input 
+                                                    type="radio"
+                                                    name="field_{{ field.id }}"
+                                                    data-track
+                                                    data-id="{{ field.id }}"
+                                                />
                                                 <label for="false">Ні</label>
                                             </div>
                                         {% elif field.field_type == 'checkbox' %}
@@ -470,7 +502,14 @@
                                             {% for option in field.options|json_loads %}
                                                 <div class="d-flex g-30">
                                                     <label class="checkbox" for="{{ forloop.counter }}">
-                                                        <input class="input_base_red" type="checkbox" name="field_{{ field.id }}" value="{{ option }}"/>
+                                                        <input
+                                                            class="input_base_red"
+                                                            type="checkbox"
+                                                            name="field_{{ field.id }}"
+                                                            value="{{ option }}"
+                                                            data-track
+                                                            data-id="{{ field.id }}"
+                                                        />
                                                         <div class="circle"></div>
                                                         <div class="box">
                                                             <span class="checkmark"></span>
@@ -481,7 +520,12 @@
                                             {% endfor %}
                                             </div>
                                         {% elif field.field_type == 'select' %}
-                                            <select class="input_base_red" name="field_{{ field.id }}">
+                                            <select
+                                                class="input_base_red"
+                                                name="field_{{ field.id }}"
+                                                data-track
+                                                data-id="{{ field.id }}"
+                                            >
                                             {% for option in field.options|json_loads %}
                                                 <option value="{{option}}">{{option}}</option>
                                             {% endfor %}
@@ -490,7 +534,13 @@
                                             <div class="multi-container marg_top-10 offset-left-20">
                                                 {% for option in field.options|json_loads %}
                                                 <div class="d-flex g-30">
-                                                    <input type="radio" name="field_{{ field.id }}" value="{{ option }}" />
+                                                    <input
+                                                        type="radio"
+                                                        value="{{ option }}"
+                                                        name="field_{{ field.id }}"
+                                                        data-track
+                                                        data-id="{{ field.id }}"
+                                                    />
                                                     <label for="{{ forloop.counter }}">{{ option }}</label>
                                                 </div>
                                                 {% endfor %}
@@ -502,6 +552,8 @@
                                                 placeholder="Введіть текст"
                                                 maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
                                                 name="field_{{ field.id }}"
+                                                data-track
+                                                data-id="{{ field.id }}"
                                             />
                                         {% endif %}
                                         {% if field.help_info %}
@@ -573,6 +625,7 @@
                                                         name="field_{{ field.id }}"
                                                         data-track
                                                         data-id="{{ field.id }}"
+                                                        id="dateShowPicker"
                                                     />
                                                 {% elif field.field_type == 'boolean' %}
                                                     <div class="radio-container offset-left-20">
@@ -670,7 +723,7 @@
                                         <h3>{{ template.description_field.title }}</h3>
                                         <p>{{ template.description_field.description }}</p>
                                     {% endif %}
-                                    {% if template.field %}
+                                    {% if template.field and template.field.from_library %}
                                         {% with template.field as field %}
                                             <div class="marg_top-25">
                                                 <div class="group-form">
@@ -724,6 +777,7 @@
                                                         name="field_{{ field.id }}"
                                                         data-track
                                                         data-id="{{ field.id }}"
+                                                        id="dateShowPicker"
                                                     />
                                                 {% elif field.field_type == 'boolean' %}
                                                     <div class="radio-container offset-left-20">
@@ -744,7 +798,7 @@
                                                     </div>
                                                 {% elif field.field_type == 'checkbox' %}
                                                     <div class="multi-container marg_top-10 offset-left-20">
-                                                        {% for option in template.field.options %}
+                                                        {% for option in template.field.options|json_loads %}
                                                             <div class="d-flex g-30">
                                                                 <label class="checkbox" for="{{ forloop.counter }}">
                                                                     <input
@@ -765,13 +819,13 @@
                                                     </div>
                                                 {% elif field.field_type == 'select' %}
                                                     <select class="input_base_red" name="field_{{ field.id }}" data-track data-id="{{ field.id }}">
-                                                        {% for option in field.options %}
+                                                        {% for option in field.options|json_loads %}
                                                             <option value="{{option}}">{{option}}</option>
                                                         {% endfor %}
                                                     </select>
                                                 {% elif field.field_type == 'radio' %}
                                                     <div class="multi-container marg_top-10 offset-left-20">
-                                                        {% for option in field.options %}
+                                                        {% for option in field.options|json_loads %}
                                                             <div class="d-flex g-30">
                                                                 <input
                                                                     type="radio"
@@ -817,7 +871,7 @@
                             
                             <div class="marg_top-25 marg_bottom-25">
                                 <button type="submit" class="button_reset button_red_outline">Uložit</button>
-                                <a href="https://google.com" class="button_reset button_red_outline">Zrušit</a>
+                                <button type="button" onclick="window.location.href='https://google.com'" class="button_reset button_red_outline">Zrušit</button>
                             </div>
                         </form>
                     </div>
@@ -1027,5 +1081,10 @@
             });
         });
     });    
+</script>
+<script>
+    document.getElementById("dateShowPicker").addEventListener("click", function () {
+      this.showPicker(); // Відкриває календар (працює у підтримуваних браузерах)
+    });
 </script>
 </html>

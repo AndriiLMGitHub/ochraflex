@@ -149,13 +149,18 @@
                     class="input_base_red"
                     maxlength="{{ field.max_symbols }}"
                     max="{{field.max_symbols}}"
+                    id="dateShowPicker"
                   />
                 {% elif field.field_type == 'boolean' %}
-                  <div class="radio-container offset-left-20">
-                    <input type="radio" name="some" value="true" />
-                    <label for="true">Так</label>
-                    <input type="radio" name="some" value="false" />
-                    <label for="false">Ні</label>
+                  <div class="multi-container offset-left-20 marg_top-10">
+                    <div class="radio-container">
+                      <input type="radio" name="some" value="true" />
+                      <label for="true">Так</label>
+                    </div>
+                    <div class="radio-container">
+                      <input type="radio" name="some" value="false" />
+                      <label for="false">Ні</label>
+                    </div>
                   </div>
                 {% elif field.field_type == 'checkbox' %}
                   <div class="multi-container marg_top-10 offset-left-20">
@@ -242,8 +247,8 @@
           {% if combined_block.description_field %}
             <h3 class="marg_bottom-10">{{ combined_block.description_field.title }}</h3>
             <p class="">{{ combined_block.description_field.description }}</p>
-        {% endif %}
-        {% for field in combined_block.fields.all %}
+          {% endif %}
+          {% for field in combined_block.fields.all %}
               <div class="marg_top-25">
                   <div class="group-form">
                     <label for="{{field.name}}" class="input_label">{{field.name}}</label>
@@ -282,13 +287,18 @@
                       class="input_base_red"
                       maxlength="{{ field.max_symbols }}"
                       max="{{field.max_symbols}}"
+                      id="dateShowPicker"
                     />
                   {% elif field.field_type == 'boolean' %}
-                    <div class="radio-container offset-left-20">
-                      <input type="radio" name="some" value="true" />
-                      <label for="true">Так</label>
-                      <input type="radio" name="some" value="false" />
-                      <label for="false">Ні</label>
+                    <div class="multi-container offset-left-20 marg_top-10">
+                      <div class="radio-container">
+                        <input type="radio" name="some" value="true" />
+                        <label for="true">Так</label>
+                      </div>
+                      <div class="radio-container">
+                        <input type="radio" name="some" value="false" />
+                        <label for="false">Ні</label>
+                      </div>
                     </div>
                   {% elif field.field_type == 'checkbox' %}
                     <div class="multi-container marg_top-10 offset-left-20">
@@ -314,7 +324,7 @@
                   {% elif field.field_type == 'radio' %}
                     <div class="multi-container marg_top-10 offset-left-20">
                       {% for option in field.options|json_loads %}
-                      <div class="d-flex g-30">
+                      <div class="d-flex g-30 radio-container">
                         <input type="radio" value="{{ options }}" name="name" />
                         <label for="{{ forloop.counter }}">{{ option }}</label>
                       </div>
@@ -443,7 +453,7 @@
             <div class="wrap-quest">
               <div class="multi-container marg_top-10">
                 {% for option in field.options|json_loads %}
-                <div class="marg_top-10 offset-left-20">
+                <div class="marg_top-10 offset-left-20 radio-container">
                   <input type="radio" value="{{ options }}" name="name" />
                   <label for="{{ forloop.counter }}">{{ option }}</label>
                 </div> 
@@ -498,11 +508,15 @@
         {% elif field.field_type == 'boolean' %}
           <div class="d-flex justify-content-between main-title-menu">
             <div class="wrap-quest">
-              <div class="radio-container marg_top-10">
-                <input type="radio" name="some" value="true" />
-                <label for="true">Так</label>
-                <input type="radio" name="some" value="false" />
+              <div class="marg_top-10 offset-left-20 multi-container">
+                <div class="radio-container">
+                  <input type="radio" name="some" value="true" />
+                  <label for="true">Так</label>
+                </div>
+                <div class="radio-container">
+                  <input type="radio" name="some" value="false" />
                 <label for="false">Ні</label>
+                </div>
               </div>
             </div>
             <div class="relative">
@@ -548,6 +562,7 @@
                 class="input_base_red"
                 maxlength="{{ field.max_symbols }}"
                 max="{{field.max_symbols}}"
+                id="dateShowPicker"
               />
             </div>
             <div class="relative">
@@ -652,12 +667,6 @@
                 <div class="selectedLanguage"></div>
                 <input type="text" class="input_base phoneNumberInput" />
               </div>
-              <!-- <input
-                type="{{field.field_type}}"
-                class="input_base_red"
-                placeholder="Введіть число"
-                max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-              /> -->
             {% elif field.field_type == 'date' %}
               <input
                 type="{{field.field_type}}"
@@ -666,15 +675,21 @@
                 max="{{field.max_symbols}}"
               />
             {% elif field.field_type == 'boolean' %}
-              <div class="radio-container offset-left-20">
-                <input type="radio" name="some" value="true" />
-                <label for="true">Так</label>
-                <input type="radio" name="some" value="false" />
-                <label for="false">Ні</label>
+              <div class="radio-container">
+                <div class="marg_top-10 offset-left-20 multi-container">
+                  <div class="radio-container">
+                    <input type="radio" name="some" value="true" />
+                    <label for="true">Так</label>
+                  </div>
+                  <div class="radio-container">
+                    <input type="radio" name="some" value="false" />
+                  <label for="false">Ні</label>
+                  </div>
+                </div>
               </div>
             {% elif field.field_type == 'checkbox' %}
-              <div class="radio-container marg_top-10 offset-left-20">
-                {% for option in field.options %}
+              <div class="multi-container marg_top-10 offset-left-20">
+                {% for option in field.options|json_loads %}
                   <div class="d-flex g-30">
                     <label class="checkbox">
                       <input type="checkbox" />
@@ -689,13 +704,13 @@
               </div>
             {% elif field.field_type == 'select' %}
               <select class="input_base_red">
-                {% for option in field.options %}
+                {% for option in field.options|json_loads %}
                   <option value="{{option}}">{{option}}</option>
                 {% endfor %}
               </select>
             {% elif field.field_type == 'radio' %}
-              <div class="radio-container marg_top-10 offset-left-20">
-                {% for option in field.options %}
+              <div class="multi-container marg_top-10 offset-left-20">
+                {% for option in field.options|json_loads %}
                 <div class="d-flex g-30">
                   <input type="radio" value="{{ options }}" name="name" />
                   <label for="{{ forloop.counter }}">{{ option }}</label>
@@ -722,12 +737,6 @@
                 <img src="{% static 'images/icons/hr--menu.svg' %}" alt="" />
               </a>
               <div class="dropdown-menu-setting">
-                <!-- <a href="#" class="dropdown-item d-flex align-items-center">
-                  <svg class="offset-right-5" width="12" height="12" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 14.2512V18.0012H3.75L14.81 6.94125L11.06 3.19125L0 14.2512ZM17.71 4.04125C18.1 3.65125 18.1 3.02125 17.71 2.63125L15.37 0.291249C14.98 -0.0987512 14.35 -0.0987512 13.96 0.291249L12.13 2.12125L15.88 5.87125L17.71 4.04125Z" fill="currentColor"/>
-                  </svg>                    
-                  Редагувати
-                </a> -->
                 <a href="{% url 'remove_library_template_from_block' template.id %}" class="dropdown-item red d-flex align-items-center">
                   <svg class="offset-right-5" width="11" height="13" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1.00244 16C1.00244 17.1 1.90244 18 3.00244 18H11.0024C12.1024 18 13.0024 17.1 13.0024 16V4H1.00244V16ZM14.0024 1H10.5024L9.50244 0H4.50244L3.50244 1H0.00244141V3H14.0024V1Z" fill="currentColor"/>
@@ -768,5 +777,10 @@
 <script src="{% static 'js/app.js' %}"></script>
 <script src="{% static 'js/utils/phoneNumber.js' %}"></script>
 <script src="{% static 'js/questionnaire/init.js' %}"></script>
+<script>
+  document.getElementById("dateShowPicker").addEventListener("click", function () {
+    this.showPicker(); // Відкриває календар (працює у підтримуваних браузерах)
+  });
+</script>
 {% endblock scripts %}
 <!--Scripts-->

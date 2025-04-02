@@ -76,10 +76,12 @@
     <!-- Loop -->
     <div class="d-flex justify-content-between main-title-menu">
       <div class="wrap-guest-combine">
-        <div class="radio-container">
+        <div class="multi-container marg_top-10 offset-left-20">
           {% for option in field.options|json_loads %}
-          <input type="radio" value="{{ options }}" name="name" />
-          <label for="{{ forloop.counter }}">{{ option }}</label>
+          <div class="radio-container">
+            <input type="radio" value="{{ options }}" name="name" />
+            <label for="{{ forloop.counter }}">{{ option }}</label>
+          </div>
           {% endfor %}
         </div>
       </div>
@@ -88,16 +90,18 @@
     <!-- Loop -->
     <div class="d-flex justify-content-between main-title-menu">
       <div class="wrap-guest-combine">
-        <div class="radio-container">
+        <div class="multi-container marg_top-10 offset-left-20">
           {% for option in field.options|json_loads %}
-          <label class="checkbox">
-            <input type="checkbox" name="combined" value="{{ field.id}}" />
-            <div class="circle"></div>
-            <div class="box">
-              <span class="checkmark"></span>
-            </div>
-          </label>
-          <p>{{ option }}</p>
+          <div class="radio-container">
+            <label class="checkbox">
+              <input type="checkbox" name="combined" value="{{ field.id }}" />
+              <div class="circle"></div>
+              <div class="box">
+                <span class="checkmark"></span>
+              </div>
+            </label>
+            <p>{{ option }}</p>
+          </div>
           {% endfor %}
         </div>
       </div>
@@ -105,11 +109,15 @@
     {% elif field.field_type == 'boolean' %}
     <div class="d-flex justify-content-between main-title-menu">
       <div class="wrap-guest-combine">
-        <div class="radio-container">
-          <input type="radio" name="some" value="true" />
-          <label for="true">Так</label>
-          <input type="radio" name="some" value="false" />
+        <div class="marg_top-10 offset-left-20 multi-container">
+          <div class="radio-container">
+            <input type="radio" name="some" value="true" />
+            <label for="true">Так</label>
+          </div>
+          <div class="radio-container">
+            <input type="radio" name="some" value="false" />
           <label for="false">Ні</label>
+          </div>
         </div>
       </div>
     </div>

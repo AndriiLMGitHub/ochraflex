@@ -158,11 +158,15 @@
                         max="{{field.max_symbols}}"
                     />
                 {% elif field.field_type == 'boolean' %}
-                    <div class="radio-container offset-left-20">
-                        <input type="radio" name="some" value="true" />
-                        <label for="true">Так</label>
-                        <input type="radio" name="some" value="false" />
-                        <label for="false">Ні</label>
+                    <div class="multi-container offset-left-20 marg_top-10">
+                        <div class="radio-container">
+                            <input type="radio" name="some" value="true" />
+                            <label for="true">Так</label>
+                        </div>
+                        <div class="radio-container">
+                            <input type="radio" name="some" value="false" />
+                            <label for="false">Ні</label>
+                        </div>
                     </div>
                 {% elif field.field_type == 'checkbox' %}
                     <div class="multi-container marg_top-10 offset-left-20">

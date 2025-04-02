@@ -89,6 +89,7 @@ class Field(models.Model):
     is_required = models.BooleanField(default=False)  # Чи є поле обов’язковим
     extra_tag = models.CharField(max_length=255, blank=True, null=True)
     is_combined = models.BooleanField(default=False)
+    from_library = models.BooleanField(default=False) #
     block_template = models.ForeignKey(
         BlockTemplate,
         on_delete=models.CASCADE,

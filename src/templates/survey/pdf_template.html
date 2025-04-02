@@ -5,8 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>PDF - Document</title>
     <style>
         body {
             margin: 0;
@@ -14,56 +13,90 @@
             font-family: Inter, sans-serif;
             font-size: 12pt;
         }
+        img {
+            height: auto;
+            max-width: 100%;
+        }
+        h1 {
+            color: #3a3a3a;
+        }
+        h3 {
+            font-size: 16pt;
+            margin-bottom: 5px;
+        }
+        p {
+            margin-bottom: 0;
+        }
         
         @page {
             size: A4;
             margin: 0; /* Мінімальний відступ */
         }
-        
+        .text-center {
+            text-align: center;
+        }
+        .fz-sm {
+            font-size: 11pt;
+            text-wrap: pretty;
+        }
         .container {
             margin: 0;
             padding: 0;
         }
+        .d-flex {
+            display: flex;
+            flex-wrap: nowrap;
+            height: 100vh;;
+        }
+        .justify-content-between {
+            justify-content: space-between;
+        }
+        .align-items-center {
+            align-items: center;
+        }
         .pdf-side-bar {
-            min-width: 280px;
-            background-color: #D7EAFF;
-            padding: 25px 0;
+            width: 20%;
+            padding-top: 85px;
             height: 100vh;
-            position: fixed; /* Фіксоване розташування */
-            top: 0;
-            left: 0;
+            background: url("/static/images/main_logo.svg") no-repeat center 25px #D7EAFF;
         }
-
+        
         .pdf-main-content {
-            margin-left: 280px;
-            padding: 25px;
-            width: 100%;
-            height: 100vh;
-            overflow-x: visible;
+            width: 70%;
+            padding: 30px 0 0 50px;
         }
+        
+        hr {
+            width: 320px;
+            border: 0.5px solid #D7EAFF; /* Пунктир */
+            margin: 20px 0;
+        }        
     </style>
 </head>
 <body>
-    <div class="">
+    <div class="d-flex container">
         <div class="pdf-side-bar">
-            <div class="logo text-center">
-                <img src="{{logo_url}}" alt="Logo"/>                
+            <div class="text-center">
+                <h4>{{ block_template.name }}</h4>
+                <p class="fz-sm">Cтворена - {{ response.submitted_at|date:"Y-m-d / H:i" }}</p> 
             </div>
         </div>
-        <div class="pdf-main-content">
+        <div class="pdf-main-content">  
             <h1>Анкета - {{ block_template.name }}</h1>
             <div class="pdf-content">
                 {% group_by_combined_block response.field_responses.all as grouped_responses %}
                 {% for combined_block, fields in grouped_responses %}
                     {% if combined_block.description_field %}
-                        <div class="marg_bottom-20 marg_top-20">
-                            <h3>{{ combined_block.description_field.title }}</h3>
-                            <p>{{ combined_block.description_field.description }}</p>
+                        <div class="">
+                            <hr class=""/>
+                            <h3 style="color: #515151;">{{ combined_block.description_field.title }}</h3>
+                            <p style="color: #777777;">{{ combined_block.description_field.description }}</p>
+                            <hr class=""/>
                         </div>
                     {% endif %}
                     <div></div>
 
-                    <div class="marg_bottom-10">
+                    <div class="marg_bottom-20">
                         {% for field_response in fields %}
                             <p class="marg_bottom-10">
                                 {% if field_response.field.field_type == 'boolean' %}

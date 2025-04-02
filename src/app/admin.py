@@ -3,7 +3,7 @@ from .models import Field, BlockTemplate, DescriptionField, CombinedBlock, Libra
 
 @admin.register(Field)
 class FieldAdmin(admin.ModelAdmin):
-    list_display = ('name', 'field_type', 'is_combined','is_required', 'id')
+    list_display = ('name', 'field_type', 'is_combined','is_required', 'from_library', 'id')
     list_filter = ('field_type', 'is_required',)
     filter_fields = ('block_template',)
 

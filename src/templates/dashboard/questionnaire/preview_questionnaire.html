@@ -25,7 +25,8 @@
 <!--Header-->
 
 <!--Content-->
-{% block main %} {% load static %}
+{% block main %}
+{% load static %}
 <div class="d-flex align-items-center justify-content-between">
   <div>
     <h3>{{ block_template.name }}</h3>
@@ -104,14 +105,18 @@
                     max="{{field.max_symbols}}"
                   />
                 {% elif field.field_type == 'boolean' %}
-                  <div class="radio-container offset-left-20">
-                    <input type="radio" name="some" value="true" />
-                    <label for="true">Так</label>
-                    <input type="radio" name="some" value="false" />
-                    <label for="false">Ні</label>
+                  <div class="multi-container offset-left-20">
+                    <div class="radio-container">
+                      <input type="radio" name="some" value="true" />
+                      <label for="true">Так</label>
+                    </div>
+                    <div class="radio-container">
+                      <input type="radio" name="some" value="false" />
+                      <label for="false">Ні</label>
+                    </div>
                   </div>
                 {% elif field.field_type == 'checkbox' %}
-                  <div class="radio-container marg_top-10 offset-left-20">
+                  <div class="multi-container marg_top-10 offset-left-20">
                     {% for option in field.options|json_loads %}
                       <div class="d-flex g-30">
                         <label class="checkbox">
@@ -132,7 +137,7 @@
                     {% endfor %}
                   </select>
                 {% elif field.field_type == 'radio' %}
-                  <div class="radio-container marg_top-10 offset-left-20">
+                  <div class="multi-container marg_top-10 offset-left-20">
                     {% for option in field.options|json_loads %}
                     <div class="d-flex g-30">
                       <input type="radio" value="{{ options }}" name="name" />
@@ -216,11 +221,15 @@
                     max="{{field.max_symbols}}"
                   />
               {% elif field.field_type == 'boolean' %}
-                <div class="radio-container offset-left-20">
-                  <input type="radio" name="some" value="true" />
+                <div class="multi-container marg_top-10 offset-left-20">
+                  <div class="radio-container">
+                    <input type="radio" name="some" value="true" />
                   <label for="true">Так</label>
-                  <input type="radio" name="some" value="false" />
-                  <label for="false">Ні</label>
+                  </div> 
+                  <div class="radio-container">
+                    <input type="radio" name="some" value="false" />
+                    <label for="false">Ні</label>
+                  </div>
                 </div>
               {% elif field.field_type == 'checkbox' %}
                 <div class="multi-container marg_top-10 offset-left-20">
@@ -335,11 +344,15 @@
           </div>
         {% elif field.field_type == 'boolean' %}
           <div class="w-100">
-            <div class="radio-container">
-              <input type="radio" name="some" value="true" />
-              <label for="true">Так</label>
-              <input type="radio" name="some" value="false" />
-              <label for="false">Ні</label>
+            <div class="multi-container">
+              <div class="radio-container">
+                <input type="radio" name="some" value="true" />
+                <label for="true">Так</label>
+              </div>
+              <div class="radio-container">
+                <input type="radio" name="some" value="false" />
+                <label for="false">Ні</label>
+              </div>
             </div>
           </div>
         {% elif field.field_type == 'checkbox' %}
@@ -400,7 +413,7 @@
         <h3 class="marg_bottom-10">{{ template.description_field.title }}</h3>
         <p class="">{{ template.description_field.description }}</p>
       {% endif %}
-      {% if template.field %}
+      {% if template.field and template.field.is_combined %}
         {% with template.field as field %}
         <div class="marg_top-20">
           <div class="">
@@ -443,15 +456,19 @@
                 max="{{field.max_symbols}}"
               />
             {% elif field.field_type == 'boolean' %}
-              <div class="radio-container offset-left-20">
-                <input type="radio" name="some" value="true" />
-                <label for="true">Так</label>
-                <input type="radio" name="some" value="false" />
-                <label for="false">Ні</label>
+              <div class="multi-container offset-left-20">
+                <div class="radio-container">
+                  <input type="radio" name="some" value="true" />
+                  <label for="true">Так</label>
+                </div>
+                <div class="radio-container">
+                  <input type="radio" name="some" value="false" />
+                  <label for="false">Ні</label>
+                </div>
               </div>
             {% elif field.field_type == 'checkbox' %}
-              <div class="radio-container marg_top-10 offset-left-20">
-                {% for option in field.options %}
+              <div class="multi-container marg_top-10 offset-left-20">
+                {% for option in field.options|json_loads %}
                   <div class="d-flex g-30">
                     <label class="checkbox">
                       <input type="checkbox" />
@@ -466,13 +483,13 @@
               </div>
             {% elif field.field_type == 'select' %}
               <select class="input_base_red">
-                {% for option in field.options %}
+                {% for option in field.options|json_loads %}
                   <option value="{{option}}">{{option}}</option>
                 {% endfor %}
               </select>
             {% elif field.field_type == 'radio' %}
-              <div class="radio-container marg_top-10 offset-left-20">
-                {% for option in field.options %}
+              <div class="multi-container marg_top-10 offset-left-20">
+                {% for option in field.options|json_loads %}
                 <div class="d-flex g-30">
                   <input type="radio" value="{{ options }}" name="name" />
                   <label for="{{ forloop.counter }}">{{ option }}</label>

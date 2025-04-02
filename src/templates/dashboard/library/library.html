@@ -266,11 +266,15 @@
         </div>
         {% elif library_field.field.field_type == 'boolean' %}
         <div class="w-100">
-            <div class="radio-container">
-            <input type="radio" name="some" value="true" />
-            <label for="true">Так</label>
-            <input type="radio" name="some" value="false" />
-            <label for="false">Ні</label>
+            <div class="multi-container offset-left-20 marg_top-10">
+                <div class="radio-container">
+                    <input type="radio" name="some" value="true" />
+                    <label for="true">Так</label>
+                </div>
+                <div class="radio-container">
+                    <input type="radio" name="some" value="false" />
+                    <label for="false">Ні</label>
+                </div>
             </div>
         </div>
         {% elif library_field.field.field_type == 'checkbox' %}
@@ -429,16 +433,20 @@
                         </div>
                     {% elif field.field_type == 'boolean' %}
                         <div class="w-100">
-                            <div class="radio-container">
-                            <input type="radio" name="some" value="true" />
-                            <label for="true">Так</label>
-                            <input type="radio" name="some" value="false" />
-                            <label for="false">Ні</label>
+                            <div class="multi-container offset-left-20 marg_top-10">
+                                <div class="radio-container">
+                                    <input type="radio" name="some" value="true" />
+                                    <label for="true">Так</label>
+                                </div>
+                                <div class="radio-container">
+                                    <input type="radio" name="some" value="false" />
+                                    <label for="false">Ні</label>
+                                </div>
                             </div>
                         </div>
                     {% elif field.field_type == 'checkbox' %}
                         <div class="w-100">
-                            <div class="multi-container offset-left-20">
+                            <div class="multi-container offset-left-20 marg_top-10">
                             {% for option in field.options|json_loads %}
                             <div class="d-flex g-30">
                                 <label class="checkbox">
@@ -455,13 +463,13 @@
                         </div>
                     {% elif field.field_type == 'radio' %}
                         <div class="w-100">
-                            <div class="multi-container offset-left-20">
-                            {% for option in field.options|json_loads %}
-                            <div class="d-flex g-30">
-                                <input type="radio" value="{{ options }}" name="name" />
-                                <label for="{{ forloop.counter }}">{{ option }}</label>
-                            </div>
-                            {% endfor %}
+                            <div class="multi-container offset-left-20 marg_top-10">
+                                {% for option in field.options|json_loads %}
+                                    <div class="d-flex g-30">
+                                        <input type="radio" value="{{ options }}" name="name" />
+                                        <label for="{{ forloop.counter }}">{{ option }}</label>
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                     {% elif field.field_type == 'select' %}

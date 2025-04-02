@@ -173,6 +173,7 @@ def create_field_template(request, id):
                 help_info=help_info,
                 is_required=is_required,
                 extra_tag=extra_tag,
+                from_library=True
             )
 
             if library_template.combined_block is not None:

@@ -1,4 +1,6 @@
-{% extends 'dashboard/dashboard_base.html' %} {% load static %}
+{% extends 'dashboard/dashboard_base.html' %}
+{% load static %}
+{% load custom_parse %}
 <!--Title-->
 {% block title %}Dashboard - Start create{% endblock title %}
 <!--Main content-->
@@ -43,21 +45,6 @@
   <div class="example-template marg_top-20">
     <div class="border-field-questionnaire">
       <div class="group-info marg_bottom-20">
-        {% if empty %}
-          <div>
-            <h3>Немає доступних полів, створіть нові!</h3>
-            <div class="d-inline-block">
-              <a 
-              href="{% url 'questionnaire_detail' block_template.id %}"
-              class="button_primary button_reset d-flex align-items-center marg_top-10">
-              <svg class="offset-right-5" width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6.87744 15.3L0.277442 8.7C0.177442 8.6 0.106441 8.49166 0.0644412 8.375C0.0231079 8.25833 0.00244141 8.13333 0.00244141 8C0.00244141 7.86667 0.0231079 7.74167 0.0644412 7.625C0.106441 7.50833 0.177442 7.4 0.277442 7.3L6.87744 0.699998C7.06077 0.516665 7.28977 0.420665 7.56444 0.411999C7.83978 0.403999 8.07744 0.499998 8.27744 0.699998C8.47744 0.883332 8.58177 1.11233 8.59044 1.387C8.59844 1.66233 8.50244 1.9 8.30244 2.1L3.40244 7H14.5774C14.8608 7 15.0984 7.09566 15.2904 7.287C15.4818 7.479 15.5774 7.71667 15.5774 8C15.5774 8.28333 15.4818 8.52066 15.2904 8.712C15.0984 8.904 14.8608 9 14.5774 9H3.40244L8.30244 13.9C8.48577 14.0833 8.58177 14.3167 8.59044 14.6C8.59844 14.8833 8.50244 15.1167 8.30244 15.3C8.11911 15.5 7.88578 15.6 7.60244 15.6C7.31911 15.6 7.07744 15.5 6.87744 15.3Z" fill="currentColor"/>
-              </svg>                
-              <p>Повернутися назад</p>
-            </a>
-            </div>
-          </div>
-        {% endif %}
         {% for description_field in description_fields %}
           {% if not description_field.is_combined %}
             <div class="d-flex justify-content-between align-items-center main-title-menu marg_bottom-25">
@@ -86,9 +73,7 @@
             {% if not field.is_combined %}
               <div class="wrap-quest">
                 <div class="group-form">
-                  <label for="{{field.name}}" class="input_label"
-                    >{{field.name}}</label
-                  >
+                  <label for="{{field.name}}" class="input_label">{{field.name}}</label>
                   {% if field.is_required %}
                   <p>
                     <img src="{% static 'images/icons/required.svg' %}" alt="" />
@@ -151,10 +136,12 @@
               <!-- Loop -->
               <div class="d-flex justify-content-between main-title-menu">
                 <div class="wrap-quest">
-                  <div class="radio-container">
-                    {% for option in field.options %}
-                    <input type="radio" value="{{ options }}" name="name" />
-                    <label for="{{ forloop.counter }}">{{ option }}</label>
+                  <div class="multi-container marg_top-10 offset-left-20">
+                    {% for option in field.options|json_loads %}
+                    <div class="d-flex g-30">
+                      <input type="radio" value="{{ options }}" name="name" />
+                      <label for="{{ forloop.counter }}">{{ option }}</label>
+                    </div>
                     {% endfor %}
                   </div>
                 </div>
@@ -178,16 +165,18 @@
               <!-- Loop -->
               <div class="d-flex justify-content-between main-title-menu">
                 <div class="wrap-quest">
-                  <div class="radio-container">
-                    {% for option in field.options %}
-                    <label class="checkbox">
-                      <input type="checkbox" name="combined" value="{{ field.id}}"/>
-                      <div class="circle"></div>
-                      <div class="box">
-                        <span class="checkmark"></span>
-                      </div>
-                    </label>
-                    <p>{{ option }}</p>
+                  <div class="multi-container marg_top-10 offset-left-20">
+                    {% for option in field.options|json_loads %}
+                    <div class="d-flex g-30">
+                      <label class="checkbox">
+                        <input type="checkbox" name="combined" value="{{ field.id}}"/>
+                        <div class="circle"></div>
+                        <div class="box">
+                          <span class="checkmark"></span>
+                        </div>
+                      </label>
+                      <p>{{ option }}</p>
+                    </div>
                     {% endfor %}
                   </div>
                 </div>
@@ -210,11 +199,15 @@
               {% elif field.field_type == 'boolean' %}
               <div class="d-flex justify-content-between main-title-menu">
                 <div class="wrap-quest">
-                  <div class="radio-container">
-                    <input type="radio" name="some" value="true" />
-                    <label for="true">Так</label>
-                    <input type="radio" name="some" value="false" />
+                  <div class="marg_top-10 offset-left-20 multi-container">
+                    <div class="radio-container">
+                      <input type="radio" name="some" value="true" />
+                      <label for="true">Так</label>
+                    </div>
+                    <div class="radio-container">
+                      <input type="radio" name="some" value="false" />
                     <label for="false">Ні</label>
+                    </div>
                   </div>
                 </div>
                 <div class="relative">
@@ -344,12 +337,10 @@
         {% endfor %}
         {% for template in library_templates %}
         {% with template.field as field %}
-          {% if not field.is_combined %}
+          {% if field.from_library %}
             <div class="wrap-quest">
               <div class="group-form">
-                <label for="{{field.name}}" class="input_label"
-                  >{{field.name}}</label
-                >
+                <label for="{{field.name}}" class="input_label">{{field.name}}</label>
                 {% if field.is_required %}
                 <p>
                   <img src="{% static 'images/icons/required.svg' %}" alt="" />
@@ -387,7 +378,7 @@
               <div class="d-flex justify-content-between main-title-menu">
                 <div class="wrap-quest">
                   <select class="input_base_red">
-                    {% for option in field.options %}
+                    {% for option in field.options|json_loads %}
                     <option value="{{option}}">{{option}}</option>
                     {% endfor %}
                   </select>
@@ -410,12 +401,14 @@
               </div>
               {% elif field.field_type == 'radio' %}
               <!-- Loop -->
-              <div class="d-flex justify-content-between main-title-menu">
+              <div class="d-flex justify-content-between align-items-center main-title-menu">
                 <div class="wrap-quest">
-                  <div class="radio-container">
-                    {% for option in field.options %}
-                    <input type="radio" value="{{ options }}" name="name" />
-                    <label for="{{ forloop.counter }}">{{ option }}</label>
+                  <div class="mutli-container offset-left-20 marg_top-10">
+                    {% for option in field.options|json_loads %}
+                    <div class="radio-container marg_top-25">
+                      <input type="radio" value="{{ options }}" name="name" />
+                      <label for="{{ forloop.counter }}">{{ option }}</label>
+                    </div>
                     {% endfor %}
                   </div>
                 </div>
@@ -437,18 +430,20 @@
               </div>
               {% elif field.field_type == 'checkbox' %}
               <!-- Loop -->
-              <div class="d-flex justify-content-between main-title-menu">
+              <div class="d-flex justify-content-between align-items-center main-title-menu">
                 <div class="wrap-quest">
-                  <div class="radio-container">
-                    {% for option in field.options %}
-                    <label class="checkbox">
-                      <input type="checkbox" name="combined" value="{{ field.id}}"/>
-                      <div class="circle"></div>
-                      <div class="box">
-                        <span class="checkmark"></span>
-                      </div>
-                    </label>
-                    <p>{{ option }}</p>
+                  <div class="multi-container offset-left-20 marg_top-10">
+                    {% for option in field.options|json_loads %}
+                    <div class="radio-container">
+                      <label class="checkbox">
+                        <input type="checkbox" name="combined" value="{{field.id}}"/>
+                        <div class="circle"></div>
+                        <div class="box">
+                          <span class="checkmark"></span>
+                        </div>
+                      </label>
+                      <p>{{ option }}</p>
+                    </div>
                     {% endfor %}
                   </div>
                 </div>
@@ -458,7 +453,7 @@
                       <input
                         type="checkbox"
                         name="combined"
-                        value="{{ field.id}}"
+                        value="{{field.id}}"
                       />
                       <div class="circle"></div>
                       <div class="box">
@@ -471,11 +466,15 @@
               {% elif field.field_type == 'boolean' %}
               <div class="d-flex justify-content-between main-title-menu">
                 <div class="wrap-quest">
-                  <div class="radio-container">
-                    <input type="radio" name="some" value="true" />
-                    <label for="true">Так</label>
-                    <input type="radio" name="some" value="false" />
-                    <label for="false">Ні</label>
+                  <div class="multi-container offset-left-20 marg_top-10">
+                    <div class="radio-container">
+                      <input type="radio" name="some" value="true" />
+                      <label for="true">Так</label>
+                    </div>
+                    <div class="radio-container">
+                      <input type="radio" name="some" value="false" />
+                      <label for="false">Ні</label>
+                    </div>
                   </div>
                 </div>
                 <div class="relative">
@@ -604,6 +603,20 @@
           {% endif %}
         {% endwith %}
         {% endfor %}
+        {% if empty %}
+          <div>
+            <div class="d-inline-block">
+              <a 
+                href="{% url 'questionnaire_detail' block_template.id %}"
+                class="button_primary button_reset d-flex align-items-center marg_top-10">
+              <svg class="offset-right-5" width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.87744 15.3L0.277442 8.7C0.177442 8.6 0.106441 8.49166 0.0644412 8.375C0.0231079 8.25833 0.00244141 8.13333 0.00244141 8C0.00244141 7.86667 0.0231079 7.74167 0.0644412 7.625C0.106441 7.50833 0.177442 7.4 0.277442 7.3L6.87744 0.699998C7.06077 0.516665 7.28977 0.420665 7.56444 0.411999C7.83978 0.403999 8.07744 0.499998 8.27744 0.699998C8.47744 0.883332 8.58177 1.11233 8.59044 1.387C8.59844 1.66233 8.50244 1.9 8.30244 2.1L3.40244 7H14.5774C14.8608 7 15.0984 7.09566 15.2904 7.287C15.4818 7.479 15.5774 7.71667 15.5774 8C15.5774 8.28333 15.4818 8.52066 15.2904 8.712C15.0984 8.904 14.8608 9 14.5774 9H3.40244L8.30244 13.9C8.48577 14.0833 8.58177 14.3167 8.59044 14.6C8.59844 14.8833 8.50244 15.1167 8.30244 15.3C8.11911 15.5 7.88578 15.6 7.60244 15.6C7.31911 15.6 7.07744 15.5 6.87744 15.3Z" fill="currentColor"/>
+              </svg>                
+              <p>Повернутися назад</p>
+            </a>
+            </div>
+          </div>
+        {% endif %}
       </div>
     </div>
   </div>
