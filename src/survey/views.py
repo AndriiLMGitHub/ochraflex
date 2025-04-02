@@ -202,7 +202,7 @@ def generate_partial_pdf(request, uuid, response_id):
     html_string = render_to_string('survey/pdf_template.html', context)
 
     # Генеруємо PDF-файл
-    pdf = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
+    pdf = HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf()
 
     # Повертаємо PDF-файл як HTTP-відповідь
     response = HttpResponse(pdf, content_type='application/pdf')
