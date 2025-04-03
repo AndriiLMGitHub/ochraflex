@@ -9,4 +9,5 @@ urlpatterns = [
     #Delete survey
     path('<str:survey_id>/delete/', views.delete_survey_view, name='delete_survey'),
     path('test/url/<str:uuid>/<str:response_id>/', views.test_pdf_view, name='test_pdf'),
+    path('test/url/more/<str:uuid>/<str:response_id>/', views.my_view, name='my_view')
 ]
