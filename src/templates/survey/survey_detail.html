@@ -54,27 +54,33 @@
         </p>
     </div>
     <div class="actions-pdf">
-        <a href="{% url 'generate_partial_pdf' block_template.uuid response.id %}">              
-            <button type="button" class="button_primary button_reset">
-                <div class="d-flex align-items-center">
-                    <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
-                    </svg>
-                    <p>PDF для замовника</p>
-                </div>
-            </button>
-        </a>
-        <a href="{% url 'generate_partial_pdf' block_template.uuid response.id %}">
-            <button type="button" class="button_primary button_reset">
-                <div class="d-flex align-items-center">
-                    <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
-                    </svg>
-                    <p>PDF для себе</p>
-                </div>
-            </button>
-        </a>
-        <a href="{% url 'test_pdf' block_template.uuid response.id %}">Test</a>
+        <div class="marg_bottom-10">
+            <a href="{% url 'generate_partial_pdf' block_template.uuid response.id %}">              
+                <button type="button" class="button_primary button_reset">
+                    <div class="d-flex align-items-center">
+                        <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
+                        </svg>
+                        <p>PDF для замовника</p>
+                    </div>
+                </button>
+            </a>
+        </div>
+        <div class="marg_bottom-10">
+            <a href="{% url 'generate_partial_pdf' block_template.uuid response.id %}">
+                <button type="button" class="button_primary button_reset">
+                    <div class="d-flex align-items-center">
+                        <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01"/>
+                        </svg>
+                        <p>PDF для себе</p>
+                    </div>
+                </button>
+            </a>
+        </div>
+        <div class="marg_bottom-10">
+            <a href="{% url 'test_pdf' block_template.uuid response.id %}">Test</a>
+        </div>
     </div>
 </div>
 
