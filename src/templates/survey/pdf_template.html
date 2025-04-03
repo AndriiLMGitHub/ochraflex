@@ -6,13 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF - Document</title>
-    <link rel="stylesheet" href="{% static 'css/pdf-styles.css' %}">
+    <link rel="stylesheet" href="{{ css_url }}">
 </head>
 <body>
     <div class="d-flex container">
         <div class="pdf-side-bar">
             <div class="text-center">
-                <img src="{% static 'images/main_logo.png' %}" alt="">
+                <img src="{{ logo_url }}" alt="Main logo">
                 <h4>{{ block_template.name }}</h4>
                 <p class="fz-sm">Cтворена - {{ response.submitted_at|date:"Y-m-d / H:i" }}</p>
             </div>

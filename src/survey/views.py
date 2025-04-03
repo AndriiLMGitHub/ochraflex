@@ -12,6 +12,9 @@ from django.conf import settings
 from django.utils.html import escape
 import io
 from django.http import FileResponse
+import base64
+import tempfile
+
 
 
 def submit_survey_response(request, uuid):
@@ -199,18 +202,26 @@ def generate_partial_pdf(request, uuid, response_id):
         "block_template": block_template,
         "response": survey_response,
         'pre_url': pre_url,
-        'logo_url': request.build_absolute_uri(static('images/main_logo.png')), 
+        'logo_url': request.build_absolute_uri(static('images/main_logo.png')),
         'css_url': request.build_absolute_uri(static('css/pdf-styles.css')),
     }
     # Рендеримо весь HTML-шаблон з контекстом
     html_string = render_to_string('survey/pdf_template.html', context)
 
-    # Генеруємо PDF-файл
-    pdf = HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf()
+    # Створюємо тимчасовий файл для збереження PDF
+    with tempfile.NamedTemporaryFile(delete=True, suffix=".pdf") as output_file:
+        # Конвертуємо HTML в PDF
+        HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf(target=output_file.name)
 
-    # Повертаємо PDF-файл як HTTP-відповідь
-    response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = f'inline; filename="partial_report_{block_template.uuid}.pdf"'
+        # Читаємо вміст PDF файлу
+        output_file.seek(0)
+        pdf_content = output_file.read()
+
+    # Повертаємо PDF як HTTP відповідь
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; filename="output.pdf"'
+    response.write(pdf_content)
+
     return response
 
 
