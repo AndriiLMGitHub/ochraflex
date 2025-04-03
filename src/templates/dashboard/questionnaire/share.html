@@ -24,16 +24,16 @@
 <!--Content-->
 {% block main %}
 {% load static %}
-<h3>Поділитися</h3>
+<h3 class="text-center-md-sm marg_top-md-sm-10">Поділитися</h3>
 <div class="">
-    <p class="marg_top-15 marg_bottom-15">Ahoj!
+    <p class="marg_top-15 marg_bottom-15 text-center-md-sm">Ahoj!
         Vyplňte svůj životopis na následujícím odkazu:
         
         <a href="{{ pre_url }}{% url 'questionnaire_user_result' block_template.uuid %}">{{ pre_url }}{% url 'questionnaire_user_result' block_template.uuid %}</a>
         
         Pro aktivaci použijte kód:: 123456
         </p>
-        <p>
+        <p class="d-flex-vs-center">
             <button id="copy-link-button" data-link="{{ pre_url }}{% url 'questionnaire_user_result' block_template.uuid %}" class="button_primary button_reset d-flex align-items-center">
                 <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z"/>
@@ -42,7 +42,7 @@
             </button>
         </p>
 </div>
-<div class="d-flex align-items-center marg_top-20">
+<div class="d-flex align-items-center marg_top-20 d-flex-vs-center">
     <a class="offset-right-10 d-inline-block" href="viber://forward?text={{ pre_url }}{% url 'questionnaire_user_result' block_template.uuid %}" target="_blank">
         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M31.196 3.53064C30.3048 2.70962 26.6974 0.0917332 18.6546 0.0567332C18.6546 0.0567332 9.17308 -0.511704 4.55512 3.72728C1.98644 6.2958 1.08113 10.0646 0.98285 14.7317C0.884569 19.3988 0.765272 28.1433 9.1941 30.5156H9.20105L9.1941 34.1369C9.1941 34.1369 9.13801 35.6037 10.1064 35.8985C11.2715 36.2635 11.9593 35.1476 13.0751 33.9474C13.6857 33.2878 14.5279 32.3192 15.1665 31.5822C20.9354 32.0666 25.364 30.9577 25.8693 30.7963C27.0343 30.4174 33.6243 29.5751 34.6911 20.8305C35.7999 11.8051 34.1577 6.10634 31.196 3.53064Z" fill="#834995"/>

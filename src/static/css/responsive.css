@@ -1,4 +1,65 @@
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 768px) {
+    .d-flex-md-sm {
+        flex-direction: column !important; /* Перетворюємо в колонку на мобільних */
+        align-items: center !important; /* Вирівнюємо по центру */
+    }
+    .d-flex-md-sm-col-reverse {
+        flex-direction: column-reverse !important; /* Перетворюємо в колонку з правого на ліво на мобільних */
+        align-items: center !important;
+    }
+    .d-flex-vs-center {
+        display: flex !important;
+        justify-content: center !important;
+    }
+    .marg_top-md-sm-10 {
+        margin-top: 10px !important;
+    }
+    .marg_top-md-sm-15 {
+        margin-top: 15px !important;
+    }
+    .marg_top-md-sm-20 {
+        margin-top: 20px !important;
+    }
+    .marg_bottom-md-sm-10 {
+        margin-bottom: 10px !important;
+    }
+    .marg_bottom-md-sm-15 {
+        margin-bottom: 15px !important;
+    }
+    .marg_bottom-md-sm-20 {
+        margin-bottom: 20px !important;
+    }
+    .offset-md-sm-clear {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+    }
+    .w-100-md-sm {
+        width: 100% !important;
+    }
+    .p-md-sm-clear {
+        padding: 0 !important;
+    }
+    .text-center-md-sm {
+        text-align: center !important;
+    }
+    .marg_x-auto {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    .content {
+        padding: 0;
+    }
+    .header {
+        padding: 15px;
+    }
+    .header h1 {
+        font-size: 18px;
+    }
+    .alert {
+        margin-top: 10px;
+    }
     .burger-menu {
         position: relative;
     }
@@ -59,9 +120,85 @@
     /* .create-template-panel */
     .create-template-panel {
         width: auto !important;
+        margin-top: 15px;
     }
 
+    /* Dasboard setting Start */
     .settings {
         margin: auto !important;
+        width: 100%;
+    }
+    .settings h4 {
+        margin-top: 15px;
+    }
+
+    /* Dasboard setting End */
+
+    /* Questionares Start*/
+    .toolbar {
+        flex-direction: column-reverse;
+        padding: 15px 0;
+        align-items: center;
+    }
+
+    .search-bar {
+        margin-bottom: 15px;
+    }
+    .link-templates {
+        margin: 0;
+        margin-right: 0 !important;
+    }
+
+    .add-new {
+        margin: 10px 0 !important;
+        display: flex;
+        justify-content: center;
+    }
+    .questionnaires-block {
+        flex-direction: column;
+    }
+    .questionnaires-block .left {
+        flex-direction: column;
+        gap: 0;
+        text-align: center;
+    }
+    .right {
+        width: 100%;
+    }
+    .questionnaires-block .right {
+        margin-top: 15px;
+        justify-content: space-between;
+    }
+
+    /* Questionares End */
+
+    /* Create Quest Start */
+    .wrap-quest {
+        width: 100% !important;
+    }
+
+    .border-field-questionnaire {
+        padding: 10px !important; 
+    }
+
+    .dropdown-fields {
+        width: 100% !important;
+    }
+
+    .dropdown-menu-setting {
+        min-width: 170px !important;
+    }
+
+    .border-field {
+        padding: 20px !important;
+    }
+
+    .main-desc {
+        width: 100% !important;
+    }
+
+    .add-new-lang-block a {
+        padding: 10px 12px !important;
+        font-size: 12px;
     }
 }

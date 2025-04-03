@@ -28,12 +28,12 @@
 {% block main %} {% load static %}
 <form method="POST" action="{% url 'create_combined_block' block_template.id %}">
   {% csrf_token %}
-  <div class="d-flex align-items-center justify-content-between">
-    <div>
+  <div class="d-flex align-items-center justify-content-between d-flex-md-sm">
+    <div class="text-center-md-sm marg_top-md-sm-20 marg_bottom-md-sm-10">
       <h3>{{ block_template.name }}</h3>
       <p>{{ block_template.description }}</p>
     </div>
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center d-flex-md-sm">
       <button type="submit" class="button_primary button_reset d-flex align-items-center">
         <svg class="offset-right-5" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M14.5924 5.58L8.00244 12.17L4.41244 8.59L3.00244 10L8.00244 15L16.0024 7L14.5924 5.58ZM10.0024 0C4.48244 0 0.00244141 4.48 0.00244141 10C0.00244141 15.52 4.48244 20 10.0024 20C15.5224 20 20.0024 15.52 20.0024 10C20.0024 4.48 15.5224 0 10.0024 0ZM10.0024 18C5.58244 18 2.00244 14.42 2.00244 10C2.00244 5.58 5.58244 2 10.0024 2C14.4224 2 18.0024 5.58 18.0024 10C18.0024 14.42 14.4224 18 10.0024 18Z" fill="currentColor"/>
@@ -82,9 +82,7 @@
                 </div>
               </div>
               {% if field.field_type == 'textarea' %}
-              <div
-                class="d-flex align-items-center justify-content-between main-title-menu"
-              >
+              <div class="d-flex align-items-center justify-content-between main-title-menu">
                 <div class="wrap-quest">
                   <div class="textarea-quest">
                     <textarea class="input_base_red" placeholder="Введіть текст">
@@ -111,7 +109,7 @@
               <div class="d-flex justify-content-between main-title-menu">
                 <div class="wrap-quest">
                   <select class="input_base_red">
-                    {% for option in field.options %}
+                    {% for option in field.options|json_loads %}
                     <option value="{{option}}">{{option}}</option>
                     {% endfor %}
                   </select>
@@ -186,7 +184,7 @@
                       <input
                         type="checkbox"
                         name="combined"
-                        value="{{ field.id}}"
+                        value="{{field.id}}"
                       />
                       <div class="circle"></div>
                       <div class="box">
@@ -304,7 +302,7 @@
                 </div>
               </div>
               {% else %}
-              <div class="d-flex justify-content-between main-title-menu">
+              <div class="d-flex justify-content-between align-items-center main-title-menu">
                 <div class="wrap-quest">
                   <input
                     type="{{field.field_type}}"
@@ -313,7 +311,7 @@
                     maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
                   />
                 </div>
-                <div class="relative">
+                <div class="relative offset-left-10">
                   <div class="radio-container">
                     <label class="checkbox">
                       <input

@@ -26,10 +26,10 @@
 {% block main %} {% load static %}
 <form id="field-form" method="POST" action="#">
   {% csrf_token %}
-  <div class="add_new_field marg_bottom-20 d-flex">
+  <div class="add_new_field marg_bottom-20 d-flex d-flex-md-sm marg_top-md-sm-15">
     <button
       type="submit"
-      class="button_primary button_reset btn-icon offset-right-10"
+      class="button_primary button_reset btn-icon offset-right-10 offset-md-sm-clear"
       id="submit-button"
     >
       <p>
@@ -39,7 +39,7 @@
       </p>
       <p>Додати</p>
     </button>
-    <a href="{% url 'fetch_library_templates' block_template.id %}" class="button_primary_outline button_reset btn-icon">
+    <a href="{% url 'fetch_library_templates' block_template.id %}" class="button_primary_outline button_reset btn-icon marg_top-md-sm-15">
       <p>Вибрати із шаблонів</p>
       <p>
         <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -48,9 +48,9 @@
       </p>
     </a>
   </div>
-  <div class="d-flex">
-    <div class="border-field">
-      <div class="input-panel">
+  <div class="d-flex d-flex-md-sm">
+    <div class="border-field w-100-md-sm ">
+      <div class="input-panel w-100-md-sm">
         <div class="group-form">
           <label for="id_name" class="input_label">
             <input
@@ -89,7 +89,7 @@
         </p>
       </div>
     </div>
-    <div class="settings-panel">
+    <div class="settings-panel w-100-md-sm offset-md-sm-clear">
       <div class="checkbox-container justify-content-start marg_bottom-10">
         <label class="checkbox">
           <input
@@ -196,7 +196,7 @@
       </div>
     </div>
   </div>
-  <div class="add-new-lang-block">
+  <div class="add-new-lang-block d-flex-vs-center marg_bottom-md-sm-10">
     <a
       href="{% url 'de_language_text_field' block_template.id %}"
       class="button_primary_outline button_reset"
