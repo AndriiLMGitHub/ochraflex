@@ -8,7 +8,7 @@
     <title>PDF - Document</title>
     <style>
         @page {
-            size: A4 portrait;
+            size: A4;
             margin: 0;
         }
         html {
@@ -73,14 +73,14 @@
             width: 320px;
             border: 0.5px solid #D7EAFF; /* Пунктир */
             margin: 20px 0;
-        }        
+        }      
     </style>
 </head>
 <body>
     <div class="d-flex container">
         <div class="pdf-side-bar">
             <div class="text-center">
-                <img src="{{logo_url}}" alt="">
+                <img src="{% static 'images/main_logo.png' %}" alt="">
                 <h4>{{ block_template.name }}</h4>
                 <p class="fz-sm">Cтворена - {{ response.submitted_at|date:"Y-m-d / H:i" }}</p>
             </div>

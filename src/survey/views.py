@@ -193,13 +193,10 @@ def generate_partial_pdf(request, uuid, response_id):
     protocol = 'https' if request.is_secure() else 'http'
     pre_url = f'{protocol}://{current_site.domain}'
 
-    logo_url = request.build_absolute_uri(static("images/main_logo.png"))
-
     context = {
         "block_template": block_template,
         "response": survey_response,
         'pre_url': pre_url,
-        'logo_url': logo_url,
     }
     # Рендеримо весь HTML-шаблон з контекстом
     html_string = render_to_string('survey/pdf_template.html', context)
@@ -248,14 +245,10 @@ def add_to_favorite_view(request, survey_id):
 def test_pdf_view(request, uuid, response_id):
     block_template = get_object_or_404(BlockTemplate, uuid=uuid)
     survey_response = SurveyResponse.objects.get(block_template=block_template, id=response_id)
-    logo_url = request.build_absolute_uri(static("images/main_logo.svg"))
-    logo_url = escape(logo_url)
-    print(logo_url)
 
     context = {
         'block_template': block_template,
         'response': survey_response,
-        'logo_url': logo_url,
     }
 
     return render(request, "survey/pdf_template.html", context)
