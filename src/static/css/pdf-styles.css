@@ -1,0 +1,67 @@
+@page {
+    size: A4;
+    margin: 0;
+}
+html {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: justify;
+    font-size: 11pt;
+}
+body, p, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+img {
+    height: auto;
+    max-width: 100%;
+}
+h1 {
+    color: #3a3a3a;
+}
+.text-center {
+    text-align: center;
+}
+.fz-sm {
+    font-size: 11pt;
+    text-wrap: pretty;
+}
+.container {
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+.d-flex {
+    display: flex;
+    flex-wrap: nowrap;
+}
+.justify-content-between {
+    justify-content: space-between;
+}
+.align-items-center {
+    align-items: center;
+}
+.pdf-side-bar {
+    width: 20%;
+    position: absolute;
+    padding: 25px 20px 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 20%;
+    background: #D7EAFF;
+    height: 100vh;
+}
+
+.pdf-main-content {
+    width: 70%;
+    margin: 0 0 0 24%;
+    padding: 20px;
+}
+
+hr {
+    width: 320px;
+    border: 0.5px solid #D7EAFF; /* Пунктир */
+    margin: 20px 0;
+}  

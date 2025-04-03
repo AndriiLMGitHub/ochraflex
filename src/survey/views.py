@@ -199,6 +199,8 @@ def generate_partial_pdf(request, uuid, response_id):
         "block_template": block_template,
         "response": survey_response,
         'pre_url': pre_url,
+        'logo_url': request.build_absolute_uri(static('images/main_logo.png')), 
+        'css_url': request.build_absolute_uri(static('css/pdf-styles.css')),
     }
     # Рендеримо весь HTML-шаблон з контекстом
     html_string = render_to_string('survey/pdf_template.html', context)
@@ -248,38 +250,13 @@ def test_pdf_view(request, uuid, response_id):
     block_template = get_object_or_404(BlockTemplate, uuid=uuid)
     survey_response = SurveyResponse.objects.get(block_template=block_template, id=response_id)
 
+    
+
     context = {
         'block_template': block_template,
         'response': survey_response,
+        'logo_url': request.build_absolute_uri(static('images/main_logo.png')), 
+        'css_url': request.build_absolute_uri(static('css/pdf-styles.css')),  # Прив'язка до стилів CSS
     }
 
     return render(request, "survey/pdf_template.html", context)
-
-
-def html_to_pdf(request, template_name, context, filename):
-    """
-    Перетворює HTML-сторінку на PDF-файл.
-    """
-    html_string = render_to_string(template_name, context)
-    html = HTML(string=html_string, base_url=request.build_absolute_uri('/'))
-    pdf_bytes = html.write_pdf()
-    return FileResponse(io.BytesIO(pdf_bytes), as_attachment=True, filename=filename)
-
-def my_view(request, uuid, response_id):
-    block_template = get_object_or_404(BlockTemplate, uuid=uuid)
-    survey_response = SurveyResponse.objects.get(block_template=block_template, id=response_id)
-
-    current_site = get_current_site(request)
-    protocol = 'https' if request.is_secure() else 'http'
-    pre_url = f'{protocol}://{current_site.domain}'
-
-    
-    context = {
-        "block_template": block_template,
-        "response": survey_response,
-        'pre_url': pre_url,
-        'image_url': request.build_absolute_uri(static('images/main_logo.png')), # Додано URL зображення
-    }
-    if request.GET.get('pdf'):
-        return html_to_pdf(request, 'survey/pdf_template.html', context, f'my_pdf-{block_template.uuid}.pdf')
-    return render(request, 'survey/pdf_template.html', context)
