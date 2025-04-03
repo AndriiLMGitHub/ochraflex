@@ -250,8 +250,6 @@ def test_pdf_view(request, uuid, response_id):
     block_template = get_object_or_404(BlockTemplate, uuid=uuid)
     survey_response = SurveyResponse.objects.get(block_template=block_template, id=response_id)
 
-    
-
     context = {
         'block_template': block_template,
         'response': survey_response,
