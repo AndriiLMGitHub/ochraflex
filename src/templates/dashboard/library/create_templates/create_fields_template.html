@@ -33,8 +33,8 @@
 
 <!--Content-->
 {% block main %}
-<div class="d-flex align-items-center justify-content-between">
-    <div>
+<div class="d-flex align-items-center justify-content-between d-flex-md-sm marg_top-md-sm-15">
+    <div class="marg_bottom-md-sm-15">
         <h3>{{ library_template.name }}</h3>
         <p>{% if library_template.description %}{{ library_template.description }}{% endif %}</p>
     </div>
@@ -74,8 +74,8 @@
 <div class="example-template marg_top-20">
     <div class="border-field-questionnaire">
         {% if library_template.description_field %}
-            <div class="d-flex align-items-center justify-content-between main-title-menu marg_bottom-30">
-                <div class="wrap-quest">
+            <div class="d-flex align-items-center justify-content-between main-title-menu marg_bottom-30 d-flex-md-sm offset-md-sm-clear">
+                <div class="wrap-quest text-center-md-sm">
                     <h3 class="marg_bottom-10">{{ library_template.description_field.title }}</h3>
                     <p class="">{{ library_template.description_field.description }}</p>
                 </div>

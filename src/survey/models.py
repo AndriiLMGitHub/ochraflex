@@ -25,6 +25,8 @@ class SurveyResponse(models.Model):
     language = models.CharField(
         blank=True, null=True, choices=LANGUAGES, max_length=128, default='cs'
     )
+    is_deleted = models.BooleanField(default=False)  # Поле для відмітки, чи відповідь видалена
+    deleted_at = models.DateTimeField(null=True, blank=True)  # Час, коли було позначено як видалене
 
 
     def __str__(self):
@@ -58,4 +60,28 @@ class FieldResponse(models.Model):
     value = models.TextField()
     input_time = models.IntegerField(default=0, null=True, blank=True)
     input_method = models.CharField(max_length=128, choices=INPUT_METHODS, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.survey_response} - {self.field} - {self.value[:50]}"
+    
+
+class SurveyResponseFavorite(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='favorite_survey_responses'
+    )
+    survey_response = models.ForeignKey(
+        SurveyResponse,
+        on_delete=models.CASCADE,
+        related_name='favorited_by_users'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'survey_response')
+
+    def __str__(self):
+        return f"{self.user} favorite {self.survey_response}"
+
 

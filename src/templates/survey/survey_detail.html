@@ -22,7 +22,7 @@
 <!--Header-->
 {% block back %}
 <div class="back-button">
-    <a href="{% url 'questionnaires' %}">
+    <a href="{% url 'list_resumes' %}">
         <img src="{% static 'images/icons/arrow-left.svg' %}" alt="Back button" />
     </a>
 </div>
@@ -33,27 +33,27 @@
 
 <!--Content-->
 {% block main %}
-<div class="d-flex justify-content-between">
-    <div class="info">
+<div class="d-flex justify-content-between d-flex-md-sm">
+    <div class="info w-100-md-sm marg_top-md-sm-15">
         <p class="marg_bottom-10"><b>Назва анкети:</b> {{ block_template.name }}</p>
         <p class="marg_bottom-10"><b>Посилання створив:</b>  {{ request.user.email }}</p>
-        <p class="marg_bottom-10"><b>Анкета заповнена:</b>  {{ response.submitted_at}}</p>
-        <p class="marg_bottom-10"><b>Мова:</b> {% if block_template.language == 'cs' %}CZ{% else %}DE{% endif %}</p>
+        <p class="marg_bottom-10"><b>Анкета заповнена:</b>  {{ response.submitted_at|date:"Y-m-d - H:i"}}</p>
+        <!-- <p class="marg_bottom-10"><b>Мова:</b> {% if block_template.language == 'cs' %}CZ{% else %}DE{% endif %}</p> -->
         <p class="marg_bottom-10"><b>Посилання на анкету:</b><br/>
             <a href="{{ pre_url }}{% url 'questionnaire_user_result' block_template.uuid %}">{{ pre_url }}{% url 'questionnaire_user_result' block_template.uuid %}</a>
         </p>
-        <p class="marg_bottom-10"><b>Код активації: </b>123456</p>
-        <p class="marg_bottom-10">
+        <!-- <p class="marg_bottom-10"><b>Код активації: </b>123456</p> -->
+        <p class="marg_bottom-10 d-flex-vs-center">
             <button type="button" class="button_primary button_reset btn-icon">
                 <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
                     <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                 </svg>                  
-                Показати інформацію про заповнення
+                Інформація про заповнення
             </button>
         </p>
     </div>
-    <div class="actions-pdf">
+    <div class="actions-pdf d-flex-center-center-md-sm">
         <div class="marg_bottom-10">
             <a href="{% url 'generate_partial_pdf'  block_template.uuid response.id %}">              
                 <button type="button" class="button_primary button_reset">
@@ -86,11 +86,11 @@
 
     <div class="pdf-content" style="background-color: rgba(0, 0,0 , 0.05); padding: 35px; border-radius: 10px;">
         {% group_by_combined_block response.field_responses.all as grouped_responses %}
-        <div class="d-flex justify-content-end align-items-center">
+        <div class="d-flex justify-content-end align-items-center d-flex-vs-center marg_bottom-md-sm-20">
             <div></div>
             <div class="d-flex">
                 <p class="offset-right-20">
-                    <a href="#">
+                    <a href="{% url 'add_to_favorites' response.id %}">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
                             <path stroke="#FFA500" stroke-width="2" d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z"/>
                         </svg>                                                
@@ -132,22 +132,6 @@
                 {% endfor %}
             </div>
         {% endfor %}
-
-        <!-- {% for resp in response.field_responses.all %}
-        <p class="marg_bottom-10">
-            {% if resp.field.field_type == 'boolean' %}
-                <b>{{ resp.field.name }}:</b> 
-                {% if resp.value == 'on' %}
-                    Так
-                    <span style="color: #037DFF;">-- Час заповнення - {{ resp.input_time }} мс; Тип заповнення - {% if resp.input_method == 'keyboard' %}Клавіатура{% elif resp.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
-                {% else %}
-                    Ні <span style="color: #037DFF;">-- Час заповнення - {{ resp.input_time }} мс; Тип заповнення - {% if resp.input_method == 'keyboard' %}Клавіатура{% elif resp.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
-                {% endif %}
-            {% else %}
-                <b>{{ resp.field.name }}:</b> {{ resp.value }} -- <span style="color: #037DFF;">-- Час заповнення - {{ resp.input_time }} мс; Тип заповнення - {% if resp.input_method == 'keyboard' %}Клавіатура{% elif resp.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
-            {% endif %}
-        </p>
-        {% endfor %} -->
     </div>
 {% endblock main %}
 <!--Content-->

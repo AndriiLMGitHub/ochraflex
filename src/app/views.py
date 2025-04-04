@@ -4,13 +4,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from account.forms import ChangeUserForm
 from django.contrib import messages
 from .models import BlockTemplate, DescriptionField, Field, CombinedBlock, LibraryTemplate
-from survey.models import SurveyResponse, FieldResponse
+from survey.models import SurveyResponse, FieldResponse, SurveyResponseFavorite
 from .forms import BlockTemplateForm, DescriptionFieldForm
 from .utils import parse_json
 from django.contrib.sites.shortcuts import get_current_site
 import json
 from django.http import HttpResponse
 from django.db.models import Count, Q
+from django.utils import timezone
 
 # Change password imports
 from django.contrib.auth.decorators import login_required
@@ -57,7 +58,18 @@ def list_resumes_view(request):
     """Пошук відповідей на анкети."""
     query = request.GET.get("q", "").strip()  # Отримуємо параметр пошуку
     # Logic for listing resumes goes here
-    answers = SurveyResponse.objects.filter(user=request.user)
+    answers = SurveyResponse.objects.filter(user=request.user, is_deleted=False)
+
+    # Отримуємо всі відповіді, що були позначені як улюблені поточним користувачем
+    favorite_responses = SurveyResponseFavorite.objects.filter(user=request.user).select_related('survey_response')
+
+    # Отримуємо поточний час
+    now = timezone.now()
+
+    # Отримуємо всі відповіді за останні 24 години
+    recent_responses = SurveyResponse.objects.filter(user=request.user, submitted_at__gte=now - timezone.timedelta(days=1))
+
+    mark_as_deleted_response = SurveyResponse.objects.filter(user=request.user, is_deleted=True)
 
     if query:
         answers = answers.filter(
@@ -68,6 +80,10 @@ def list_resumes_view(request):
     context = {
         'answers': answers,
         "query": query,
+        'favorite_responses': favorite_responses,  # Додаємо відповіді, які були позначені як улюблені поточним користувачем
+        'recent_responses': recent_responses, # 
+        'deleted': mark_as_deleted_response
+
     }
     return render(request, 'dashboard/resume/resumes.html', context)
 

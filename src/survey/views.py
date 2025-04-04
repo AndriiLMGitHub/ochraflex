@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
-from survey.models import SurveyResponse, FieldResponse
+from survey.models import SurveyResponse, FieldResponse, SurveyResponseFavorite
 from app.models import BlockTemplate, DescriptionField, Field, CombinedBlock
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -13,6 +13,7 @@ from django.utils.html import escape
 import io
 from django.http import FileResponse
 import base64
+from django.utils import timezone
 import tempfile
 
 
@@ -224,38 +225,35 @@ def generate_partial_pdf(request, uuid, response_id):
 
     return response
 
-
-def choose_language_questionare_view(request, id):
-    """Вибір мови анкети."""
-    block_template = get_object_or_404(BlockTemplate, id=id)
-
-    if block_template.language:
-        return redirect("questionnaire_user_result", block_template.uuid)
-
-    if request.method == "POST":
-        language = request.POST.get("language")
-        block_template.language = language
-        block_template.save()
-        return redirect("questionnaire_user_result", block_template.uuid)
-    
-    context = {
-        "block_template": block_template,
-    }
-
-    return render(request, "survey/choose_language.html", context)
-
-
-
 def delete_survey_view(request, survey_id):
-    survey_response = get_object_or_404(SurveyResponse, id=survey_id)
+    """Позначити відповідь як видалену"""
+    response = get_object_or_404(SurveyResponse, id=survey_id)
     
-    survey_response.delete()
-    messages.success(request, 'Опитування успішно видалено!')
+    # Перевіряємо, чи не є вже видаленою
+    if not response.is_deleted:
+        response.is_deleted = True
+        response.deleted_at = timezone.now()  # Встановлюємо час видалення
+        response.save()
+        messages.success(request, 'Відповідь позначена як видалена!')
+
     return redirect('list_resumes')
 
-def add_to_favorite_view(request, survey_id):
-    survey_detail = get_object_or_404(SurveyResponse, id=survey_id)
-    pass
+
+def permanently_delete_responses(request):
+    """Видалення відповідей, які були позначені як видалені більше ніж 30 днів тому"""
+    now = timezone.now()
+    
+    # Фільтруємо відповіді, які позначені як видалені і пройшло більше 30 днів
+    responses_to_permanently_delete = SurveyResponse.objects.filter(
+        is_deleted=True,
+        deleted_at__lte=now - timezone.timedelta(days=30)
+    )
+    
+    # Видаляємо ці відповіді
+    count, _ = responses_to_permanently_delete.delete()
+    
+    return HttpResponse(f"Було видалено {count} відповідей, старіших за 30 днів.")
+
 
 def test_pdf_view(request, uuid, response_id):
     block_template = get_object_or_404(BlockTemplate, uuid=uuid)
@@ -269,3 +267,40 @@ def test_pdf_view(request, uuid, response_id):
     }
 
     return render(request, "survey/pdf_template.html", context)
+
+
+def add_to_favorites(request, response_id):
+    """Додати відповідь до улюблених користувача."""
+    if not request.user.is_authenticated:
+        messages.error(request, "Ви повинні бути авторизовані, щоб додавати в улюблені.")
+        return redirect('signin')  # чи на сторінку, яка відповідає за логін
+
+    survey_response = get_object_or_404(SurveyResponse, id=response_id)
+
+    # Перевірка, чи вже є в улюблених
+    if SurveyResponseFavorite.objects.filter(user=request.user, survey_response=survey_response).exists():
+        messages.error(request, "Ця відповідь вже в улюблених.")
+    else:
+        SurveyResponseFavorite.objects.create(user=request.user, survey_response=survey_response)
+        messages.success(request, "Відповідь додано до улюблених.")
+
+    return redirect('list_resumes')
+
+
+def remove_from_favorites(request, response_id):
+    """Видалити відповідь з улюблених користувача."""
+    if not request.user.is_authenticated:
+        messages.error(request, "Ви повинні бути авторизовані, щоб видаляти з улюблених.")
+        return redirect('signin')
+
+    survey_response = get_object_or_404(SurveyResponse, id=response_id)
+
+    # Видалення з улюблених
+    favorite = SurveyResponseFavorite.objects.filter(user=request.user, survey_response=survey_response).first()
+    if favorite:
+        favorite.delete()
+        messages.success(request, "Відповідь видалено з улюблених.")
+    else:
+        messages.info(request, "Ця відповідь не була у ваших улюблених.")
+
+    return redirect('list_resumes')

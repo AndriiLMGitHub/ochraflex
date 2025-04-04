@@ -6,4 +6,9 @@
   .auth_form {
     width: 100%;
   }
+  .alert_container {
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 15px !important;
+  }
 }

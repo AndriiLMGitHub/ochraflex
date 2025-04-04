@@ -97,6 +97,24 @@
 
 /* All resumes */
 
+.table-responsive {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table-responsive table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px; /* щоб не ламалась при звуженні */
+}
+
+@media (max-width: 768px) {
+  table th, table td {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -134,16 +152,18 @@ tbody td:first-child {
   text-align: center;
 }
 
-.icon {
-  display: inline-block;
-  font-size: 18px;
+.star-icon path {
+  fill: transparent;  /* Початковий стан - прозорий */
+  stroke: black;      /* Лінія чорна для обведення */
+  stroke-width: 2;    /* Обводка зірочки */
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.star-icon.active path {
+  fill: gold;         /* Зміна кольору на жовтий при активному стані */
+  stroke: gold;       /* Лінія також змінюється на жовту */
+}
+
+.star-icon {
   cursor: pointer;
-}
-
-.icon.star {
-  color: #000;
-}
-
-.icon.star:hover {
-  color: #ffcc00;
 }

@@ -15,7 +15,7 @@ from django.contrib import messages
 
 def signup_view(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('questionnaires')
     else:
         if request.method == "POST":
             form = CustomUserSignUpForm(request.POST)
@@ -68,7 +68,7 @@ def activate(request, uidb64, token):
 
 def signin_view(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('questionnaires')
     else:
         if request.method == 'POST':
             email = request.POST['email']
@@ -78,7 +78,7 @@ def signin_view(request):
                 login(request, user)
                 messages.success(request, _(
                     "Ви успішно ввійшли."))
-                return redirect('list_resumes')
+                return redirect('questionnaires')
             else:
                 messages.error(request, _("Неправильна адреса електронної пошти або пароль."))
     return render(request, 'auth/login.html')

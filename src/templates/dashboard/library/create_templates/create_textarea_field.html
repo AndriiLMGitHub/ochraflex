@@ -26,7 +26,7 @@
 {% block main %} {% load static %}
 <form id="field-form" method="POST">
     {% csrf_token %}
-    <div class="add_new_field marg_bottom-20">
+    <div class="add_new_field marg_bottom-20 d-flex-vs-center marg_top-md-sm-15">
         <button type="submit" class="button_primary button_reset btn-icon" id="submit-button">
             <p>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -36,8 +36,8 @@
             <p>Додати</p>
         </button>
     </div>
-    <div class="d-flex">
-        <div class="border-field">
+    <div class="d-flex d-flex-md-sm">
+        <div class="border-field w-100-md-sm">
             <div class="input-panel">
                 <div class="group-form">
                     <label for="id_name" class="input_label">
@@ -76,7 +76,7 @@
             </p>
             </div>
         </div>
-    <div class="settings-panel">
+    <div class="settings-panel w-100-md-sm offset-md-sm-clear">
         <div class="checkbox-container justify-content-start marg_bottom-10">
         <label class="checkbox">
             <input
@@ -101,7 +101,7 @@
             <span class="checkmark"></span>
             </div>
         </label>
-        <span>Допоміжний текст (Текст підказка)</span>
+        <span>Текст підказка</span>
         </div>
         <!-- Title -->
         <div class="settings-panel-title">Тип введення</div>

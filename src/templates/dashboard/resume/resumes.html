@@ -16,17 +16,17 @@
 
 <!--Content-->
 {% block main %}
-<div class="tabs">
+<div class="tabs d-flex-vs-center marg_top-md-sm-15">
   <button class="tab-link active" data-tab="all">Всі</button>
   <button class="tab-link" data-tab="new">Нові</button>
   <button class="tab-link" data-tab="favorites">Обрані</button>
   <button class="tab-link" data-tab="deleted">Видалені</button>
 </div>
 <div class="toolbar">
-  <div class="toolbar-left">
+  <div class="toolbar-left marg_top-md-sm-10 marg_bottom-md-sm-10">
     <div class="checkbox-container">
       <label class="checkbox">
-        <input type="checkbox" />
+        <input type="checkbox" id="select-all-checkbox"/>
         <div class="circle"></div>
         <div class="box">
           <span class="checkmark"></span>
@@ -41,7 +41,7 @@
     <i><img src="{% static 'images/icons/filter.svg' %}" alt="Filter" /></i>
     <!-- Filter icon -->
   </div>
-  <div class="search-bar">
+  <div class="search-bar w-100-md-sm">
     <form action="{% url 'list_resumes' %}" method="GET">
       <input type="text" name="q" value="{{ query }}" placeholder="Введіть назву анкети" class="input_base" />
       <div class="search-icon" type="submit">
@@ -50,7 +50,7 @@
     </form>
     <!-- Search icon -->
   </div>
-  <div class="toolbar-right">
+  <div class="toolbar-right marg_bottom-md-sm-15">
     <div class="page-nav">
       <!-- <i class="disabled">&#8249;</i> -->
       <!-- Left arrow -->
@@ -87,7 +87,7 @@
   </div>
 </div>
 <div id="all" class="tab-content active">
-  <div>
+  <div class="table-responsive">
     <table>
       <thead>
           <tr>
@@ -103,11 +103,11 @@
       </thead>
       <tbody>
           {% for answer in answers %}
-              <tr onclick="window.location.href='{% url 'survey_detail' answer.block_template.uuid answer.id %}'" style="cursor: pointer;">
+            <tr class="survey-row" data-url="{% url 'survey_detail' answer.block_template.uuid answer.id %}" style="cursor: pointer;">
                   <td >
                     <div class="checkbox-container">
                       <label class="checkbox">
-                        <input type="checkbox" />
+                        <input type="checkbox" class="click-safe row-checkbox" />
                         <div class="circle"></div>
                         <div class="box">
                           <span class="checkmark"></span>
@@ -115,7 +115,13 @@
                       </label>
                     </div>
                   </td>
-                  <td class="icon star">★</td>
+                  <td class="click-safe">
+                    <a href="{% url 'add_to_favorites' answer.id %}">
+                      <svg class="star-icon" width="20" height="19" viewBox="-2 -2 24 22" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z" />
+                      </svg> 
+                    </a>                                                                                                                 
+                  </td>
                   <td>{{ answer.id }}</td>
                   <td>Jakub Novák</td>
                   <td>{{ answer.submitted_at }}</td>
@@ -129,13 +135,148 @@
   </div>
 </div>
 <div id="new" class="tab-content">
-  <p>Нові</p>
+  <div class="table-responsive">
+    <table>
+      <thead>
+          <tr>
+              <th></th>
+              <th></th>
+              <th>ID</th>
+              <th>Jméno a příjmení</th>
+              <th>Datum</th>
+              <th>Obor</th>
+              <th>Dotazník</th>
+              <th>Jazyk</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for recent_response in recent_responses %}
+            <tr class="survey-row" style="cursor: pointer;" data-url="{% url 'survey_detail' recent_response.block_template.uuid recent_response.id %}">
+                  <td >
+                    <div class="checkbox-container">
+                      <label class="checkbox">
+                        <input type="checkbox" class="click-safe row-checkbox" />
+                        <div class="circle"></div>
+                        <div class="box">
+                          <span class="checkmark"></span>
+                        </div>
+                      </label>
+                    </div>
+                  </td>
+                  <td class="click-safe">
+                    <a href="{% url 'remove_from_favorites' recent_response.id %}">
+                      <svg class="star-icon" width="20" height="19" viewBox="-2 -2 24 22" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z" />
+                      </svg> 
+                    </a>                                                                                                                 
+                  </td>
+                  <td>{{ recent_response.id }}</td>
+                  <td>Jakub Novák</td>
+                  <td>{{ recent_response.submitted_at }}</td>
+                  <td>Електрик</td>
+                  <td>Для всіх</td>
+                  <td>{% if recent_response.block_template.language == 'cs' %}CZ{% else %}DE{% endif %}</td>
+            </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  </div>
 </div>
 <div id="favorites" class="tab-content">
-  <p>Обрані</p>
+  <div class="table-responsive">
+    <table>
+      <thead>
+          <tr>
+              <th></th>
+              <th></th>
+              <th>ID</th>
+              <th>Jméno a příjmení</th>
+              <th>Datum</th>
+              <th>Obor</th>
+              <th>Dotazník</th>
+              <th>Jazyk</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for favorite in favorite_responses %}
+            <tr class="survey-row" style="cursor: pointer;" data-url="{% url 'survey_detail' favorite.survey_response.block_template.uuid favorite.survey_response.id %}">
+                  <td >
+                    <div class="checkbox-container">
+                      <label class="checkbox">
+                        <input type="checkbox" class="click-safe row-checkbox" />
+                        <div class="circle"></div>
+                        <div class="box">
+                          <span class="checkmark"></span>
+                        </div>
+                      </label>
+                    </div>
+                  </td>
+                  <td class="click-safe">
+                    <a href="{% url 'remove_from_favorites' favorite.survey_response.id %}">
+                      <svg class="star-icon" width="20" height="19" viewBox="-2 -2 24 22" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z" />
+                      </svg> 
+                    </a>                                                                                                                 
+                  </td>
+                  <td>{{ favorite.survey_response.id }}</td>
+                  <td>Jakub Novák</td>
+                  <td>{{ favorite.survey_response.submitted_at }}</td>
+                  <td>Електрик</td>
+                  <td>Для всіх</td>
+                  <td>{% if answer.block_template.language == 'cs' %}CZ{% else %}DE{% endif %}</td>
+            </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  </div>
 </div>
 <div id="deleted" class="tab-content">
-  <p>Видалені</p>
+  <div class="table-responsive">
+    <table>
+      <thead>
+          <tr>
+              <th></th>
+              <th></th>
+              <th>ID</th>
+              <th>Jméno a příjmení</th>
+              <th>Datum</th>
+              <th>Obor</th>
+              <th>Dotazník</th>
+              <th>Jazyk</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for item in deleted %}
+            <tr class="survey-row" style="cursor: pointer;" data-url="{% url 'survey_detail' item.block_template.uuid item.id %}">
+                  <td >
+                    <div class="checkbox-container">
+                      <label class="checkbox">
+                        <input type="checkbox" class="click-safe row-checkbox" />
+                        <div class="circle"></div>
+                        <div class="box">
+                          <span class="checkmark"></span>
+                        </div>
+                      </label>
+                    </div>
+                  </td>
+                  <td class="click-safe">
+                    <a href="{% url 'remove_from_favorites' item.id %}">
+                      <svg class="star-icon" width="20" height="19" viewBox="-2 -2 24 22" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z" />
+                      </svg> 
+                    </a>                                                                                                                 
+                  </td>
+                  <td>{{ item.id }}</td>
+                  <td>Jakub Novák</td>
+                  <td>{{ item.submitted_at }}</td>
+                  <td>Електрик</td>
+                  <td>Для всіх</td>
+                  <td>{% if recent_response.block_template.language == 'cs' %}CZ{% else %}DE{% endif %}</td>
+            </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  </div>
 </div>
 {% endblock main %}
 <!--Content-->
@@ -143,5 +284,51 @@
 {% block scripts %}
 <script src="{% static 'js/app.js' %}"></script>
 <script src="{% static 'js/resumes/index.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const rows = document.querySelectorAll(".survey-row");
+
+      rows.forEach(row => {
+          row.addEventListener("click", function () {
+              const url = this.dataset.url;
+              if (url) {
+                  window.location.href = url;
+              }
+          });
+      });
+
+      // Всі елементи, які не повинні викликати перехід
+    const clickSafeElements = document.querySelectorAll(".click-safe");
+
+    clickSafeElements.forEach(el => {
+      el.addEventListener("click", function (event) {
+        event.stopPropagation(); // Зупиняємо подію, щоб не викликався клік на <tr>
+      });
+    });
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const selectAll = document.getElementById('select-all-checkbox');
+    const checkboxes = document.querySelectorAll('.row-checkbox');
+
+    selectAll.addEventListener('change', function () {
+      checkboxes.forEach(cb => {
+        cb.checked = selectAll.checked;
+      });
+    });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const stars = document.querySelectorAll(".star-icon");
+    stars.forEach(star => {
+      star.addEventListener("click", function (e) {
+        e.stopPropagation(); // не переходити по посиланню рядка
+        star.classList.toggle("active");
+      });
+    });
+  });
+</script>
 {% endblock scripts %}
 <!--Sctipts-->

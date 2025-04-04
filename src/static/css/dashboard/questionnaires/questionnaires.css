@@ -44,9 +44,6 @@
   margin: 25px 0 0;
 }
 .questionnaires-block {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -56,8 +53,6 @@
 }
 
 .questionnaires-block .left {
-  display: flex;
-  align-items: center;
   gap: 12px;
 }
 
@@ -77,8 +72,6 @@
 }
 
 .questionnaires-block .right {
-  display: flex;
-  align-items: center;
   gap: 12px;
 }
 
