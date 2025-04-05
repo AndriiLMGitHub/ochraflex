@@ -376,3 +376,13 @@
 .btn-icon-hover:hover {
   background-color: #e2e2e2;
 }
+
+
+.button-search {
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  margin-top: 4px;
+  margin-right: 3px;
+  background-color: transparent !important;
+}
