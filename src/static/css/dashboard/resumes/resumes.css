@@ -152,18 +152,49 @@ tbody td:first-child {
   text-align: center;
 }
 
-.star-icon path {
-  fill: transparent;  /* Початковий стан - прозорий */
-  stroke: black;      /* Лінія чорна для обведення */
-  stroke-width: 2;    /* Обводка зірочки */
+/* .star-icon path {
+  fill: transparent;  
+  stroke: black;     
+  stroke-width: 2;    
   transition: fill 0.3s ease, stroke 0.3s ease;
 }
 
 .star-icon.active path {
-  fill: gold;         /* Зміна кольору на жовтий при активному стані */
-  stroke: gold;       /* Лінія також змінюється на жовту */
+  fill: gold;         
+  stroke: gold;       
+} */
+
+/* .star-icon {
+  cursor: pointer;
 }
 
+.star-icon.favorited {
+  fill: gold;
+  stroke: gold;
+} */
+
 .star-icon {
+  fill: transparent;
+  stroke: black;
   cursor: pointer;
+  stroke-width: 1.7;  /* Збільшує товщину лінії */
+  transition: fill 0.2s;
+}
+
+.star-icon.favorited {
+  fill: gold;
+  stroke: gold;
+}
+
+.delete-icon {
+  transition: fill 0.3s ease;
+  fill: black;
+}
+.delete-icon.active {
+  fill: red;
+}
+
+.delete-icon.red path {
+  fill: red;
+  transition: fill 0.3s ease;
 }

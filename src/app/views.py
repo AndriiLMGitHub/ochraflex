@@ -63,6 +63,9 @@ def list_resumes_view(request):
     # Отримуємо всі відповіді, що були позначені як улюблені поточним користувачем
     favorite_responses = SurveyResponseFavorite.objects.filter(user=request.user).select_related('survey_response')
 
+    # Отримати список ID обраних відповідей для користувача
+    favorite_ids = SurveyResponseFavorite.objects.filter(user=request.user).values_list('survey_response_id', flat=True)
+
     # Отримуємо поточний час
     now = timezone.now()
 
@@ -82,7 +85,8 @@ def list_resumes_view(request):
         "query": query,
         'favorite_responses': favorite_responses,  # Додаємо відповіді, які були позначені як улюблені поточним користувачем
         'recent_responses': recent_responses, # 
-        'deleted': mark_as_deleted_response
+        'deleted': mark_as_deleted_response,
+        'favorite_ids': favorite_ids,  # Додаємо список ID обраних відповідей для користувача
 
     }
     return render(request, 'dashboard/resume/resumes.html', context)
@@ -622,9 +626,6 @@ def questionnaire_user_result_view(request, uuid):
         block_template=block_template)
     combined_blocks = CombinedBlock.objects.filter(
         block_template=block_template).prefetch_related('fields')
-    
-    if not block_template.language:
-        return redirect('choose_language_questionare', block_template.id)
     
 
     if request.method == "POST":

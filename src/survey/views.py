@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from survey.models import SurveyResponse, FieldResponse, SurveyResponseFavorite
 from app.models import BlockTemplate, DescriptionField, Field, CombinedBlock
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from weasyprint import HTML
 from django.templatetags.static import static
@@ -15,7 +15,7 @@ from django.http import FileResponse
 import base64
 from django.utils import timezone
 import tempfile
-
+from django.views.decorators.csrf import csrf_exempt
 
 
 def submit_survey_response(request, uuid):
@@ -181,6 +181,9 @@ def survey_detail_view(request, uuid, response_id):
     block_template = get_object_or_404(BlockTemplate, uuid=uuid)
     survey_response = SurveyResponse.objects.get(block_template=block_template, id=response_id)
 
+    # Отримати список ID обраних відповідей для користувача
+    favorite_ids = SurveyResponseFavorite.objects.filter(user=request.user).values_list('survey_response_id', flat=True)
+
     current_site = get_current_site(request)
     protocol = 'https' if request.is_secure() else 'http'
     pre_url = f'{protocol}://{current_site.domain}'
@@ -189,6 +192,7 @@ def survey_detail_view(request, uuid, response_id):
         "block_template": block_template,
         "response": survey_response,
         'pre_url': pre_url,
+        'favorite_ids': favorite_ids,
     })
 
 def generate_partial_pdf(request, uuid, response_id):
@@ -269,38 +273,27 @@ def test_pdf_view(request, uuid, response_id):
     return render(request, "survey/pdf_template.html", context)
 
 
-def add_to_favorites(request, response_id):
-    """Додати відповідь до улюблених користувача."""
-    if not request.user.is_authenticated:
-        messages.error(request, "Ви повинні бути авторизовані, щоб додавати в улюблені.")
-        return redirect('signin')  # чи на сторінку, яка відповідає за логін
-
-    survey_response = get_object_or_404(SurveyResponse, id=response_id)
-
-    # Перевірка, чи вже є в улюблених
-    if SurveyResponseFavorite.objects.filter(user=request.user, survey_response=survey_response).exists():
-        messages.error(request, "Ця відповідь вже в улюблених.")
-    else:
-        SurveyResponseFavorite.objects.create(user=request.user, survey_response=survey_response)
-        messages.success(request, "Відповідь додано до улюблених.")
-
-    return redirect('list_resumes')
-
-
-def remove_from_favorites(request, response_id):
-    """Видалити відповідь з улюблених користувача."""
-    if not request.user.is_authenticated:
-        messages.error(request, "Ви повинні бути авторизовані, щоб видаляти з улюблених.")
-        return redirect('signin')
-
-    survey_response = get_object_or_404(SurveyResponse, id=response_id)
-
-    # Видалення з улюблених
-    favorite = SurveyResponseFavorite.objects.filter(user=request.user, survey_response=survey_response).first()
-    if favorite:
+@login_required
+def toggle_favorite(request, survey_response_id):
+    survey_response = get_object_or_404(SurveyResponse, id=survey_response_id)
+    favorite, created = SurveyResponseFavorite.objects.get_or_create(
+        user=request.user,
+        survey_response=survey_response
+    )
+    if not created:
         favorite.delete()
-        messages.success(request, "Відповідь видалено з улюблених.")
-    else:
-        messages.info(request, "Ця відповідь не була у ваших улюблених.")
+        return JsonResponse({'favorited': False})
+    return JsonResponse({'favorited': True})
 
-    return redirect('list_resumes')
+
+@csrf_exempt
+def delete_survey_response(request, survey_response_id):
+    if request.method == 'POST':
+        try:
+            response = SurveyResponse.objects.get(id=survey_response_id)
+            response.is_deleted = True
+            response.save()
+            return JsonResponse({'success': True})
+        except SurveyResponse.DoesNotExist:
+            return JsonResponse({'error': 'Not found'}, status=404)
+    return JsonResponse({'error': 'Invalid method'}, status=400)

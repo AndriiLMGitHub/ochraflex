@@ -90,10 +90,22 @@
             <div></div>
             <div class="d-flex">
                 <p class="offset-right-20">
-                    <a href="{% url 'add_to_favorites' response.id %}">
-                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
-                            <path stroke="#FFA500" stroke-width="2" d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z"/>
-                        </svg>                                                
+                    <a href="#">
+                        <svg
+                            class="star-icon {% if response.id in favorite_ids %}favorited{% endif %}"
+                            data-id="{{ response.id }}"
+                            onclick="toggleFavorite(this)"
+                            width="20"
+                            height="19"
+                            viewBox="-2 -2 24 22"
+                            xmlns="http://www.w3.org/2000/svg"
+                            >
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z"
+                        />
+                    </svg>                                              
                     </a>
                 </p>
                 <p>
@@ -138,5 +150,43 @@
 <!--Scripts-->
 {% block scripts %}
 <script src="{% static 'js/app.js' %}"></script>
+<script>
+    function toggleFavorite(starElement) {
+        const id = starElement.getAttribute('data-id');
+    
+        fetch(`/dashboard/survey/favorites/toggle/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.favorited) {
+                starElement.classList.add('favorited');
+                window.alert('Відповідь додана до улюблених')  
+            } else {
+                starElement.classList.remove('favorited');
+                window.alert('Відповідь видалена з улюблених')   
+            }
+        });
+    }
+    
+    // Функція для отримання CSRF токена
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    </script>
 {% endblock scripts %}
 <!--Scripts-->

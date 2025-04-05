@@ -34,11 +34,16 @@
       </label>
     </div>
     <!-- Placeholder for a checkbox icon -->
-    <i><img src="{% static 'images/icons/trash-disabled.svg' %}" alt="Delete item" /></i>
+    <!-- <i><img src="{% static 'images/icons/trash-disabled.svg' %}" alt="Delete item" /></i> -->
+    <i>
+      <svg class="delete-icon" width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 16C1 17.1 1.9 18 3 18H11C12.1 18 13 17.1 13 16V4H1V16ZM3 6H11V16H3V6ZM10.5 1L9.5 0H4.5L3.5 1H0V3H14V1H10.5Z" fill="#E8E8E8"/>
+      </svg>
+    </i>
     <!-- Trash can icon -->
-    <i><img src="{% static 'images/icons/order.svg' %}" alt="Order item" /></i>
+    <!-- <i><img src="{% static 'images/icons/order.svg' %}" alt="Order item" /></i> -->
     <!-- Order icon -->
-    <i><img src="{% static 'images/icons/filter.svg' %}" alt="Filter" /></i>
+    <!-- <i><img src="{% static 'images/icons/filter.svg' %}" alt="Filter" /></i> -->
     <!-- Filter icon -->
   </div>
   <div class="search-bar w-100-md-sm">
@@ -103,7 +108,12 @@
       </thead>
       <tbody>
           {% for answer in answers %}
-            <tr class="survey-row" data-url="{% url 'survey_detail' answer.block_template.uuid answer.id %}" style="cursor: pointer;">
+            <tr 
+              class="survey-row"
+              data-url="{% url 'survey_detail' answer.block_template.uuid answer.id %}"
+              style="cursor: pointer;"
+              data-id="{{ answer.id }}"
+            >
                   <td >
                     <div class="checkbox-container">
                       <label class="checkbox">
@@ -116,11 +126,21 @@
                     </div>
                   </td>
                   <td class="click-safe">
-                    <a href="{% url 'add_to_favorites' answer.id %}">
-                      <svg class="star-icon" width="20" height="19" viewBox="-2 -2 24 22" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z" />
-                      </svg> 
-                    </a>                                                                                                                 
+                    <svg
+                      class="star-icon {% if answer.id in favorite_ids %}favorited{% endif %}"
+                      data-id="{{ answer.id }}"
+                      onclick="toggleFavorite(this)"
+                      width="20"
+                      height="19"
+                      viewBox="-2 -2 24 22"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z"
+                        />
+                    </svg>                                                                                                               
                   </td>
                   <td>{{ answer.id }}</td>
                   <td>Jakub Novák</td>
@@ -164,11 +184,21 @@
                     </div>
                   </td>
                   <td class="click-safe">
-                    <a href="{% url 'remove_from_favorites' recent_response.id %}">
-                      <svg class="star-icon" width="20" height="19" viewBox="-2 -2 24 22" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z" />
-                      </svg> 
-                    </a>                                                                                                                 
+                    <svg
+                      class="star-icon {% if answer.id in favorite_ids %}favorited{% endif %}"
+                      data-id="{{ answer.id }}"
+                      onclick="toggleFavorite(this)"
+                      width="20"
+                      height="19"
+                      viewBox="-2 -2 24 22"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z"
+                        />
+                    </svg>                                                                                                              
                   </td>
                   <td>{{ recent_response.id }}</td>
                   <td>Jakub Novák</td>
@@ -212,11 +242,21 @@
                     </div>
                   </td>
                   <td class="click-safe">
-                    <a href="{% url 'remove_from_favorites' favorite.survey_response.id %}">
-                      <svg class="star-icon" width="20" height="19" viewBox="-2 -2 24 22" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z" />
-                      </svg> 
-                    </a>                                                                                                                 
+                    <svg
+                      class="star-icon {% if favorite.survey_response.id in favorite_ids %}favorited{% endif %}"
+                      data-id="{{ favorite.survey_response.id }}"
+                      onclick="toggleFavorite(this)"
+                      width="20"
+                      height="19"
+                      viewBox="-2 -2 24 22"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z"
+                        />
+                    </svg>                                                                                                                
                   </td>
                   <td>{{ favorite.survey_response.id }}</td>
                   <td>Jakub Novák</td>
@@ -235,8 +275,6 @@
     <table>
       <thead>
           <tr>
-              <th></th>
-              <th></th>
               <th>ID</th>
               <th>Jméno a příjmení</th>
               <th>Datum</th>
@@ -248,7 +286,7 @@
       <tbody>
           {% for item in deleted %}
             <tr class="survey-row" style="cursor: pointer;" data-url="{% url 'survey_detail' item.block_template.uuid item.id %}">
-                  <td >
+                  <!-- <td >
                     <div class="checkbox-container">
                       <label class="checkbox">
                         <input type="checkbox" class="click-safe row-checkbox" />
@@ -258,14 +296,24 @@
                         </div>
                       </label>
                     </div>
-                  </td>
-                  <td class="click-safe">
-                    <a href="{% url 'remove_from_favorites' item.id %}">
-                      <svg class="star-icon" width="20" height="19" viewBox="-2 -2 24 22" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z" />
-                      </svg> 
-                    </a>                                                                                                                 
-                  </td>
+                  </td> -->
+                  <!-- <td class="click-safe">
+                    <svg
+                      class="star-icon {% if item.id in favorite_ids %}favorited{% endif %}"
+                      data-id="{{ item.id }}"
+                      onclick="toggleFavorite(this)"
+                      width="20"
+                      height="19"
+                      viewBox="-2 -2 24 22"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10 0L12.81 6.62L20 7.24L14.55 11.97L16.18 19L10 15.27L3.82 19L5.46 11.97L0 7.24L7.19 6.63L10 0Z"
+                        />
+                    </svg>                                                                                                                
+                  </td> -->
                   <td>{{ item.id }}</td>
                   <td>Jakub Novák</td>
                   <td>{{ item.submitted_at }}</td>
@@ -330,5 +378,107 @@
     });
   });
 </script>
+<script>
+  function toggleFavorite(starElement) {
+      const id = starElement.getAttribute('data-id');
+  
+      fetch(`/dashboard/survey/favorites/toggle/${id}/`, {
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': getCookie('csrftoken'),
+          },
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.favorited) {
+              starElement.classList.add('favorited');
+              window.alert('Відповідь додана до улюблених')
+              window.location.reload()
+          } else {
+              starElement.classList.remove('favorited');
+              window.alert('Відповідь видалена з улюблених')
+              window.location.reload()
+          }
+      });
+  }
+  
+  // Функція для отримання CSRF токена
+  function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+  </script>
+  <script>
+    const deleteIcon = document.querySelector('.delete-icon');
+    const checkboxes = document.querySelectorAll('.row-checkbox');
+    const selectAllCheckbox = document.getElementById('select-all-checkbox');
+
+    function updateDeleteIcon() {
+      const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+      if (anyChecked) {
+        deleteIcon.classList.add('red');
+        } else {
+          deleteIcon.classList.remove('red');
+        }
+      }
+
+      // Реакція на клік по "вибрати всі"
+      selectAllCheckbox.addEventListener('change', function () {
+        checkboxes.forEach(cb => cb.checked = this.checked);
+        updateDeleteIcon();
+      });
+
+      // Слухачі на кожен чекбокс у рядку
+      checkboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+          updateDeleteIcon();
+
+          // Якщо хоч один знятий — знімаємо загальний
+          if (!cb.checked) {
+            selectAllCheckbox.checked = false;
+          } else if (Array.from(checkboxes).every(c => c.checked)) {
+            // Якщо ВСІ вибрані — ставимо загальний
+            selectAllCheckbox.checked = true;
+          }
+        });
+      });
+
+      deleteIcon.addEventListener('click', () => {
+        if (!deleteIcon.classList.contains('red')) return;
+
+        if (!confirm('Ви впевнені, що хочете видалити вибрані відповіді?')) return;
+
+        const selectedIds = Array.from(checkboxes)
+          .filter(cb => cb.checked)
+          .map(cb => cb.closest('tr').dataset.id);
+
+        selectedIds.forEach(id => {
+          fetch(`/dashboard/survey/delete/${id}/`, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': getCookie('csrftoken'),
+            },
+          })
+          .then(response => {
+            if (response.ok) {
+              const row = document.querySelector(`tr[data-id="${id}"]`);
+              if (row) row.remove();
+            }
+          });
+        });
+
+        deleteIcon.classList.remove('red');
+      });
+  </script>
 {% endblock scripts %}
 <!--Sctipts-->

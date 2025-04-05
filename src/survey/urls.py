@@ -9,6 +9,7 @@ urlpatterns = [
     path('<str:survey_id>/delete/', views.delete_survey_view, name='delete_survey'),
     path('response/<str:uuid>/<str:response_id>/', views.test_pdf_view, name='test_pdf'),
     # Favorites
-    path('add_to_favorites/<int:response_id>/', views.add_to_favorites, name='add_to_favorites'),
-    path('remove_from_favorites/<int:response_id>/', views.remove_from_favorites, name='remove_from_favorites'),
+    path('favorites/toggle/<str:survey_response_id>/', views.toggle_favorite, name='toggle_favorite'),
+    path('delete/<int:survey_response_id>/', views.delete_survey_response, name='delete_survey_response'),
+
 ]
