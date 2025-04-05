@@ -473,6 +473,7 @@
             if (response.ok) {
               const row = document.querySelector(`tr[data-id="${id}"]`);
               if (row) row.remove();
+              window.location.reload();
             }
           });
         });
