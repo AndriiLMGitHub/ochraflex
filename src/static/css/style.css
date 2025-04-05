@@ -53,8 +53,8 @@ body {
 input[type="date"] {
   display: block;
   width: 100%;
-  -webkit-appearance: none;
-  appearance: none;
+  /* -webkit-appearance: none;
+  appearance: none; */
   box-sizing: border-box;
 }
 
