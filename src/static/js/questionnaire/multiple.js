@@ -24,8 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
       li.appendChild(wrap);
       wrap.appendChild(div1);
       wrap.appendChild(div2);
+      div1.classList.add("w-100")
       div1.appendChild(input);
-      input.classList.add("input_reset");
+      input.classList.add("input_reset", "w-100");
       input.setAttribute("placeholder", "Введіть пункт");
     });
 
