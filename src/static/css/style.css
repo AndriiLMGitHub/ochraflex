@@ -50,6 +50,13 @@ body {
   color: #2e2e2e;
 }
 
+input[type="date"] {
+  display: block;
+  width: 100%;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
 .button_reset {
   background-color: transparent;
   color: inherit;
