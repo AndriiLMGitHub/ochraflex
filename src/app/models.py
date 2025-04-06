@@ -124,6 +124,8 @@ class CombinedBlock(models.Model):
     )
     allow_dublicate = models.BooleanField(default=False)
 
+    is_cloned = models.BooleanField(default=False)
+
     # def __str__(self):
     #     return self.description_field
 

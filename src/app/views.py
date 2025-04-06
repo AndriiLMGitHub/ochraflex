@@ -626,21 +626,28 @@ def questionnaire_user_result_view(request, uuid):
         block_template=block_template)
     combined_blocks = CombinedBlock.objects.filter(
         block_template=block_template).prefetch_related('fields')
+
     
 
     if request.method == "POST":
-        # Перевіряємо, чи користувач авторизований
-        if request.user.is_authenticated:
-            user = request.user
-            email = None
-        else:
-            user = None
-            email = request.POST.get("email", "").strip()
+        # # Перевіряємо, чи користувач авторизований
+        # if request.user.is_authenticated:
+        #     user = request.user
+        #     email = None
+        # else:
+        #     user = None
+        #     email = request.POST.get("email", "").strip()
 
-            # Якщо e-mail не заповнений, повертаємо помилку
-            if not email:
-                messages.error(request, "Будь ласка, введіть e-mail, щоб ми могли зв'язатися з вами.")
-                return redirect("submit_survey", uuid=uuid)
+        #     # Якщо e-mail не заповнений, повертаємо помилку
+        #     if not email:
+        #         messages.error(request, "Будь ласка, введіть e-mail, щоб ми могли зв'язатися з вами.")
+        #         return redirect("submit_survey", uuid=uuid)
+
+        # Створюємо відповідь на анкету
+        survey_response = SurveyResponse.objects.create(
+            user=request.user or None,
+            block_template=block_template
+        )
             
         # Отримуємо всі поля введення (крім прихованих)
         form_data = {key: value for key, value in request.POST.items() if key.startswith("field_")}
@@ -654,13 +661,6 @@ def questionnaire_user_result_view(request, uuid):
         for field_name, value in form_data.items():
             field_id = field_name.replace("field_", "")
             print(f"Поле: {field_name}, Значення: {value}, Час: {input_times.get(field_id, '0')} мс, Метод: {input_methods.get(field_id, 'unknown')}")
-
-        # Створюємо відповідь на анкету
-        survey_response = SurveyResponse.objects.create(
-            user=user,
-            email=email,
-            block_template=block_template
-        )
 
         # Збереження відповідей для стандартних полів
         for field in fields:
@@ -703,13 +703,13 @@ def questionnaire_user_result_view(request, uuid):
 
                 if field_value:
                     FieldResponse.objects.create(
-                        survey_response=survey_response,
-                        field=field,
-                        value=field_value,
-                        combined_block=combined_block,  # Прив'язка до комбінованого блоку
-                        input_time=int(input_time),  # Записуємо час у мілісекундах
-                        input_method=input_method  # Записуємо метод введення
-                    )
+                    survey_response=survey_response,
+                    field=field,
+                    value=field_value,
+                    combined_block=combined_block,
+                    input_time=int(input_time) if input_time else 0,
+                    input_method=input_method
+                )
 
         for template in block_template.library_templates.all():
             if template.field:

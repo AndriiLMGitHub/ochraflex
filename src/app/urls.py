@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, views_json, views_library, views_combined
+from . import views, views_json, views_library, views_combined, views_clone_cb
 
 urlpatterns = [
      # Dashboard routes
@@ -355,6 +355,8 @@ urlpatterns = [
           views_library.allow_duplicate_library_template_view,
           name='allow_duplicate_library_template'
      ),
+     #Clone block
+     path('blocks/<int:block_id>/<int:block_template_id>/clone/', views_clone_cb.clone_combined_block, name='clone_combined_block'),
 
      # User View Routes
      path('user/questionare/create/answer/<str:uuid>/', views.questionnaire_user_result_view, name='questionnaire_user_result'),

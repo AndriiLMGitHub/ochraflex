@@ -90,7 +90,7 @@
             </style>
         {% endblock styles %}
     </head>
-<body>
+<body data-block-template-id="{{ block_template.id }}">
     <div class="user-header">
         <div class="user-wrapper">
             <div class="d-flex-vs-center ">
@@ -257,21 +257,18 @@
         </div>
     </div>
 
-
+    <form method="POST">
+    {% csrf_token %}
     <div class="user-main-content">
         <div class="user-wrapper">
             <div class="main-content-header">
                 <h1>{{ block_template.name }}</h1>
-                <p class="marg_bottom-10">{{ block_template.description }}</p>
-                <h3>{% if block_template.language == 'cs' %}<b style="background-color: rgb(212, 212, 212);">CZ</b>{% else %}<b style="background-color: rgb(212, 212, 212);">DE</b>{% endif %}</h3>
                 <p class="marg_top-15"><b>Vaše ID</b> - {{ block_template.uuid }}</p>
                 <p class="text-red marg_top-20">Upozornění: pracovní nabídku poskytujeme pouze pro aktivní OSVČ!</p>
             </div>
             <div class="main-content-body">
                 <div class="block-panell">
                     <div class="">
-                        <form method="POST">
-                            {% csrf_token %}
                             {% for combined_block in combined_blocks %}
                                 <div class="marg_top-20 border-field-questionnaire">
                                     <h3>{{ combined_block.description_field.title }}</h3>
@@ -299,6 +296,7 @@
                                                             name="field_{{ field.id }}" 
                                                             data-track
                                                             data-id="{{ field.id }}"
+                                                            {% if field.is_required%}required{% endif %}
                                                             ></textarea>
                                                     </div>
                                                 </div>
@@ -312,6 +310,7 @@
                                                             data-track
                                                             data-id="{{ field.id }}"
                                                             name="field_{{ field.id }}"
+                                                            {% if field.is_required%}required{% endif %}
                                                         />
                                                     </div>
                                                 <!-- <input
@@ -331,6 +330,7 @@
                                                     data-track
                                                     data-id="{{ field.id }}"
                                                     id="dateShowPicker"
+                                                    {% if field.is_required%}required{% endif %}
                                                 />
                                             {% elif field.field_type == 'boolean' %}
                                                 <div class="multi-container offset-left-20 marg_bottom-10 marg_top-10">
@@ -340,6 +340,7 @@
                                                         name="field_{{ field.id }}"
                                                         data-track
                                                         data-id="{{ field.id }}"
+                                                        {% if field.is_required%}required{% endif %}
                                                         />
                                                         <label for="true">Так</label>
                                                     </div>
@@ -349,6 +350,7 @@
                                                             name="field_{{ field.id }}"
                                                             data-track
                                                             data-id="{{ field.id }}"
+                                                            {% if field.is_required%}required{% endif %}
                                                         />
                                                         <label for="false">Ні</label>
                                                     </div>
@@ -365,6 +367,7 @@
                                                                     value="{{ option }}"
                                                                     data-track
                                                                     data-id="{{ field.id }}"
+                                                                    {% if field.is_required%}required{% endif %}
                                                                     />
                                                                 <div class="circle"></div>
                                                                 <div class="box">
@@ -381,6 +384,7 @@
                                                     name="field_{{ field.id }}"
                                                     data-track
                                                     data-id="{{ field.id }}"
+                                                    {% if field.is_required%}required{% endif %}
                                                 >
                                                     {% for option in field.options|json_loads %}
                                                         <option value="{{option}}">{{option}}</option>
@@ -396,6 +400,7 @@
                                                                 value="{{ option }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
+                                                                {% if field.is_required%}required{% endif %}
                                                             />
                                                             <label for="{{ forloop.counter }}">{{ option }}</label>
                                                         </div>
@@ -410,6 +415,7 @@
                                                     name="field_{{ field.id }}"
                                                     data-track
                                                     data-id="{{ field.id }}"
+                                                    {% if field.is_required%}required{% endif %}
                                                 />
                                             {% endif %}
                                             <!-- Для кожного поля додаємо приховані поля, щоб JavaScript міг знайти їх -->
@@ -422,14 +428,21 @@
                                             {% endif %}
                                         </div>
                                     {% endfor %}
+                                    {% if combined_block.allow_dublicate %}
+                                        <div class="d-flex justify-content-end marg_top-20">
+                                            <button
+                                                type="button"
+                                                class="button_red_outline"
+                                                data-block-id="{{ combined_block.id }}"
+                                                id="add-one-more-block"
+                                                style="display: flex;"
+                                            >
+                                                <p>Додати ще</p>
+                                            </button>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             {% endfor %}
-                    
-                            {% if not user.is_authenticated %}
-                                <label>E-mail:</label>
-                                <input type="email" name="email" required>
-                                <br>
-                            {% endif %}
                     
                             {% for field in fields %}
                                 {% if not field.is_combined %}
@@ -600,7 +613,8 @@
                                                                 maxlength="{{ field.max_symbols }}"
                                                                 name="field_{{ field.id }}"
                                                                 data-track
-                                                                data-id="{{ field.id }}" 
+                                                                data-id="{{ field.id }}"
+                                                                {% if field.is_required%}required{% endif %}
                                                             ></textarea>
                                                         </div>
                                                     </div>
@@ -614,6 +628,7 @@
                                                                 name="field_{{ field.id }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
+                                                                {% if field.is_required%}required{% endif %}
                                                             />
                                                         </div>
                                                     <!-- <input
@@ -633,6 +648,7 @@
                                                         data-track
                                                         data-id="{{ field.id }}"
                                                         id="dateShowPicker"
+                                                        {% if field.is_required%}required{% endif %}
                                                     />
                                                 {% elif field.field_type == 'boolean' %}
                                                     <div class="radio-container offset-left-20">
@@ -641,6 +657,7 @@
                                                             name="field_{{ field.id }}"
                                                             data-track
                                                             data-id="{{ field.id }}"
+                                                            {% if field.is_required%}required{% endif %}
                                                         />
                                                         <label for="true">Так</label>
                                                         <input
@@ -648,6 +665,7 @@
                                                             name="field_{{ field.id }}"
                                                             data-track
                                                             data-id="{{ field.id }}"
+                                                            {% if field.is_required%}required{% endif %}
                                                         />
                                                         <label for="false">Ні</label>
                                                     </div>
@@ -662,6 +680,7 @@
                                                                         value="{{ option }}"
                                                                         data-track
                                                                         data-id="{{ field.id }}"
+                                                                        {% if field.is_required%}required{% endif %}
                                                                     />
                                                                     <div class="circle"></div>
                                                                     <div class="box">
@@ -678,6 +697,7 @@
                                                         name="field_{{ field.id }}"
                                                         data-track
                                                         data-id="{{ field.id }}"
+                                                        {% if field.is_required%}required{% endif %}
                                                     >
                                                         {% for option in field.options|json_loads %}
                                                             <option value="{{option}}">{{option}}</option>
@@ -693,6 +713,7 @@
                                                                     value="{{ option }}"
                                                                     data-track
                                                                     data-id="{{ field.id }}"
+                                                                    {% if field.is_required%}required{% endif %}
                                                                 />
                                                                 <label for="{{ forloop.counter }}">{{ option }}</label>
                                                             </div>
@@ -707,6 +728,7 @@
                                                         name="field_{{ field.id }}"
                                                         data-track
                                                         data-id="{{ field.id }}"
+                                                        {% if field.is_required%}required{% endif %}
                                                     />
                                                 {% endif %}
                                                 <!-- Для кожного поля додаємо приховані поля, щоб JavaScript міг знайти їх -->
@@ -719,11 +741,24 @@
                                                 {% endif %}
                                             </div>
                                         {% endfor %}
+                                        {% if template.combined_block.allow_dublicate %}
+                                            <div class="d-flex justify-content-end marg_top-20">
+                                                <button
+                                                    type="button"
+                                                    data-block-id="{{ template.combined_block.id }}"
+                                                    class="button_red_outline"
+                                                    id="add-one-more-block"
+                                                    style="display: flex;"
+                                                >
+                                                    <p>Додати ще</p>
+                                                </button>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 {% endif %}
                             {% endfor %}
                     
-                            {% for template in block_template.library_templates.all %}
+                        {% for template in block_template.library_templates.all %}
                             {% if template.field %}
                                 <div class="marg_top-20">
                                     {% if template.description_field %}
@@ -875,17 +910,16 @@
                                 <p>Položky označené <span class="text-red">*</span> jsou povinné k vyplnění.</p>
                             </div>
                             
-                            
-                            <div class="marg_top-25 marg_bottom-25">
-                                <button type="submit" class="button_reset button_red_outline">Uložit</button>
+                            <div class=" d-flex marg_top-25 marg_bottom-25">
+                                <button type="submit" class="button_reset button_red_outline offset-right-5">Uložit</button>
                                 <button type="button" onclick="window.location.href='https://google.com'" class="button_reset button_red_outline">Zrušit</button>
-                            </div>
-                        </form>
+                            </div> 
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </form>
 
     <footer>
         <div class="user-wrapper">
@@ -1092,6 +1126,54 @@
 <script>
     document.getElementById("dateShowPicker").addEventListener("click", function () {
       this.showPicker(); // Відкриває календар (працює у підтримуваних браузерах)
+    });
+</script>
+<script>
+    function cloneCombinedBlock(blockId, blockTemplateId) {
+        fetch(`/dashboard/blocks/${blockId}/${blockTemplateId}/clone/`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),  // Функція нижче
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network error while cloning block');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+            window.alert(`Блок успішно клоновано з ID: ${data.new_block_id}`);
+            // За бажанням: оновити UI, зробити редирект тощо
+            window.location.reload();
+            } else {
+            console.error('Помилка:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
+        }
+        
+        // Отримання CSRF токена з cookie
+        function getCSRFToken() {
+        const name = 'csrftoken';
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith(name + '='))
+            ?.split('=')[1];
+        return cookieValue || '';
+        }      
+</script>
+<script>
+    document.querySelectorAll(".button_red_outline").forEach(button => {
+        button.addEventListener("click", function () {
+            const blockId = this.dataset.blockId;  // Отримуємо ID блоку з data-атрибута
+            const blockTemplateId = document.body.getAttribute("data-block-template-id")
+            cloneCombinedBlock(blockId, blockTemplateId);  // Викликаємо функцію для клонування блоку
+        });
     });
 </script>
 </html>
