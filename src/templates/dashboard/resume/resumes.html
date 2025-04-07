@@ -99,11 +99,10 @@
               <th></th>
               <th></th>
               <th>ID</th>
-              <th>Jméno a příjmení</th>
+              <th>Název dotazníku</th>
               <th>Datum</th>
               <th>Obor</th>
               <th>Dotazník</th>
-              <th>Jazyk</th>
           </tr>
       </thead>
       <tbody>
@@ -147,7 +146,6 @@
                   <td>{{ answer.submitted_at }}</td>
                   <td>Електрик</td>
                   <td>Для всіх</td>
-                  <td>{% if answer.block_template.language == 'cs' %}CZ{% else %}DE{% endif %}</td>
             </tr>
           {% endfor %}
       </tbody>
@@ -162,11 +160,10 @@
               <th></th>
               <th></th>
               <th>ID</th>
-              <th>Jméno a příjmení</th>
+              <th>Název dotazníku</th>
               <th>Datum</th>
               <th>Obor</th>
               <th>Dotazník</th>
-              <th>Jazyk</th>
           </tr>
       </thead>
       <tbody>
@@ -205,7 +202,6 @@
                   <td>{{ recent_response.submitted_at }}</td>
                   <td>Електрик</td>
                   <td>Для всіх</td>
-                  <td>{% if recent_response.block_template.language == 'cs' %}CZ{% else %}DE{% endif %}</td>
             </tr>
           {% endfor %}
       </tbody>
@@ -220,11 +216,10 @@
               <th></th>
               <th></th>
               <th>ID</th>
-              <th>Jméno a příjmení</th>
+              <th>Název dotazníku</th>
               <th>Datum</th>
               <th>Obor</th>
               <th>Dotazník</th>
-              <th>Jazyk</th>
           </tr>
       </thead>
       <tbody>
@@ -263,7 +258,6 @@
                   <td>{{ favorite.survey_response.submitted_at }}</td>
                   <td>Електрик</td>
                   <td>Для всіх</td>
-                  <td>{% if answer.block_template.language == 'cs' %}CZ{% else %}DE{% endif %}</td>
             </tr>
           {% endfor %}
       </tbody>
@@ -276,11 +270,10 @@
       <thead>
           <tr>
               <th>ID</th>
-              <th>Jméno a příjmení</th>
+              <th>Název dotazníku</th>
               <th>Datum</th>
               <th>Obor</th>
               <th>Dotazník</th>
-              <th>Jazyk</th>
           </tr>
       </thead>
       <tbody>
@@ -319,7 +312,6 @@
                   <td>{{ item.submitted_at }}</td>
                   <td>Електрик</td>
                   <td>Для всіх</td>
-                  <td>{% if recent_response.block_template.language == 'cs' %}CZ{% else %}DE{% endif %}</td>
             </tr>
           {% endfor %}
       </tbody>

@@ -44,7 +44,7 @@
         </p>
         <!-- <p class="marg_bottom-10"><b>Код активації: </b>123456</p> -->
         <p class="marg_bottom-10 d-flex-vs-center">
-            <button type="button" class="button_primary button_reset btn-icon">
+            <button type="button" class="button_primary button_reset btn-icon" id="toggle-info-btn">
                 <svg class="offset-right-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
                     <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
@@ -133,12 +133,12 @@
                             <b>{{ field_response.field.name }}:</b> 
                             {% if field_response.value == 'on' %}
                                 Так
-                                <span style="color: #037DFF;">-- Час заповнення - {{ field_response.input_time }} мс; Тип заповнення - {% if field_response.input_method == 'keyboard' %}Клавіатура{% elif field_response.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
+                                <span class="info-block" style="display: none; color: #037DFF;">-- Час заповнення - {{ field_response.input_time }} мс; Тип заповнення - {% if field_response.input_method == 'keyboard' %}Клавіатура{% elif field_response.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
                             {% else %}
-                                Ні <span style="color: #037DFF;">-- Час заповнення - {{ field_response.input_time }} мс; Тип заповнення - {% if field_response.input_method == 'keyboard' %}Клавіатура{% elif field_response.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
+                                Ні <span class="info-block" style="display: none; color: #037DFF;">-- Час заповнення - {{ field_response.input_time }} мс; Тип заповнення - {% if field_response.input_method == 'keyboard' %}Клавіатура{% elif field_response.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
                             {% endif %}
                         {% else %}
-                            <b>{{ field_response.field.name }}:</b> {{ field_response.value }} -- <span style="color: #037DFF;">-- Час заповнення - {{ field_response.input_time }} мс; Тип заповнення - {% if field_response.input_method == 'keyboard' %}Клавіатура{% elif field_response.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
+                            <b>{{ field_response.field.name }}:</b> {{ field_response.value }} <span class="info-block" style="display: none; color: #037DFF;">-- Час заповнення - {{ field_response.input_time }} мс; Тип заповнення - {% if field_response.input_method == 'keyboard' %}Клавіатура{% elif field_response.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
                         {% endif %}
                     </p>
                 {% endfor %}
@@ -188,5 +188,16 @@
         return cookieValue;
     }
     </script>
+    <script>
+        document.getElementById('toggle-info-btn').addEventListener('click', function () {
+            const infoBlocks = document.querySelectorAll('.info-block');
+            infoBlocks.forEach(block => {
+                block.style.display = (block.style.display === 'none' || block.style.display === '') 
+                    ? 'inline' 
+                    : 'none';
+            });
+        });
+    </script>
+    <!--Scripts-->
 {% endblock scripts %}
 <!--Scripts-->

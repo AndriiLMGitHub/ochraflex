@@ -58,7 +58,7 @@ def list_resumes_view(request):
     """Пошук відповідей на анкети."""
     query = request.GET.get("q", "").strip()  # Отримуємо параметр пошуку
     # Logic for listing resumes goes here
-    answers = SurveyResponse.objects.filter(user=request.user, is_deleted=False)
+    answers = SurveyResponse.objects.filter(user=request.user, is_deleted=False).order_by('-submitted_at')
 
     # Отримуємо всі відповіді, що були позначені як улюблені поточним користувачем
     favorite_responses = SurveyResponseFavorite.objects.filter(user=request.user).select_related('survey_response')
@@ -622,12 +622,10 @@ def questionnaire_result_view(request, id):
 def questionnaire_user_result_view(request, uuid):
     block_template = get_object_or_404(BlockTemplate, uuid=uuid)
     fields = Field.objects.filter(block_template=block_template)
-    description_fields = DescriptionField.objects.filter(
-        block_template=block_template)
     combined_blocks = CombinedBlock.objects.filter(
-        block_template=block_template).prefetch_related('fields')
-
-    
+        block_template=block_template,
+        original__isnull=True
+        ).prefetch_related('fields') # Просто блоки від руки
 
     if request.method == "POST":
         # # Перевіряємо, чи користувач авторизований
@@ -682,34 +680,65 @@ def questionnaire_user_result_view(request, uuid):
                     value=field_value
                 )
 
-        # Збереження відповідей для комбінових полів
-        # Обробка комбінованих блоків та їх полів
+        # # Збереження відповідей для комбінових полів
+        # # Обробка комбінованих блоків та їх полів
+        # for combined_block in combined_blocks:
+        #     for field in combined_block.fields.all():
+        #         field_name = f"field_{field.id}"
+        #         input_time_name = f"input_time_{field.id}"
+        #         input_method_name = f"input_method_{field.id}"
+
+        #         if field.field_type == Field.CHECKBOX:
+        #             field_value = ", ".join(request.POST.getlist(field_name))
+        #         elif field.field_type == Field.RADIO:
+        #             field_value = request.POST.get(field_name, "").strip()
+        #         else:
+        #             field_value = request.POST.get(field_name, "").strip()
+
+        #         # Отримуємо час заповнення та метод введення
+        #         input_time = request.POST.get(input_time_name, "0")
+        #         input_method = request.POST.get(input_method_name, "unknown")
+
+        #         if field_value:
+        #             FieldResponse.objects.create(
+        #             survey_response=survey_response,
+        #             field=field,
+        #             value=field_value,
+        #             combined_block=combined_block,
+        #             input_time=int(input_time) if input_time else 0,
+        #             input_method=input_method
+        #         )
+
+        # Обробка комбінованих блоків (оригіналів) та їхніх копій
         for combined_block in combined_blocks:
-            for field in combined_block.fields.all():
-                field_name = f"field_{field.id}"
-                input_time_name = f"input_time_{field.id}"
-                input_method_name = f"input_method_{field.id}"
+            # Створюємо список блоків: оригінал + усі копії
+            all_related_blocks = [combined_block] + list(combined_block.clones.all())
 
-                if field.field_type == Field.CHECKBOX:
-                    field_value = ", ".join(request.POST.getlist(field_name))
-                elif field.field_type == Field.RADIO:
-                    field_value = request.POST.get(field_name, "").strip()
-                else:
-                    field_value = request.POST.get(field_name, "").strip()
+            for block in all_related_blocks:
+                for field in block.fields.all():
+                    field_name = f"field_{field.id}"
+                    input_time_name = f"input_time_{field.id}"
+                    input_method_name = f"input_method_{field.id}"
 
-                # Отримуємо час заповнення та метод введення
-                input_time = request.POST.get(input_time_name, "0")
-                input_method = request.POST.get(input_method_name, "unknown")
+                    if field.field_type == Field.CHECKBOX:
+                        field_value = ", ".join(request.POST.getlist(field_name))
+                    elif field.field_type == Field.RADIO:
+                        field_value = request.POST.get(field_name, "").strip()
+                    else:
+                        field_value = request.POST.get(field_name, "").strip()
 
-                if field_value:
-                    FieldResponse.objects.create(
-                    survey_response=survey_response,
-                    field=field,
-                    value=field_value,
-                    combined_block=combined_block,
-                    input_time=int(input_time) if input_time else 0,
-                    input_method=input_method
-                )
+                    input_time = request.POST.get(input_time_name, "0")
+                    input_method = request.POST.get(input_method_name, "unknown")
+
+                    if field_value:
+                        FieldResponse.objects.create(
+                            survey_response=survey_response,
+                            field=field,
+                            value=field_value,
+                            combined_block=block,
+                            input_time=int(input_time) if input_time else 0,
+                            input_method=input_method
+                        )
 
         for template in block_template.library_templates.all():
             if template.field:
@@ -738,6 +767,7 @@ def questionnaire_user_result_view(request, uuid):
                         input_method=input_method  # Записуємо метод введення
                     )
             elif template.combined_block:
+                # Обробка оригінального блоку
                 for field in template.combined_block.fields.all():
                     if field:
                         field_name = f"field_{field.id}"
@@ -751,7 +781,6 @@ def questionnaire_user_result_view(request, uuid):
                         else:
                             field_value = request.POST.get(field_name, "").strip()
 
-                        # Отримуємо час заповнення та метод введення
                         input_time = request.POST.get(input_time_name, "0")
                         input_method = request.POST.get(input_method_name, "unknown")
 
@@ -760,17 +789,43 @@ def questionnaire_user_result_view(request, uuid):
                                 survey_response=survey_response,
                                 field=field,
                                 value=field_value,
-                                combined_block=template.combined_block,  # Додаємо прив’язку, якщо потрібно
-                                input_time=int(input_time),  # Записуємо час у мілісекундах
-                                input_method=input_method  # Записуємо метод введення
+                                combined_block=template.combined_block,
+                                input_time=int(input_time) if input_time else 0,
+                                input_method=input_method
                             )
+
+                # Обробка копій цього комбінованого блоку
+                for clone in template.combined_block.clones.all():
+                    for field in clone.fields.all():
+                        if field:
+                            field_name = f"field_{field.id}"
+                            input_time_name = f"input_time_{field.id}"
+                            input_method_name = f"input_method_{field.id}"
+
+                            if field.field_type == Field.CHECKBOX:
+                                field_value = ", ".join(request.POST.getlist(field_name))
+                            elif field.field_type == Field.RADIO:
+                                field_value = request.POST.get(field_name, "").strip()
+                            else:
+                                field_value = request.POST.get(field_name, "").strip()
+
+                            input_time = request.POST.get(input_time_name, "0")
+                            input_method = request.POST.get(input_method_name, "unknown")
+
+                            if field_value:
+                                FieldResponse.objects.create(
+                                    survey_response=survey_response,
+                                    field=field,
+                                    value=field_value,
+                                    combined_block=clone,
+                                    input_time=int(input_time) if input_time else 0,
+                                    input_method=input_method
+                                )
 
         return render(request, 'survey/thanks.html')
 
     context = {
         'block_template': block_template,
-        'fields': fields,
-        'description_fields': description_fields,
         'combined_blocks': combined_blocks,
     }
 

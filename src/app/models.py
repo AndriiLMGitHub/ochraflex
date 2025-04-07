@@ -125,6 +125,16 @@ class CombinedBlock(models.Model):
     allow_dublicate = models.BooleanField(default=False)
 
     is_cloned = models.BooleanField(default=False)
+    is_from_library_template = models.BooleanField(default=False)
+    is_copy_from_original = models.BooleanField(default=False)
+
+    original = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='clones'
+    )
 
     # def __str__(self):
     #     return self.description_field

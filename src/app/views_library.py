@@ -43,6 +43,7 @@ def library_view(request):
         'library_blocks': library_blocks,
         'library_fields_all': library_fields_without_fields,
         'query': query,
+        "all_library_templates": all_library_templates,
         'templates': templates,  # Отримуємо всі шаблони бібліотеки, які відносять до поточного блоку
     }
 
@@ -98,10 +99,7 @@ def library_create_block_view(request):
 
         return redirect('choose_template_type', library_template.id)  # Перенаправлення на створення шаблонів
 
-    context = {
-    }
-
-    return render(request, 'dashboard/library/create_templates/create_library_template.html', context)
+    return render(request, 'dashboard/library/create_templates/create_library_template.html')
 
 # --- Start -> Create views templates ---
 

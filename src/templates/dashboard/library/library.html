@@ -33,10 +33,6 @@
 
 <!--Content-->
 {% block main %}
-<div class="tabs d-flex-vs-center marg_top-md-sm-15">
-    <button class="tab-link active" data-tab="fields">Поля</button>
-    <button class="tab-link" data-tab="blocks">Блоки</button>
-</div>
 <div class="d-flex align-items-center marg_bottom-20 d-flex-md-sm">
     <div class="search-bar offset-right-20 w-100-md-sm offset-md-sm-clear">
         <form action="" method="GET">
@@ -132,6 +128,12 @@
         <!-- Add new icon -->
     </div>
 </div>
+
+<div class="tabs d-flex-vs-center marg_top-md-sm-15">
+    <button class="tab-link active" data-tab="fields">Поля</button>
+    <button class="tab-link" data-tab="blocks">Блоки</button>
+</div>
+
 <div id="fields" class="tab-content active marg_bottom-15">
 {% if library_descriptions %}
     {% for library_description in library_descriptions %}
@@ -139,9 +141,9 @@
         <div class="border-block-blue marg_bottom-15">
             <div class="d-flex align-items-center justify-content-between tool-panel">
                 <div class="toggle-lang">
-                    <a href="#" class="active">CS</a>
-                    <span style="font-size: 7px;">|</span>
-                    <a href="#">DE</a>
+                    {% for template in library_description.library_templates.all %}
+                        <p>{{ template.name }}</p>  {# ← це ім’я шаблону, до якого належить поле #}
+                    {% endfor %}
                 </div>
                 <div class="setting-trigger">
                     <a href="" class="trigger">
@@ -165,9 +167,7 @@
         <div class="border-block-blue marg_bottom-15 w-100-md-sm">
             <div class="d-flex align-items-center justify-content-between tool-panel">
                 <div class="toggle-lang">
-                    <a href="#" class="active">CS</a>
-                    <span style="font-size: 7px;">|</span>
-                    <a href="#">DE</a>
+                    <h3>{{library_description.name}}</h3>
                 </div>
                 <div class="setting-trigger">
                     <a href="" class="trigger">
@@ -200,9 +200,7 @@
 <div class="border-block-blue marg_bottom-15 w-100-md-sm">
     <div class="d-flex align-items-center justify-content-between tool-panel">
         <div class="toggle-lang">
-            <a href="#" class="active">CS</a>
-            <span style="font-size: 7px;">|</span>
-            <a href="#">DE</a>
+            <h3>{{ library_field.name }}</h3>
         </div>
         <div class="setting-trigger">
             <a href="" class="trigger">
@@ -336,9 +334,7 @@
     <div class="border-block-blue marg_bottom-15 w-100-md-sm">
         <div class="d-flex align-items-center justify-content-between tool-panel">
             <div class="toggle-lang">
-                <a href="#" class="active">CS</a>
-                <span style="font-size: 7px;">|</span>
-                <a href="#">DE</a>
+                <h3>{{ library_block.name }}</h3>
             </div>
             <div class="setting-trigger">
                 <a href="" class="trigger">

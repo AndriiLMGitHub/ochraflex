@@ -269,6 +269,358 @@
             <div class="main-content-body">
                 <div class="block-panell">
                     <div class="">
+                        {% for template in block_template.library_templates.all %}
+                                {% if template.combined_block %}
+                                    <div class="border-field-questionnaire">
+                                        {% if template.combined_block.description_field %}
+                                            <h3>{{ template.combined_block.description_field.title }}</h3>
+                                            <p>{{ template.combined_block.description_field.description }}</p>
+                                        {% endif %}
+                                        {% for field in template.combined_block.fields.all %}
+                                            <div class="marg_top-25">
+                                                <div class="group-form">
+                                                    <label for="{{field.name}}" class="input_label">{{field.name}}</label>
+                                                    {% if field.is_required %}
+                                                        <p>
+                                                            <img src="{% static 'images/icons/required.svg' %}" alt="" />
+                                                        </p>
+                                                    {% endif %}
+                                                </div>
+                                                {% if field.field_type == 'textarea' %}
+                                                    <div class="d-flex justify-content-between main-title-menu">
+                                                        <div class="w-100">
+                                                            <textarea
+                                                                id="{{field.name}}"
+                                                                style="min-height: 100px;"
+                                                                class="input_base_red"
+                                                                placeholder="Zadejte text"
+                                                                maxlength="{{ field.max_symbols }}"
+                                                                name="field_{{ field.id }}"
+                                                                data-track
+                                                                data-id="{{ field.id }}"
+                                                                {% if field.is_required%}required{% endif %}
+                                                            ></textarea>
+                                                        </div>
+                                                    </div>
+                                                {% elif field.field_type == 'number' and field.extra_tag == 'phone' %}
+                                                    <div class="d-flex phoneForm d-flex-md-sm">
+                                                        <select class="input_base languageDropdown marg_bottom-md-sm-10"></select>
+                                                        <div class="selectedLanguage"></div>
+                                                            <input
+                                                                type="text"
+                                                                class="input_base_red phoneNumberInput"
+                                                                name="field_{{ field.id }}"
+                                                                data-track
+                                                                data-id="{{ field.id }}"
+                                                                {% if field.is_required%}required{% endif %}
+                                                            />
+                                                        </div>
+                                                    <!-- <input
+                                                        type="{{field.field_type}}"
+                                                        class="input_base_red"
+                                                        placeholder="Введіть число"
+                                                        max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                                                        name="field_{{ field.id }}"
+                                                    /> -->
+                                                {% elif field.field_type == 'date' %}
+                                                    <input
+                                                        type="{{field.field_type}}"
+                                                        class="input_base_red"
+                                                        maxlength="{{ field.max_symbols }}"
+                                                        max="{{field.max_symbols}}"
+                                                        name="field_{{ field.id }}"
+                                                        data-track
+                                                        data-id="{{ field.id }}"
+                                                        id="dateShowPicker"
+                                                        {% if field.is_required%}required{% endif %}
+                                                    />
+                                                {% elif field.field_type == 'boolean' %}
+                                                    <div class="radio-container offset-left-20">
+                                                        <input
+                                                            type="radio"
+                                                            name="field_{{ field.id }}"
+                                                            data-track
+                                                            data-id="{{ field.id }}"
+                                                            {% if field.is_required%}required{% endif %}
+                                                        />
+                                                        <label for="true">Так</label>
+                                                        <input
+                                                            type="radio"
+                                                            name="field_{{ field.id }}"
+                                                            data-track
+                                                            data-id="{{ field.id }}"
+                                                            {% if field.is_required%}required{% endif %}
+                                                        />
+                                                        <label for="false">Ні</label>
+                                                    </div>
+                                                {% elif field.field_type == 'checkbox' %}
+                                                    <div class="multi-container marg_top-10 offset-left-20">
+                                                        {% for option in field.options|json_loads %}
+                                                            <div class="d-flex g-30">
+                                                                <label class="checkbox" for="{{ forloop.counter }}">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        name="field_{{ field.id }}"
+                                                                        value="{{ option }}"
+                                                                        data-track
+                                                                        data-id="{{ field.id }}"
+                                                                        {% if field.is_required%}required{% endif %}
+                                                                    />
+                                                                    <div class="circle"></div>
+                                                                    <div class="box">
+                                                                        <span class="checkmark"></span>
+                                                                    </div>
+                                                                </label>
+                                                                <p>{{ option }}</p>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% elif field.field_type == 'select' %}
+                                                    <select
+                                                        class="input_base_red"
+                                                        name="field_{{ field.id }}"
+                                                        data-track
+                                                        data-id="{{ field.id }}"
+                                                        {% if field.is_required%}required{% endif %}
+                                                    >
+                                                        {% for option in field.options|json_loads %}
+                                                            <option value="{{option}}">{{option}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                {% elif field.field_type == 'radio' %}
+                                                    <div class="multi-container marg_top-10 offset-left-20">
+                                                        {% for option in field.options|json_loads %}
+                                                            <div class="d-flex g-30">
+                                                                <input
+                                                                    type="radio"
+                                                                    name="field_{{ field.id }}"
+                                                                    value="{{ option }}"
+                                                                    data-track
+                                                                    data-id="{{ field.id }}"
+                                                                    {% if field.is_required%}required{% endif %}
+                                                                />
+                                                                <label for="{{ forloop.counter }}">{{ option }}</label>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% else %}
+                                                    <input
+                                                        type="{{field.field_type}}"
+                                                        class="input_base_red"
+                                                        placeholder="Zadejte text"
+                                                        maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                                                        name="field_{{ field.id }}"
+                                                        data-track
+                                                        data-id="{{ field.id }}"
+                                                        {% if field.is_required%}required{% endif %}
+                                                    />
+                                                {% endif %}
+                                                <!-- Для кожного поля додаємо приховані поля, щоб JavaScript міг знайти їх -->
+                                                <input type="hidden" name="input_time_{{ field.id }}" id="input_time_{{ field.id }}">
+                                                <input type="hidden" name="input_method_{{ field.id }}" id="input_method_{{ field.id }}">
+                                                {% if field.help_info %}
+                                                    <p class="offset-left-5">
+                                                    <small class="text-small-muted">{{ field.help_info}}</small>
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                        {% if template.combined_block.allow_dublicate %}
+                                            <div class="d-flex justify-content-end marg_top-20">
+                                                <button
+                                                    type="button"
+                                                    data-block-id="{{ template.combined_block.id }}"
+                                                    class="button_red_outline"
+                                                    id="add-one-more-block"
+                                                    style="display: flex;"
+                                                >
+                                                    <p>Přidat další</p>
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                <div class="">
+                                    {% if template.combined_block.clones %}
+                                        {% for cm in template.combined_block.clones.all %}
+                                            <div class="marg_top-20 border-field-questionnaire">
+                                                <h3>{{ cm.description_field.title }}</h3>
+                                                <p>{{ cm.description_field.description }}</p>
+                                                {% load humanize %}
+                                                {% for field in cm.fields.all %}
+                                                    <div class="marg_top-25">
+                                                        <div class="group-form">
+                                                            <label for="{{field.name}}" class="input_label">{{field.name}}</label>
+                                                            {% if field.is_required %}
+                                                                <p>
+                                                                    <img src="{% static 'images/icons/required.svg' %}" alt="" />
+                                                                </p>
+                                                            {% endif %}
+                                                        </div>
+                                                        {% if field.field_type == 'textarea' %}
+                                                            <div class="d-flex justify-content-between main-title-menu">
+                                                                <div class="w-100">
+                                                                    <textarea
+                                                                        id="{{ field.name }}"
+                                                                        style="min-height: 100px;"
+                                                                        class="input_base_red"
+                                                                        placeholder="Zadejte text"
+                                                                        maxlength="{{ field.max_symbols }}"
+                                                                        name="field_{{ field.id }}" 
+                                                                        data-track
+                                                                        data-id="{{ field.id }}"
+                                                                        {% if field.is_required%}required{% endif %}
+                                                                        ></textarea>
+                                                                </div>
+                                                            </div>
+                                                        {% elif field.field_type == 'number' and field.extra_tag == 'phone' %}
+                                                            <div class="d-flex phoneForm d-flex-md-sm">
+                                                                <select class="input_base languageDropdown marg_bottom-md-sm-10"></select>
+                                                                <div class="selectedLanguage"></div>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="input_base phoneNumberInput"
+                                                                        data-track
+                                                                        data-id="{{ field.id }}"
+                                                                        name="field_{{ field.id }}"
+                                                                        {% if field.is_required%}required{% endif %}
+                                                                    />
+                                                                </div>
+                                                            <!-- <input
+                                                                type="{{field.field_type}}"
+                                                                class="input_base_red"
+                                                                placeholder="Введіть число"
+                                                                max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                                                                name="field_{{ field.id }}"
+                                                            /> -->
+                                                        {% elif field.field_type == 'date' %}
+                                                            <input
+                                                                type="{{field.field_type}}"
+                                                                class="input_base_red"
+                                                                maxlength="{{ field.max_symbols }}"
+                                                                max="{{field.max_symbols}}"
+                                                                name="field_{{ field.id }}"
+                                                                data-track
+                                                                data-id="{{ field.id }}"
+                                                                id="dateShowPicker"
+                                                                {% if field.is_required%}required{% endif %}
+                                                            />
+                                                        {% elif field.field_type == 'boolean' %}
+                                                            <div class="multi-container offset-left-20 marg_bottom-10 marg_top-10">
+                                                                <div class="radio-container">
+                                                                    <input
+                                                                    type="radio"
+                                                                    name="field_{{ field.id }}"
+                                                                    data-track
+                                                                    data-id="{{ field.id }}"
+                                                                    {% if field.is_required%}required{% endif %}
+                                                                    />
+                                                                    <label for="true">Так</label>
+                                                                </div>
+                                                                <div class="radio-container">
+                                                                    <input
+                                                                        type="radio"
+                                                                        name="field_{{ field.id }}"
+                                                                        data-track
+                                                                        data-id="{{ field.id }}"
+                                                                        {% if field.is_required%}required{% endif %}
+                                                                    />
+                                                                    <label for="false">Ні</label>
+                                                                </div>
+                                                            </div>
+                                                        {% elif field.field_type == 'checkbox' %}
+                                                            <div class="multi-container marg_top-10 offset-left-20">
+                                                                {% for option in field.options|json_loads %}
+                                                                    <div class="d-flex g-30">
+                                                                        <label class="checkbox" for="{{ forloop.counter }}">
+                                                                            <input
+                                                                                class="input_base_red"
+                                                                                type="checkbox"
+                                                                                name="field_{{ field.id }}"
+                                                                                value="{{ option }}"
+                                                                                data-track
+                                                                                data-id="{{ field.id }}"
+                                                                                {% if field.is_required%}required{% endif %}
+                                                                                />
+                                                                            <div class="circle"></div>
+                                                                            <div class="box">
+                                                                                <span class="checkmark"></span>
+                                                                            </div>
+                                                                        </label>
+                                                                        <p>{{ option }}</p>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        {% elif field.field_type == 'select' %}
+                                                            <select
+                                                                class="input_base_red"
+                                                                name="field_{{ field.id }}"
+                                                                data-track
+                                                                data-id="{{ field.id }}"
+                                                                {% if field.is_required%}required{% endif %}
+                                                            >
+                                                                {% for option in field.options|json_loads %}
+                                                                    <option value="{{option}}">{{option}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        {% elif field.field_type == 'radio' %}
+                                                            <div class="multi-container marg_top-10 offset-left-20">
+                                                                {% for option in field.options|json_loads %}
+                                                                    <div class="d-flex g-30">
+                                                                        <input
+                                                                            type="radio"
+                                                                            name="field_{{ field.id }}"
+                                                                            value="{{ option }}"
+                                                                            data-track
+                                                                            data-id="{{ field.id }}"
+                                                                            {% if field.is_required%}required{% endif %}
+                                                                        />
+                                                                        <label for="{{ forloop.counter }}">{{ option }}</label>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        {% else %}
+                                                            <input
+                                                                type="{{field.field_type}}"
+                                                                class="input_base_red"
+                                                                placeholder="Zadejte text"
+                                                                maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                                                                name="field_{{ field.id }}"
+                                                                data-track
+                                                                data-id="{{ field.id }}"
+                                                                {% if field.is_required%}required{% endif %}
+                                                            />
+                                                        {% endif %}
+                                                        <!-- Для кожного поля додаємо приховані поля, щоб JavaScript міг знайти їх -->
+                                                        <input type="hidden" name="input_time_{{ field.id }}" id="input_time_{{ field.id }}">
+                                                        <input type="hidden" name="input_method_{{ field.id }}" id="input_method_{{ field.id }}">
+                                                        {% if field.help_info %}
+                                                            <p class="offset-left-5">
+                                                                <small class="text-small-muted">{{field.help_info}}</small>
+                                                            </p>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endfor %}
+                                                {% if combined_block.allow_dublicate %}
+                                                    <div class="d-flex justify-content-end marg_top-20">
+                                                        <button
+                                                            type="button"
+                                                            class="button_red_outline"
+                                                            data-block-id="{{ combined_block.id }}"
+                                                            id="add-one-more-block"
+                                                            style="display: flex;"
+                                                        >
+                                                            <p>Přidat další</p>
+                                                        </button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+
+
                             {% for combined_block in combined_blocks %}
                                 <div class="marg_top-20 border-field-questionnaire">
                                     <h3>{{ combined_block.description_field.title }}</h3>
@@ -291,7 +643,7 @@
                                                             id="{{ field.name }}"
                                                             style="min-height: 100px;"
                                                             class="input_base_red"
-                                                            placeholder="Введіть текст"
+                                                            placeholder="Zadejte text"
                                                             maxlength="{{ field.max_symbols }}"
                                                             name="field_{{ field.id }}" 
                                                             data-track
@@ -410,7 +762,7 @@
                                                 <input
                                                     type="{{field.field_type}}"
                                                     class="input_base_red"
-                                                    placeholder="Введіть текст"
+                                                    placeholder="Zadejte text"
                                                     maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
                                                     name="field_{{ field.id }}"
                                                     data-track
@@ -437,473 +789,189 @@
                                                 id="add-one-more-block"
                                                 style="display: flex;"
                                             >
-                                                <p>Додати ще</p>
+                                                <p>Přidat další</p>
                                             </button>
                                         </div>
                                     {% endif %}
                                 </div>
-                            {% endfor %}
-                    
-                            {% for field in fields %}
-                                {% if not field.is_combined %}
-                                    <div class="marg_top-25">
-                                        <div class="group-form">
-                                            <label for="{{field.name}}" class="input_label">{{field.name}}</label>
-                                            {% if field.is_required %}
-                                            <p>
-                                                <img src="{% static 'images/icons/required.svg' %}" alt="" />
-                                            </p>
-                                            {% endif %}
-                                        </div>
-                                        {% if field.field_type == 'textarea' %}
-                                            <div class="d-flex justify-content-between main-title-menu">
-                                                <div class="w-100">
-                                                    <textarea
-                                                        id="id_{{field.name}}"
-                                                        style="min-height: 100px;"
-                                                        class="input_base_red"
-                                                        placeholder="Введіть текст"
-                                                        maxlength="{{ field.max_symbols }}"
-                                                        name="field_{{ field.id }}"
-                                                        data-track
-                                                        data-id="{{ field.id }}" 
-                                                        ></textarea>
-                                                </div>
-                                            </div>
-                                        {% elif field.field_type == 'number' and field.extra_tag == 'phone' %}
-                                            <div class="d-flex phoneForm">
-                                                <select class="input_base_red languageDropdown"></select>
-                                                <div class="selectedLanguage"></div>
-                                                    <input
-                                                        type="text"
-                                                        class="input_base_red phoneNumberInput"
-                                                        name="field_{{ field.id }}"
-                                                        data-track
-                                                        data-id="{{ field.id }}"
-                                                    />
-                                                </div>
-                                            <!-- <input
-                                                type="{{field.field_type}}"
-                                                class="input_base_red"
-                                                placeholder="Введіть число"
-                                                max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                name="field_{{ field.id }}"
-                                            /> -->
-                                        {% elif field.field_type == 'date' %}
-                                            <input
-                                                type="{{field.field_type}}"
-                                                class="input_base_red"
-                                                maxlength="{{ field.max_symbols }}"
-                                                max="{{field.max_symbols}}"
-                                                name="field_{{ field.id }}"
-                                                data-track
-                                                data-id="{{ field.id }}"
-                                                id="dateShowPicker"
-                                            />
-                                        {% elif field.field_type == 'boolean' %}
-                                            <div class="radio-container offset-left-20">
-                                                <input
-                                                    type="radio"
-                                                    name="field_{{ field.id }}"
-                                                    data-track
-                                                    data-id="{{ field.id }}"
-                                                />
-                                                <label for="true">Так</label>
-                                                <input 
-                                                    type="radio"
-                                                    name="field_{{ field.id }}"
-                                                    data-track
-                                                    data-id="{{ field.id }}"
-                                                />
-                                                <label for="false">Ні</label>
-                                            </div>
-                                        {% elif field.field_type == 'checkbox' %}
-                                            <div class="multi-container marg_top-10 offset-left-20">
-                                            {% for option in field.options|json_loads %}
-                                                <div class="d-flex g-30">
-                                                    <label class="checkbox" for="{{ forloop.counter }}">
-                                                        <input
-                                                            class="input_base_red"
-                                                            type="checkbox"
-                                                            name="field_{{ field.id }}"
-                                                            value="{{ option }}"
-                                                            data-track
-                                                            data-id="{{ field.id }}"
-                                                        />
-                                                        <div class="circle"></div>
-                                                        <div class="box">
-                                                            <span class="checkmark"></span>
+                                <div class="">
+                                    {% if combined_block.clones %}
+                                        {% for cm in combined_block.clones.all %}
+                                            <div class="marg_top-20 border-field-questionnaire">
+                                                <h3>{{ cm.description_field.title }}</h3>
+                                                <p>{{ cm.description_field.description }}</p>
+                                                {% load humanize %}
+                                                {% for field in cm.fields.all %}
+                                                    <div class="marg_top-25">
+                                                        <div class="group-form">
+                                                            <label for="{{field.name}}" class="input_label">{{field.name}}</label>
+                                                            {% if field.is_required %}
+                                                                <p>
+                                                                    <img src="{% static 'images/icons/required.svg' %}" alt="" />
+                                                                </p>
+                                                            {% endif %}
                                                         </div>
-                                                    </label>
-                                                    <p>{{ option }}</p>
-                                                </div>
-                                            {% endfor %}
-                                            </div>
-                                        {% elif field.field_type == 'select' %}
-                                            <select
-                                                class="input_base_red"
-                                                name="field_{{ field.id }}"
-                                                data-track
-                                                data-id="{{ field.id }}"
-                                            >
-                                            {% for option in field.options|json_loads %}
-                                                <option value="{{option}}">{{option}}</option>
-                                            {% endfor %}
-                                            </select>
-                                        {% elif field.field_type == 'radio' %}
-                                            <div class="multi-container marg_top-10 offset-left-20">
-                                                {% for option in field.options|json_loads %}
-                                                <div class="d-flex g-30">
-                                                    <input
-                                                        type="radio"
-                                                        value="{{ option }}"
-                                                        name="field_{{ field.id }}"
-                                                        data-track
-                                                        data-id="{{ field.id }}"
-                                                    />
-                                                    <label for="{{ forloop.counter }}">{{ option }}</label>
-                                                </div>
-                                                {% endfor %}
-                                            </div>
-                                        {% else %}
-                                            <input
-                                                type="{{field.field_type}}"
-                                                class="input_base_red"
-                                                placeholder="Введіть текст"
-                                                maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                name="field_{{ field.id }}"
-                                                data-track
-                                                data-id="{{ field.id }}"
-                                            />
-                                        {% endif %}
-                                        {% if field.help_info %}
-                                            <p class="offset-left-5">
-                                            <small class="text-small-muted">{{field.help_info}}</small>
-                                            </p>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-                            {% endfor%}
-
-                            {% for template in block_template.library_templates.all %}
-                                {% if template.combined_block %}
-                                    <div class="border-field-questionnaire">
-                                        {% if template.combined_block.description_field %}
-                                            <h3>{{ template.combined_block.description_field.title }}</h3>
-                                            <p>{{ template.combined_block.description_field.description }}</p>
-                                        {% endif %}
-                                        {% for field in template.combined_block.fields.all %}
-                                            <div class="marg_top-25">
-                                                <div class="group-form">
-                                                    <label for="{{field.name}}" class="input_label">{{field.name}}</label>
-                                                    {% if field.is_required %}
-                                                        <p>
-                                                            <img src="{% static 'images/icons/required.svg' %}" alt="" />
-                                                        </p>
-                                                    {% endif %}
-                                                </div>
-                                                {% if field.field_type == 'textarea' %}
-                                                    <div class="d-flex justify-content-between main-title-menu">
-                                                        <div class="w-100">
-                                                            <textarea
-                                                                id="{{field.name}}"
-                                                                style="min-height: 100px;"
+                                                        {% if field.field_type == 'textarea' %}
+                                                            <div class="d-flex justify-content-between main-title-menu">
+                                                                <div class="w-100">
+                                                                    <textarea
+                                                                        id="{{ field.name }}"
+                                                                        style="min-height: 100px;"
+                                                                        class="input_base_red"
+                                                                        placeholder="Zadejte text"
+                                                                        maxlength="{{ field.max_symbols }}"
+                                                                        name="field_{{ field.id }}" 
+                                                                        data-track
+                                                                        data-id="{{ field.id }}"
+                                                                        {% if field.is_required%}required{% endif %}
+                                                                        ></textarea>
+                                                                </div>
+                                                            </div>
+                                                        {% elif field.field_type == 'number' and field.extra_tag == 'phone' %}
+                                                            <div class="d-flex phoneForm d-flex-md-sm">
+                                                                <select class="input_base languageDropdown marg_bottom-md-sm-10"></select>
+                                                                <div class="selectedLanguage"></div>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="input_base phoneNumberInput"
+                                                                        data-track
+                                                                        data-id="{{ field.id }}"
+                                                                        name="field_{{ field.id }}"
+                                                                        {% if field.is_required%}required{% endif %}
+                                                                    />
+                                                                </div>
+                                                            <!-- <input
+                                                                type="{{field.field_type}}"
                                                                 class="input_base_red"
-                                                                placeholder="Введіть текст"
-                                                                maxlength="{{ field.max_symbols }}"
+                                                                placeholder="Введіть число"
+                                                                max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
                                                                 name="field_{{ field.id }}"
-                                                                data-track
-                                                                data-id="{{ field.id }}"
-                                                                {% if field.is_required%}required{% endif %}
-                                                            ></textarea>
-                                                        </div>
-                                                    </div>
-                                                {% elif field.field_type == 'number' and field.extra_tag == 'phone' %}
-                                                    <div class="d-flex phoneForm d-flex-md-sm">
-                                                        <select class="input_base languageDropdown marg_bottom-md-sm-10"></select>
-                                                        <div class="selectedLanguage"></div>
+                                                            /> -->
+                                                        {% elif field.field_type == 'date' %}
                                                             <input
-                                                                type="text"
-                                                                class="input_base_red phoneNumberInput"
+                                                                type="{{field.field_type}}"
+                                                                class="input_base_red"
+                                                                maxlength="{{ field.max_symbols }}"
+                                                                max="{{field.max_symbols}}"
                                                                 name="field_{{ field.id }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
+                                                                id="dateShowPicker"
                                                                 {% if field.is_required%}required{% endif %}
                                                             />
-                                                        </div>
-                                                    <!-- <input
-                                                        type="{{field.field_type}}"
-                                                        class="input_base_red"
-                                                        placeholder="Введіть число"
-                                                        max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                        name="field_{{ field.id }}"
-                                                    /> -->
-                                                {% elif field.field_type == 'date' %}
-                                                    <input
-                                                        type="{{field.field_type}}"
-                                                        class="input_base_red"
-                                                        maxlength="{{ field.max_symbols }}"
-                                                        max="{{field.max_symbols}}"
-                                                        name="field_{{ field.id }}"
-                                                        data-track
-                                                        data-id="{{ field.id }}"
-                                                        id="dateShowPicker"
-                                                        {% if field.is_required%}required{% endif %}
-                                                    />
-                                                {% elif field.field_type == 'boolean' %}
-                                                    <div class="radio-container offset-left-20">
-                                                        <input
-                                                            type="radio"
-                                                            name="field_{{ field.id }}"
-                                                            data-track
-                                                            data-id="{{ field.id }}"
-                                                            {% if field.is_required%}required{% endif %}
-                                                        />
-                                                        <label for="true">Так</label>
-                                                        <input
-                                                            type="radio"
-                                                            name="field_{{ field.id }}"
-                                                            data-track
-                                                            data-id="{{ field.id }}"
-                                                            {% if field.is_required%}required{% endif %}
-                                                        />
-                                                        <label for="false">Ні</label>
-                                                    </div>
-                                                {% elif field.field_type == 'checkbox' %}
-                                                    <div class="multi-container marg_top-10 offset-left-20">
-                                                        {% for option in field.options|json_loads %}
-                                                            <div class="d-flex g-30">
-                                                                <label class="checkbox" for="{{ forloop.counter }}">
+                                                        {% elif field.field_type == 'boolean' %}
+                                                            <div class="multi-container offset-left-20 marg_bottom-10 marg_top-10">
+                                                                <div class="radio-container">
                                                                     <input
-                                                                        type="checkbox"
+                                                                    type="radio"
+                                                                    name="field_{{ field.id }}"
+                                                                    data-track
+                                                                    data-id="{{ field.id }}"
+                                                                    {% if field.is_required%}required{% endif %}
+                                                                    />
+                                                                    <label for="true">Так</label>
+                                                                </div>
+                                                                <div class="radio-container">
+                                                                    <input
+                                                                        type="radio"
                                                                         name="field_{{ field.id }}"
-                                                                        value="{{ option }}"
                                                                         data-track
                                                                         data-id="{{ field.id }}"
                                                                         {% if field.is_required%}required{% endif %}
                                                                     />
-                                                                    <div class="circle"></div>
-                                                                    <div class="box">
-                                                                        <span class="checkmark"></span>
+                                                                    <label for="false">Ні</label>
+                                                                </div>
+                                                            </div>
+                                                        {% elif field.field_type == 'checkbox' %}
+                                                            <div class="multi-container marg_top-10 offset-left-20">
+                                                                {% for option in field.options|json_loads %}
+                                                                    <div class="d-flex g-30">
+                                                                        <label class="checkbox" for="{{ forloop.counter }}">
+                                                                            <input
+                                                                                class="input_base_red"
+                                                                                type="checkbox"
+                                                                                name="field_{{ field.id }}"
+                                                                                value="{{ option }}"
+                                                                                data-track
+                                                                                data-id="{{ field.id }}"
+                                                                                {% if field.is_required%}required{% endif %}
+                                                                                />
+                                                                            <div class="circle"></div>
+                                                                            <div class="box">
+                                                                                <span class="checkmark"></span>
+                                                                            </div>
+                                                                        </label>
+                                                                        <p>{{ option }}</p>
                                                                     </div>
-                                                                </label>
-                                                                <p>{{ option }}</p>
+                                                                {% endfor %}
                                                             </div>
-                                                        {% endfor %}
-                                                    </div>
-                                                {% elif field.field_type == 'select' %}
-                                                    <select
-                                                        class="input_base_red"
-                                                        name="field_{{ field.id }}"
-                                                        data-track
-                                                        data-id="{{ field.id }}"
-                                                        {% if field.is_required%}required{% endif %}
-                                                    >
-                                                        {% for option in field.options|json_loads %}
-                                                            <option value="{{option}}">{{option}}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                {% elif field.field_type == 'radio' %}
-                                                    <div class="multi-container marg_top-10 offset-left-20">
-                                                        {% for option in field.options|json_loads %}
-                                                            <div class="d-flex g-30">
-                                                                <input
-                                                                    type="radio"
-                                                                    name="field_{{ field.id }}"
-                                                                    value="{{ option }}"
-                                                                    data-track
-                                                                    data-id="{{ field.id }}"
-                                                                    {% if field.is_required%}required{% endif %}
-                                                                />
-                                                                <label for="{{ forloop.counter }}">{{ option }}</label>
-                                                            </div>
-                                                        {% endfor %}
-                                                    </div>
-                                                {% else %}
-                                                    <input
-                                                        type="{{field.field_type}}"
-                                                        class="input_base_red"
-                                                        placeholder="Введіть текст"
-                                                        maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                        name="field_{{ field.id }}"
-                                                        data-track
-                                                        data-id="{{ field.id }}"
-                                                        {% if field.is_required%}required{% endif %}
-                                                    />
-                                                {% endif %}
-                                                <!-- Для кожного поля додаємо приховані поля, щоб JavaScript міг знайти їх -->
-                                                <input type="hidden" name="input_time_{{ field.id }}" id="input_time_{{ field.id }}">
-                                                <input type="hidden" name="input_method_{{ field.id }}" id="input_method_{{ field.id }}">
-                                                {% if field.help_info %}
-                                                    <p class="offset-left-5">
-                                                    <small class="text-small-muted">{{ field.help_info}}</small>
-                                                    </p>
-                                                {% endif %}
-                                            </div>
-                                        {% endfor %}
-                                        {% if template.combined_block.allow_dublicate %}
-                                            <div class="d-flex justify-content-end marg_top-20">
-                                                <button
-                                                    type="button"
-                                                    data-block-id="{{ template.combined_block.id }}"
-                                                    class="button_red_outline"
-                                                    id="add-one-more-block"
-                                                    style="display: flex;"
-                                                >
-                                                    <p>Додати ще</p>
-                                                </button>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                    
-                        {% for template in block_template.library_templates.all %}
-                            {% if template.field %}
-                                <div class="marg_top-20">
-                                    {% if template.description_field %}
-                                        <h3>{{ template.description_field.title }}</h3>
-                                        <p>{{ template.description_field.description }}</p>
-                                    {% endif %}
-                                    {% if template.field and template.field.from_library %}
-                                        {% with template.field as field %}
-                                            <div class="marg_top-25">
-                                                <div class="group-form">
-                                                    <label for="{{field.name}}" class="input_label">{{field.name}}</label>
-                                                    {% if field.is_required %}
-                                                        <p>
-                                                            <img src="{% static 'images/icons/required.svg' %}" alt="" />
-                                                        </p>
-                                                    {% endif %}
-                                                </div>
-                                                {% if field.field_type == 'textarea' %}
-                                                    <div class="d-flex justify-content-between main-title-menu">
-                                                        <div class="w-100">
-                                                            <textarea
-                                                                id="{{field.name}}"
-                                                                style="min-height: 100px;"
+                                                        {% elif field.field_type == 'select' %}
+                                                            <select
                                                                 class="input_base_red"
-                                                                placeholder="Введіть текст"
-                                                                maxlength="{{ field.max_symbols }}"
-                                                                name="field_{{ field.id }}"
-                                                                data-track
-                                                                data-id="{{ field.id }}" 
-                                                                ></textarea>
-                                                        </div>
-                                                    </div>
-                                                {% elif field.field_type == 'number' and field.extra_tag == 'phone' %}
-                                                    <div class="d-flex phoneForm">
-                                                        <select class="input_base languageDropdown"></select>
-                                                        <div class="selectedLanguage"></div>
-                                                            <input
-                                                                type="text"
-                                                                class="input_base_red phoneNumberInput"
                                                                 name="field_{{ field.id }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
-                                                            />
-                                                        </div>
-                                                    <!-- <input
-                                                        type="{{field.field_type}}"
-                                                        class="input_base_red"
-                                                        placeholder="Введіть число"
-                                                        max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                        name="field_{{ field.id }}"
-                                                    /> -->
-                                                {% elif field.field_type == 'date' %}
-                                                    <input
-                                                        type="{{field.field_type}}"
-                                                        class="input_base_red"
-                                                        maxlength="{{ field.max_symbols }}"
-                                                        max="{{field.max_symbols}}"
-                                                        name="field_{{ field.id }}"
-                                                        data-track
-                                                        data-id="{{ field.id }}"
-                                                        id="dateShowPicker"
-                                                    />
-                                                {% elif field.field_type == 'boolean' %}
-                                                    <div class="radio-container offset-left-20">
-                                                        <input 
-                                                            type="radio"
-                                                            name="field_{{ field.id }}"
-                                                            data-track
-                                                            data-id="{{ field.id }}"
-                                                        />
-                                                        <label for="true">Так</label>
-                                                        <input
-                                                            type="radio"
-                                                            name="field_{{ field.id }}"
-                                                            data-track
-                                                            data-id="{{ field.id }}"
-                                                        />
-                                                        <label for="false">Ні</label>
-                                                    </div>
-                                                {% elif field.field_type == 'checkbox' %}
-                                                    <div class="multi-container marg_top-10 offset-left-20">
-                                                        {% for option in template.field.options|json_loads %}
-                                                            <div class="d-flex g-30">
-                                                                <label class="checkbox" for="{{ forloop.counter }}">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        name="field_{{ field.id }}"
-                                                                        value="{{ option }}"
-                                                                        data-track
-                                                                        data-id="{{ field.id }}"
-                                                                    />
-                                                                    <div class="circle"></div>
-                                                                    <div class="box">
-                                                                        <span class="checkmark"></span>
+                                                                {% if field.is_required%}required{% endif %}
+                                                            >
+                                                                {% for option in field.options|json_loads %}
+                                                                    <option value="{{option}}">{{option}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        {% elif field.field_type == 'radio' %}
+                                                            <div class="multi-container marg_top-10 offset-left-20">
+                                                                {% for option in field.options|json_loads %}
+                                                                    <div class="d-flex g-30">
+                                                                        <input
+                                                                            type="radio"
+                                                                            name="field_{{ field.id }}"
+                                                                            value="{{ option }}"
+                                                                            data-track
+                                                                            data-id="{{ field.id }}"
+                                                                            {% if field.is_required%}required{% endif %}
+                                                                        />
+                                                                        <label for="{{ forloop.counter }}">{{ option }}</label>
                                                                     </div>
-                                                                </label>
-                                                                <p>{{ option }}</p>
+                                                                {% endfor %}
                                                             </div>
-                                                        {% endfor %}
+                                                        {% else %}
+                                                            <input
+                                                                type="{{field.field_type}}"
+                                                                class="input_base_red"
+                                                                placeholder="Zadejte text"
+                                                                maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
+                                                                name="field_{{ field.id }}"
+                                                                data-track
+                                                                data-id="{{ field.id }}"
+                                                                {% if field.is_required%}required{% endif %}
+                                                            />
+                                                        {% endif %}
+                                                        <!-- Для кожного поля додаємо приховані поля, щоб JavaScript міг знайти їх -->
+                                                        <input type="hidden" name="input_time_{{ field.id }}" id="input_time_{{ field.id }}">
+                                                        <input type="hidden" name="input_method_{{ field.id }}" id="input_method_{{ field.id }}">
+                                                        {% if field.help_info %}
+                                                            <p class="offset-left-5">
+                                                                <small class="text-small-muted">{{field.help_info}}</small>
+                                                            </p>
+                                                        {% endif %}
                                                     </div>
-                                                {% elif field.field_type == 'select' %}
-                                                    <select class="input_base_red" name="field_{{ field.id }}" data-track data-id="{{ field.id }}">
-                                                        {% for option in field.options|json_loads %}
-                                                            <option value="{{option}}">{{option}}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                {% elif field.field_type == 'radio' %}
-                                                    <div class="multi-container marg_top-10 offset-left-20">
-                                                        {% for option in field.options|json_loads %}
-                                                            <div class="d-flex g-30">
-                                                                <input
-                                                                    type="radio"
-                                                                    name="field_{{ field.id }}" 
-                                                                    value="{{ option }}"
-                                                                    data-track
-                                                                    data-id="{{ field.id }}"
-                                                                />
-                                                                <label for="{{ forloop.counter }}">{{ option }}</label>
-                                                            </div>
-                                                        {% endfor %}
+                                                {% endfor %}
+                                                {% if combined_block.allow_dublicate %}
+                                                    <div class="d-flex justify-content-end marg_top-20">
+                                                        <button
+                                                            type="button"
+                                                            class="button_red_outline"
+                                                            data-block-id="{{ combined_block.id }}"
+                                                            id="add-one-more-block"
+                                                            style="display: flex;"
+                                                        >
+                                                            <p>Přidat další</p>
+                                                        </button>
                                                     </div>
-                                                {% else %}
-                                                    <input
-                                                        type="{{field.field_type}}"
-                                                        class="input_base_red"
-                                                        placeholder="Введіть текст"
-                                                        maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                        name="field_{{ field.id }}"
-                                                        data-track
-                                                        data-id="{{ field.id }}"
-                                                    />
-                                                {% endif %}
-                                                <!-- Для кожного поля додаємо приховані поля, щоб JavaScript міг знайти їх -->
-                                                <input type="hidden" name="input_time_{{ field.id }}" id="input_time_{{ field.id }}">
-                                                <input type="hidden" name="input_method_{{ field.id }}" id="input_method_{{ field.id }}">
-                                                {% if field.help_info %}
-                                                    <p class="offset-left-5">
-                                                    <small class="text-small-muted">{{ field.help_info}}</small>
-                                                    </p>
                                                 {% endif %}
                                             </div>
-                                        {% endwith %}
+                                        {% endfor %}
                                     {% endif %}
                                 </div>
-                            {% endif %}
                             {% endfor %}
 
                             <div class="marg_top-20">

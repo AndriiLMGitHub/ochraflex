@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
-from .models import CombinedBlock, Field, DescriptionField, BlockTemplate
+from .models import CombinedBlock, Field, DescriptionField, BlockTemplate, LibraryTemplate
 from django.db import transaction
 
 @require_POST
@@ -21,12 +21,16 @@ def clone_combined_block(request, block_id, block_template_id):
                 is_combined=original_description.is_combined
             )
 
+        
         # Створення нового CombinedBlock
         cloned_block = CombinedBlock.objects.create(
             block_template=block_template,
             description_field=cloned_description,
             allow_dublicate=original_block.allow_dublicate,
-            is_cloned=True
+            is_cloned=True,
+            is_from_library_template = True if original_block.library_templates.exists() else False,
+            is_copy_from_original=True if not original_block.library_templates.exists() else False,
+            original=original_block  # ← Зв'язок з оригіналом
         )
 
         # Клонування полів
