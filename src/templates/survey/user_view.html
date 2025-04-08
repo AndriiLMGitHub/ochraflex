@@ -343,7 +343,7 @@
                                                             data-id="{{ field.id }}"
                                                             {% if field.is_required%}required{% endif %}
                                                         />
-                                                        <label for="true">Так</label>
+                                                        <label for="true">Ano</label>
                                                         <input
                                                             type="radio"
                                                             name="field_{{ field.id }}"
@@ -351,7 +351,7 @@
                                                             data-id="{{ field.id }}"
                                                             {% if field.is_required%}required{% endif %}
                                                         />
-                                                        <label for="false">Ні</label>
+                                                        <label for="false">Ne</label>
                                                     </div>
                                                 {% elif field.field_type == 'checkbox' %}
                                                     <div class="multi-container marg_top-10 offset-left-20">
@@ -364,7 +364,6 @@
                                                                         value="{{ option }}"
                                                                         data-track
                                                                         data-id="{{ field.id }}"
-                                                                        {% if field.is_required%}required{% endif %}
                                                                     />
                                                                     <div class="circle"></div>
                                                                     <div class="box">
@@ -397,7 +396,6 @@
                                                                     value="{{ option }}"
                                                                     data-track
                                                                     data-id="{{ field.id }}"
-                                                                    {% if field.is_required%}required{% endif %}
                                                                 />
                                                                 <label for="{{ forloop.counter }}">{{ option }}</label>
                                                             </div>
@@ -515,7 +513,7 @@
                                                                     data-id="{{ field.id }}"
                                                                     {% if field.is_required%}required{% endif %}
                                                                     />
-                                                                    <label for="true">Так</label>
+                                                                    <label for="true">Ano</label>
                                                                 </div>
                                                                 <div class="radio-container">
                                                                     <input
@@ -525,7 +523,7 @@
                                                                         data-id="{{ field.id }}"
                                                                         {% if field.is_required%}required{% endif %}
                                                                     />
-                                                                    <label for="false">Ні</label>
+                                                                    <label for="false">Ne</label>
                                                                 </div>
                                                             </div>
                                                         {% elif field.field_type == 'checkbox' %}
@@ -540,7 +538,6 @@
                                                                                 value="{{ option }}"
                                                                                 data-track
                                                                                 data-id="{{ field.id }}"
-                                                                                {% if field.is_required%}required{% endif %}
                                                                                 />
                                                                             <div class="circle"></div>
                                                                             <div class="box">
@@ -573,7 +570,6 @@
                                                                             value="{{ option }}"
                                                                             data-track
                                                                             data-id="{{ field.id }}"
-                                                                            {% if field.is_required%}required{% endif %}
                                                                         />
                                                                         <label for="{{ forloop.counter }}">{{ option }}</label>
                                                                     </div>
@@ -665,13 +661,6 @@
                                                             {% if field.is_required%}required{% endif %}
                                                         />
                                                     </div>
-                                                <!-- <input
-                                                    type="{{field.field_type}}"
-                                                    class="input_base_red"
-                                                    placeholder="Введіть число"
-                                                    max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                    name="field_{{ field.id }}"
-                                                /> -->
                                             {% elif field.field_type == 'date' %}
                                                 <input
                                                     type="{{field.field_type}}"
@@ -694,7 +683,7 @@
                                                         data-id="{{ field.id }}"
                                                         {% if field.is_required%}required{% endif %}
                                                         />
-                                                        <label for="true">Так</label>
+                                                        <label for="true">Ano</label>
                                                     </div>
                                                     <div class="radio-container">
                                                         <input
@@ -704,7 +693,7 @@
                                                             data-id="{{ field.id }}"
                                                             {% if field.is_required%}required{% endif %}
                                                         />
-                                                        <label for="false">Ні</label>
+                                                        <label for="false">Ne</label>
                                                     </div>
                                                 </div>
                                             {% elif field.field_type == 'checkbox' %}
@@ -719,7 +708,6 @@
                                                                     value="{{ option }}"
                                                                     data-track
                                                                     data-id="{{ field.id }}"
-                                                                    {% if field.is_required%}required{% endif %}
                                                                     />
                                                                 <div class="circle"></div>
                                                                 <div class="box">
@@ -840,13 +828,6 @@
                                                                         {% if field.is_required%}required{% endif %}
                                                                     />
                                                                 </div>
-                                                            <!-- <input
-                                                                type="{{field.field_type}}"
-                                                                class="input_base_red"
-                                                                placeholder="Введіть число"
-                                                                max="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                                name="field_{{ field.id }}"
-                                                            /> -->
                                                         {% elif field.field_type == 'date' %}
                                                             <input
                                                                 type="{{field.field_type}}"
@@ -869,7 +850,7 @@
                                                                     data-id="{{ field.id }}"
                                                                     {% if field.is_required%}required{% endif %}
                                                                     />
-                                                                    <label for="true">Так</label>
+                                                                    <label for="true">Ano</label>
                                                                 </div>
                                                                 <div class="radio-container">
                                                                     <input
@@ -879,7 +860,7 @@
                                                                         data-id="{{ field.id }}"
                                                                         {% if field.is_required%}required{% endif %}
                                                                     />
-                                                                    <label for="false">Ні</label>
+                                                                    <label for="false">Ne</label>
                                                                 </div>
                                                             </div>
                                                         {% elif field.field_type == 'checkbox' %}
@@ -894,7 +875,6 @@
                                                                                 value="{{ option }}"
                                                                                 data-track
                                                                                 data-id="{{ field.id }}"
-                                                                                {% if field.is_required%}required{% endif %}
                                                                                 />
                                                                             <div class="circle"></div>
                                                                             <div class="box">

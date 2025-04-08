@@ -26,20 +26,7 @@ def submit_survey_response(request, uuid):
     combined_blocks = CombinedBlock.objects.filter(block_template=block_template).prefetch_related('fields')
 
 
-    if request.method == "POST":
-        # Перевіряємо, чи користувач авторизований
-        if request.user.is_authenticated:
-            user = request.user
-            email = None
-        else:
-            user = None
-            email = request.POST.get("email", "").strip()
-
-            # Якщо e-mail не заповнений, повертаємо помилку
-            if not email:
-                messages.error(request, "Будь ласка, введіть e-mail, щоб ми могли зв'язатися з вами.")
-                return redirect("submit_survey", uuid=uuid)
-            
+    if request.method == "POST":    
         # Отримуємо всі поля введення (крім прихованих)
         form_data = {key: value for key, value in request.POST.items() if key.startswith("field_")}
 
@@ -55,8 +42,6 @@ def submit_survey_response(request, uuid):
 
         # Створюємо відповідь на анкету
         survey_response = SurveyResponse.objects.create(
-            user=user,
-            email=email,
             block_template=block_template
         )
 

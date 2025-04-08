@@ -628,22 +628,9 @@ def questionnaire_user_result_view(request, uuid):
         ).prefetch_related('fields') # Просто блоки від руки
 
     if request.method == "POST":
-        # # Перевіряємо, чи користувач авторизований
-        # if request.user.is_authenticated:
-        #     user = request.user
-        #     email = None
-        # else:
-        #     user = None
-        #     email = request.POST.get("email", "").strip()
-
-        #     # Якщо e-mail не заповнений, повертаємо помилку
-        #     if not email:
-        #         messages.error(request, "Будь ласка, введіть e-mail, щоб ми могли зв'язатися з вами.")
-        #         return redirect("submit_survey", uuid=uuid)
-
         # Створюємо відповідь на анкету
         survey_response = SurveyResponse.objects.create(
-            user=request.user or None,
+            user=block_template.user,
             block_template=block_template
         )
             
