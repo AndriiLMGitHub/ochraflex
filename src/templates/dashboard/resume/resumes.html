@@ -142,7 +142,7 @@
                     </svg>                                                                                                               
                   </td>
                   <td>{{ answer.id }}</td>
-                  <td>Jakub Novák</td>
+                  <td>{{ answer.block_template.name }}</td>
                   <td>{{ answer.submitted_at }}</td>
                   <td>Електрик</td>
                   <td>Для всіх</td>
@@ -198,7 +198,7 @@
                     </svg>                                                                                                              
                   </td>
                   <td>{{ recent_response.id }}</td>
-                  <td>Jakub Novák</td>
+                  <td>{{recent_response.block_template.name}}</td>
                   <td>{{ recent_response.submitted_at }}</td>
                   <td>Електрик</td>
                   <td>Для всіх</td>
@@ -254,7 +254,7 @@
                     </svg>                                                                                                                
                   </td>
                   <td>{{ favorite.survey_response.id }}</td>
-                  <td>Jakub Novák</td>
+                  <td>{{ favorite.survey_response.block_template.name }}</td>
                   <td>{{ favorite.survey_response.submitted_at }}</td>
                   <td>Електрик</td>
                   <td>Для всіх</td>
@@ -308,7 +308,7 @@
                     </svg>                                                                                                                
                   </td> -->
                   <td>{{ item.id }}</td>
-                  <td>Jakub Novák</td>
+                  <td>{{ item.block_template.name }}</td>
                   <td>{{ item.submitted_at }}</td>
                   <td>Електрик</td>
                   <td>Для всіх</td>
