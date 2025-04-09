@@ -649,7 +649,7 @@ def questionnaire_user_result_view(request, uuid):
 
         # Збереження відповідей для стандартних полів
         for field in fields:
-            field_name = f"field_{field.id}"
+            field_name = f"field_{field.id}_block_{block_template.id}"
 
             if field.field_type == Field.CHECKBOX:
                 # Checkbox може мати кілька значень
@@ -703,7 +703,7 @@ def questionnaire_user_result_view(request, uuid):
 
             for block in all_related_blocks:
                 for field in block.fields.all():
-                    field_name = f"field_{field.id}"
+                    field_name = f"field_{field.id}_block_{block_template.id}"
                     input_time_name = f"input_time_{field.id}"
                     input_method_name = f"input_method_{field.id}"
 
@@ -729,7 +729,7 @@ def questionnaire_user_result_view(request, uuid):
 
         for template in block_template.library_templates.all():
             if template.field:
-                field_name = f"field_{template.field.id}"
+                field_name = f"field_{field.id}_block_{block_template.id}"
                 input_time_name = f"input_time_{field.id}"
                 input_method_name = f"input_method_{field.id}"
 
@@ -757,7 +757,7 @@ def questionnaire_user_result_view(request, uuid):
                 # Обробка оригінального блоку
                 for field in template.combined_block.fields.all():
                     if field:
-                        field_name = f"field_{field.id}"
+                        field_name = f"field_{field.id}_block_{block_template.id}"
                         input_time_name = f"input_time_{field.id}"
                         input_method_name = f"input_method_{field.id}"
 
@@ -785,7 +785,7 @@ def questionnaire_user_result_view(request, uuid):
                 for clone in template.combined_block.clones.all():
                     for field in clone.fields.all():
                         if field:
-                            field_name = f"field_{field.id}"
+                            field_name = f"field_{field.id}_block_{block_template.id}"
                             input_time_name = f"input_time_{field.id}"
                             input_method_name = f"input_method_{field.id}"
 

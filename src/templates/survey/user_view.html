@@ -295,7 +295,7 @@
                                                                 class="input_base_red"
                                                                 placeholder="Zadejte text"
                                                                 maxlength="{{ field.max_symbols }}"
-                                                                name="field_{{ field.id }}"
+                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
                                                                 {% if field.is_required%}required{% endif %}
@@ -309,7 +309,7 @@
                                                             <input
                                                                 type="text"
                                                                 class="input_base_red phoneNumberInput"
-                                                                name="field_{{ field.id }}"
+                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
                                                                 {% if field.is_required%}required{% endif %}
@@ -328,30 +328,38 @@
                                                         class="input_base_red"
                                                         maxlength="{{ field.max_symbols }}"
                                                         max="{{field.max_symbols}}"
-                                                        name="field_{{ field.id }}"
+                                                        name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                         data-track
                                                         data-id="{{ field.id }}"
                                                         id="dateShowPicker"
                                                         {% if field.is_required%}required{% endif %}
                                                     />
                                                 {% elif field.field_type == 'boolean' %}
-                                                    <div class="radio-container offset-left-20">
-                                                        <input
-                                                            type="radio"
-                                                            name="field_{{ field.id }}"
-                                                            data-track
-                                                            data-id="{{ field.id }}"
-                                                            {% if field.is_required%}required{% endif %}
-                                                        />
-                                                        <label for="true">Ano</label>
-                                                        <input
-                                                            type="radio"
-                                                            name="field_{{ field.id }}"
-                                                            data-track
-                                                            data-id="{{ field.id }}"
-                                                            {% if field.is_required%}required{% endif %}
-                                                        />
-                                                        <label for="false">Ne</label>
+                                                    <div class="multi-container offset-left-20 marg_bottom-10 marg_top-10">
+                                                        <div class="radio-container">
+                                                            <input
+                                                                type="radio"
+                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
+                                                                id="field_{{ field.id }}_true"
+                                                                data-track
+                                                                data-id="{{ field.id }}"
+                                                                {% if field.is_required%}required{% endif %}
+                                                                value="True"
+                                                            />
+                                                            <label for="field_{{ field.id }}_true">Ano</label>
+                                                        </div>
+                                                        <div class="radio-container">
+                                                            <input
+                                                                type="radio"
+                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
+                                                                data-track
+                                                                id="field_{{ field.id }}_false"
+                                                                data-id="{{ field.id }}"
+                                                                {% if field.is_required%}required{% endif %}
+                                                                value="False"
+                                                            />
+                                                            <label for="field_{{ field.id }}_false">Ne</label>
+                                                        </div>
                                                     </div>
                                                 {% elif field.field_type == 'checkbox' %}
                                                     <div class="multi-container marg_top-10 offset-left-20">
@@ -360,7 +368,7 @@
                                                                 <label class="checkbox" for="{{ forloop.counter }}">
                                                                     <input
                                                                         type="checkbox"
-                                                                        name="field_{{ field.id }}"
+                                                                        name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                         value="{{ option }}"
                                                                         data-track
                                                                         data-id="{{ field.id }}"
@@ -377,7 +385,7 @@
                                                 {% elif field.field_type == 'select' %}
                                                     <select
                                                         class="input_base_red"
-                                                        name="field_{{ field.id }}"
+                                                        name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                         data-track
                                                         data-id="{{ field.id }}"
                                                         {% if field.is_required%}required{% endif %}
@@ -392,7 +400,7 @@
                                                             <div class="d-flex g-30">
                                                                 <input
                                                                     type="radio"
-                                                                    name="field_{{ field.id }}"
+                                                                    name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                     value="{{ option }}"
                                                                     data-track
                                                                     data-id="{{ field.id }}"
@@ -407,7 +415,7 @@
                                                         class="input_base_red"
                                                         placeholder="Zadejte text"
                                                         maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                        name="field_{{ field.id }}"
+                                                        name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                         data-track
                                                         data-id="{{ field.id }}"
                                                         {% if field.is_required%}required{% endif %}
@@ -464,7 +472,7 @@
                                                                         class="input_base_red"
                                                                         placeholder="Zadejte text"
                                                                         maxlength="{{ field.max_symbols }}"
-                                                                        name="field_{{ field.id }}" 
+                                                                        name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                         data-track
                                                                         data-id="{{ field.id }}"
                                                                         {% if field.is_required%}required{% endif %}
@@ -480,7 +488,7 @@
                                                                         class="input_base phoneNumberInput"
                                                                         data-track
                                                                         data-id="{{ field.id }}"
-                                                                        name="field_{{ field.id }}"
+                                                                        name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                         {% if field.is_required%}required{% endif %}
                                                                     />
                                                                 </div>
@@ -497,7 +505,7 @@
                                                                 class="input_base_red"
                                                                 maxlength="{{ field.max_symbols }}"
                                                                 max="{{field.max_symbols}}"
-                                                                name="field_{{ field.id }}"
+                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
                                                                 id="dateShowPicker"
@@ -508,22 +516,26 @@
                                                                 <div class="radio-container">
                                                                     <input
                                                                     type="radio"
-                                                                    name="field_{{ field.id }}"
+                                                                    name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                     data-track
+                                                                    id="field_{{ field.id }}_true"
                                                                     data-id="{{ field.id }}"
                                                                     {% if field.is_required%}required{% endif %}
+                                                                    value="True"
                                                                     />
-                                                                    <label for="true">Ano</label>
+                                                                    <label for="field_{{ field.id }}_true">Ano</label>
                                                                 </div>
                                                                 <div class="radio-container">
                                                                     <input
                                                                         type="radio"
-                                                                        name="field_{{ field.id }}"
+                                                                        name="field_{{ field.id }}_block_{{ block_template.id }}"
+                                                                        id="field_{{ field.id }}_false"
                                                                         data-track
                                                                         data-id="{{ field.id }}"
                                                                         {% if field.is_required%}required{% endif %}
+                                                                        value="False"
                                                                     />
-                                                                    <label for="false">Ne</label>
+                                                                    <label for="field_{{ field.id }}_false">Ne</label>
                                                                 </div>
                                                             </div>
                                                         {% elif field.field_type == 'checkbox' %}
@@ -534,7 +546,7 @@
                                                                             <input
                                                                                 class="input_base_red"
                                                                                 type="checkbox"
-                                                                                name="field_{{ field.id }}"
+                                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                                 value="{{ option }}"
                                                                                 data-track
                                                                                 data-id="{{ field.id }}"
@@ -551,7 +563,7 @@
                                                         {% elif field.field_type == 'select' %}
                                                             <select
                                                                 class="input_base_red"
-                                                                name="field_{{ field.id }}"
+                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
                                                                 {% if field.is_required%}required{% endif %}
@@ -566,7 +578,7 @@
                                                                     <div class="d-flex g-30">
                                                                         <input
                                                                             type="radio"
-                                                                            name="field_{{ field.id }}"
+                                                                            name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                             value="{{ option }}"
                                                                             data-track
                                                                             data-id="{{ field.id }}"
@@ -581,7 +593,7 @@
                                                                 class="input_base_red"
                                                                 placeholder="Zadejte text"
                                                                 maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                                name="field_{{ field.id }}"
+                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
                                                                 {% if field.is_required%}required{% endif %}
@@ -641,7 +653,7 @@
                                                             class="input_base_red"
                                                             placeholder="Zadejte text"
                                                             maxlength="{{ field.max_symbols }}"
-                                                            name="field_{{ field.id }}" 
+                                                            name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                             data-track
                                                             data-id="{{ field.id }}"
                                                             {% if field.is_required%}required{% endif %}
@@ -657,7 +669,7 @@
                                                             class="input_base phoneNumberInput"
                                                             data-track
                                                             data-id="{{ field.id }}"
-                                                            name="field_{{ field.id }}"
+                                                            name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                             {% if field.is_required%}required{% endif %}
                                                         />
                                                     </div>
@@ -667,7 +679,7 @@
                                                     class="input_base_red"
                                                     maxlength="{{ field.max_symbols }}"
                                                     max="{{field.max_symbols}}"
-                                                    name="field_{{ field.id }}"
+                                                    name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                     data-track
                                                     data-id="{{ field.id }}"
                                                     id="dateShowPicker"
@@ -678,22 +690,26 @@
                                                     <div class="radio-container">
                                                         <input
                                                         type="radio"
-                                                        name="field_{{ field.id }}"
+                                                        name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                         data-track
+                                                        id="field_{{ field.id }}_true"
                                                         data-id="{{ field.id }}"
                                                         {% if field.is_required%}required{% endif %}
+                                                        value="True"
                                                         />
-                                                        <label for="true">Ano</label>
+                                                        <label for="field_{{ field.id }}_true">Ano</label>
                                                     </div>
                                                     <div class="radio-container">
                                                         <input
                                                             type="radio"
-                                                            name="field_{{ field.id }}"
+                                                            name="field_{{ field.id }}_block_{{ block_template.id }}"
+                                                            id="field_{{ field.id }}_false"
                                                             data-track
                                                             data-id="{{ field.id }}"
                                                             {% if field.is_required%}required{% endif %}
+                                                            value="False"
                                                         />
-                                                        <label for="false">Ne</label>
+                                                        <label for="field_{{ field.id }}_false">Ne</label>
                                                     </div>
                                                 </div>
                                             {% elif field.field_type == 'checkbox' %}
@@ -704,7 +720,7 @@
                                                                 <input
                                                                     class="input_base_red"
                                                                     type="checkbox"
-                                                                    name="field_{{ field.id }}"
+                                                                    name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                     value="{{ option }}"
                                                                     data-track
                                                                     data-id="{{ field.id }}"
@@ -721,7 +737,7 @@
                                             {% elif field.field_type == 'select' %}
                                                 <select
                                                     class="input_base_red"
-                                                    name="field_{{ field.id }}"
+                                                    name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                     data-track
                                                     data-id="{{ field.id }}"
                                                     {% if field.is_required%}required{% endif %}
@@ -736,7 +752,7 @@
                                                         <div class="d-flex g-30">
                                                             <input
                                                                 type="radio"
-                                                                name="field_{{ field.id }}"
+                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                 value="{{ option }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
@@ -752,7 +768,7 @@
                                                     class="input_base_red"
                                                     placeholder="Zadejte text"
                                                     maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                    name="field_{{ field.id }}"
+                                                    name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                     data-track
                                                     data-id="{{ field.id }}"
                                                     {% if field.is_required%}required{% endif %}
@@ -808,7 +824,7 @@
                                                                         class="input_base_red"
                                                                         placeholder="Zadejte text"
                                                                         maxlength="{{ field.max_symbols }}"
-                                                                        name="field_{{ field.id }}" 
+                                                                        name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                         data-track
                                                                         data-id="{{ field.id }}"
                                                                         {% if field.is_required%}required{% endif %}
@@ -824,7 +840,7 @@
                                                                         class="input_base phoneNumberInput"
                                                                         data-track
                                                                         data-id="{{ field.id }}"
-                                                                        name="field_{{ field.id }}"
+                                                                        name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                         {% if field.is_required%}required{% endif %}
                                                                     />
                                                                 </div>
@@ -834,7 +850,7 @@
                                                                 class="input_base_red"
                                                                 maxlength="{{ field.max_symbols }}"
                                                                 max="{{field.max_symbols}}"
-                                                                name="field_{{ field.id }}"
+                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
                                                                 id="dateShowPicker"
@@ -845,22 +861,26 @@
                                                                 <div class="radio-container">
                                                                     <input
                                                                     type="radio"
-                                                                    name="field_{{ field.id }}"
+                                                                    name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                     data-track
                                                                     data-id="{{ field.id }}"
+                                                                    id="field_{{ field.id }}_true"
                                                                     {% if field.is_required%}required{% endif %}
+                                                                    value="True"
                                                                     />
-                                                                    <label for="true">Ano</label>
+                                                                    <label for="field_{{ field.id }}_true">Ano</label>
                                                                 </div>
                                                                 <div class="radio-container">
                                                                     <input
                                                                         type="radio"
-                                                                        name="field_{{ field.id }}"
+                                                                        name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                         data-track
+                                                                        id="field_{{ field.id }}_false"
                                                                         data-id="{{ field.id }}"
                                                                         {% if field.is_required%}required{% endif %}
+                                                                        value="False"
                                                                     />
-                                                                    <label for="false">Ne</label>
+                                                                    <label for="field_{{ field.id }}_false">Ne</label>
                                                                 </div>
                                                             </div>
                                                         {% elif field.field_type == 'checkbox' %}
@@ -871,7 +891,7 @@
                                                                             <input
                                                                                 class="input_base_red"
                                                                                 type="checkbox"
-                                                                                name="field_{{ field.id }}"
+                                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                                 value="{{ option }}"
                                                                                 data-track
                                                                                 data-id="{{ field.id }}"
@@ -888,7 +908,7 @@
                                                         {% elif field.field_type == 'select' %}
                                                             <select
                                                                 class="input_base_red"
-                                                                name="field_{{ field.id }}"
+                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
                                                                 {% if field.is_required%}required{% endif %}
@@ -903,7 +923,7 @@
                                                                     <div class="d-flex g-30">
                                                                         <input
                                                                             type="radio"
-                                                                            name="field_{{ field.id }}"
+                                                                            name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                             value="{{ option }}"
                                                                             data-track
                                                                             data-id="{{ field.id }}"
@@ -919,7 +939,7 @@
                                                                 class="input_base_red"
                                                                 placeholder="Zadejte text"
                                                                 maxlength="{% if field.static_value %}{{ field.static_value }}{% else %}{{field.max_symbols}}{% endif %}"
-                                                                name="field_{{ field.id }}"
+                                                                name="field_{{ field.id }}_block_{{ block_template.id }}"
                                                                 data-track
                                                                 data-id="{{ field.id }}"
                                                                 {% if field.is_required%}required{% endif %}

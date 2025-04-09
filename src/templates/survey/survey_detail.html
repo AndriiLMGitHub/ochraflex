@@ -131,7 +131,7 @@
                     <p class="marg_bottom-10">
                         {% if field_response.field.field_type == 'boolean' %}
                             <b>{{ field_response.field.name }}:</b> 
-                            {% if field_response.value == 'on' %}
+                            {% if field_response.value == 'True' %}
                                 Так
                                 <span class="info-block" style="display: none; color: #037DFF;">-- Час заповнення - {{ field_response.input_time }} мс; Тип заповнення - {% if field_response.input_method == 'keyboard' %}Клавіатура{% elif field_response.input_method == 'paste' %}Копіювання/вставка{% else %}Клавіатура (Select, Checkbox or Radio){% endif %}</span>
                             {% else %}
